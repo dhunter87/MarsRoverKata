@@ -3,10 +3,19 @@ namespace MarsRoverKata
 {
 	public class MarsRover
 	{
-		public MarsRover()
-		{
-			throw new NotImplementedException();
-		}
-	}
+		public int? X { get; }
+		public int? Y { get; }
+        public char? Bearing { get; }
+
+        public MarsRover()
+        {
+
+        }
+
+        public MarsRover(int xCoordinate, int yCoodinate, char bearing)
+        {
+
+        }
+    }
 }
 
