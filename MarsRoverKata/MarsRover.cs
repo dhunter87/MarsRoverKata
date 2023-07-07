@@ -22,10 +22,15 @@ namespace MarsRoverKata
 
         public void ExecuteInstruction(char instruction)
         {
-            if (instruction == 'M')
+            if (instruction == 'M' && Bearing == 'N')
             {
                 YCoordinate++;
             }
+            if (instruction == 'M' && Bearing == 'E')
+            {
+                XCoordinate++;
+            }
+
         }
     }
 }

@@ -68,4 +68,17 @@ public class MarsRoverUnitTests
         //Assert
         Assert.That(rover.XCoordinate, Is.EqualTo(1));
     }
+
+    [Test]
+    public void Mars_Rover_X_Coordinate_Changes_When_Bearing_Is_W_And_ExecuteInstruction_Is_Called_With_M()
+    {
+        //Arrange
+        var rover = new MarsRover(1, 0, 'W');
+
+        //Act
+        rover.ExecuteInstruction('M');
+
+        //Assert
+        Assert.That(rover.XCoordinate, Is.EqualTo(0));
+    }
 }
