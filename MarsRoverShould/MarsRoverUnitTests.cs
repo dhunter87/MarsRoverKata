@@ -10,19 +10,6 @@ public class MarsRoverUnitTests
     {
     }
 
-    [Test]
-    public void Mars_Rover_Should_Be_Initailise_With_A_Position()
-    {
-        //Arrange
-        var rover = new MarsRover();
-
-        //Act
-
-
-        //Assert
-        Assert.That(rover, Is.Not.Null);
-    }
-
     [TestCase(0,0,'N')]
     [TestCase(3,5,'W')]
     [TestCase(0100,10000,'S')]
@@ -37,8 +24,8 @@ public class MarsRoverUnitTests
         //Assert
         Assert.Multiple(() =>
         {
-            Assert.That(rover.X, Is.EqualTo(xCoord));
-            Assert.That(rover.Y, Is.EqualTo(yCoord));
+            Assert.That(rover.XCoordinate, Is.EqualTo(xCoord));
+            Assert.That(rover.YCoordinate, Is.EqualTo(yCoord));
             Assert.That(rover.Bearing, Is.EqualTo(bearing));
         });
     }
@@ -57,7 +44,7 @@ public class MarsRoverUnitTests
     }
 
     [Test]
-    public void Mars_Rover_X_Coordinate_Changes_When_ExecuteInstruction_Is_Called_With_M()
+    public void Mars_Rover_Y_Coordinate_Changes_When_Bearing_Is_N_ExecuteInstruction_Is_Called_With_M()
     {
         //Arrange
         var rover = new MarsRover(0, 0, 'N');
@@ -66,6 +53,19 @@ public class MarsRoverUnitTests
         rover.ExecuteInstruction('M');
 
         //Assert
-        Assert.That(rover.X, Is.EqualTo(1));
+        Assert.That(rover.YCoordinate, Is.EqualTo(1));
+    }
+
+    [Test]
+    public void Mars_Rover_X_Coordinate_Changes_When_Bearing_Is_E_And_ExecuteInstruction_Is_Called_With_M()
+    {
+        //Arrange
+        var rover = new MarsRover(0, 0, 'E');
+
+        //Act
+        rover.ExecuteInstruction('M');
+
+        //Assert
+        Assert.That(rover.XCoordinate, Is.EqualTo(1));
     }
 }

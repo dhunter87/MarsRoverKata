@@ -3,37 +3,29 @@ namespace MarsRoverKata
 {
 	public class MarsRover
 	{
-		public int X { get; }
-		public int Y { get; }
-        public char Bearing { get; }
+        private readonly CoordinatesValidator validator;
 
-        public MarsRover()
-        {
-
-        }
+        public int XCoordinate { get; private set; }
+		public int YCoordinate { get; private set; }
+        public char Bearing { get; private set; }
 
         public MarsRover(int xCoordinate, int yCoodinate, char bearing)
         {
-            if (xCoordinate < 0)
+            validator = new CoordinatesValidator();
+            if (validator.IsValid(xCoordinate, yCoodinate, bearing))
             {
-                throw new ArgumentException();
+                XCoordinate = xCoordinate;
+                YCoordinate = yCoodinate;
+                Bearing = bearing;
             }
-            if (yCoodinate < 0)
-            {
-                throw new ArgumentException();
-            }
-            if (bearing != 'N' && bearing != 'E' && bearing != 'S' && bearing != 'W')
-            {
-                throw new ArgumentException();
-            }
-            X = xCoordinate;
-            Y = yCoodinate;
-            Bearing = bearing;
         }
 
         public void ExecuteInstruction(char instruction)
         {
-            throw new NotImplementedException();
+            if (instruction == 'M')
+            {
+                YCoordinate++;
+            }
         }
     }
 }
