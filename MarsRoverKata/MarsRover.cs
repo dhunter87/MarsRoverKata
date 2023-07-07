@@ -22,9 +22,18 @@ namespace MarsRoverKata
             {
                 throw new ArgumentException();
             }
+            if (bearing != 'N' && bearing != 'E' && bearing != 'S' && bearing != 'W')
+            {
+                throw new ArgumentException();
+            }
             X = xCoordinate;
             Y = yCoodinate;
             Bearing = bearing;
+        }
+
+        public void ExecuteInstruction(char instruction)
+        {
+            throw new NotImplementedException();
         }
     }
 }

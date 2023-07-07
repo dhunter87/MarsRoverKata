@@ -43,31 +43,10 @@ public class MarsRoverUnitTests
         });
     }
 
-
-    [Test]
-    public void Mars_Rover_Trows_Exception_If_Initailised_With_A_X_Coordinate_Out_Of_Bounds()
-    {
-        //Arrange
-
-        //Act
-
-        //Assert
-        Assert.Throws<ArgumentException>(() => new MarsRover(-1, 0, 'N'));
-    }
-
-    [Test]
-    public void Mars_Rover_Trows_Exception_If_Initailised_With_A_Y_Coordinate_Out_Of_Bounds()
-    {
-        //Arrange
-
-        //Act
-
-        //Assert
-        Assert.Throws<ArgumentException>(() => new MarsRover(0, -1, 'N'));
-    }
-
-    [Test]
-    public void Mars_Rover_Trows_Exception_If_Initailised_With_An_Invalid_Bearing()
+    [TestCase(-1, 0, 'N')]
+    [TestCase(0, -1, 'N')]
+    [TestCase(0, 0, 'Q')]
+    public void Mars_Rover_Trows_Exception_If_Initailised_With_An_Coordinate_Or_Bearing(int xCoord, int yCoord, char bearing)
     {
         //Arrange
 
@@ -75,5 +54,18 @@ public class MarsRoverUnitTests
 
         //Assert
         Assert.Throws<ArgumentException>(() => new MarsRover(0, 0, 'Q'));
+    }
+
+    [Test]
+    public void Mars_Rover_X_Coordinate_Changes_When_ExecuteInstruction_Is_Called_With_M()
+    {
+        //Arrange
+        var rover = new MarsRover(0, 0, 'N');
+
+        //Act
+        rover.ExecuteInstruction('M');
+
+        //Assert
+        Assert.That(rover.X, Is.EqualTo(1));
     }
 }
