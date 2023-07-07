@@ -26,7 +26,7 @@ public class MarsRoverUnitTests
     [TestCase(0,0,'N')]
     [TestCase(3,5,'W')]
     [TestCase(0100,10000,'S')]
-    public void Given_Mars_Rover_Initailised_With_A_Position_Coordinates_And_Bearing_Are_Stroed2(int xCoord, int yCoord, char bearing)
+    public void Given_Mars_Rover_Initailised_The_Coordinates_And_Bearing_Are_Stroed(int xCoord, int yCoord, char bearing)
     {
         //Arrange
         var rover = new MarsRover(xCoord, yCoord, bearing);
@@ -52,6 +52,6 @@ public class MarsRoverUnitTests
         //Act
 
         //Assert
-        Assert.Throws<ArgumentException>(() => new MarsRover());
+        Assert.Throws<ArgumentException>(() => new MarsRover(-1, 0, 'N'));
     }
 }

@@ -3,9 +3,9 @@ namespace MarsRoverKata
 {
 	public class MarsRover
 	{
-		public int? X { get; }
-		public int? Y { get; }
-        public char? Bearing { get; }
+		public int X { get; }
+		public int Y { get; }
+        public char Bearing { get; }
 
         public MarsRover()
         {
@@ -14,6 +14,7 @@ namespace MarsRoverKata
 
         public MarsRover(int xCoordinate, int yCoodinate, char bearing)
         {
+
             X = xCoordinate;
             Y = yCoodinate;
             Bearing = bearing;
