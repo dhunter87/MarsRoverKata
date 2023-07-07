@@ -14,9 +14,9 @@ namespace MarsRoverKata
 
         public MarsRover(int xCoordinate, int yCoodinate, char bearing)
         {
-            X = new int();
-            Y = new int();
-            Bearing = new char();
+            X = xCoordinate;
+            Y = yCoodinate;
+            Bearing = bearing;
         }
     }
 }

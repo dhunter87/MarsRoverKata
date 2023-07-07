@@ -23,11 +23,13 @@ public class MarsRoverUnitTests
         Assert.That(rover, Is.Not.Null);
     }
 
-    [Test]
-    public void Given_Mars_Rover_Initailised_With_A_Position()
+    [TestCase(0,0,'N')]
+    [TestCase(3,5,'W')]
+    [TestCase(0100,10000,'S')]
+    public void Given_Mars_Rover_Initailised_With_A_Position_Coordinates_And_Bearing_Are_Stroed2(int xCoord, int yCoord, char bearing)
     {
         //Arrange
-        var rover = new MarsRover(0, 0, 'N');
+        var rover = new MarsRover(xCoord, yCoord, bearing);
 
         //Act
 
@@ -35,27 +37,21 @@ public class MarsRoverUnitTests
         //Assert
         Assert.Multiple(() =>
         {
-            Assert.That(rover.X, Is.Not.Null);
-            Assert.That(rover.Y, Is.Not.Null);
-            Assert.That(rover.Bearing, Is.Not.Null);
+            Assert.That(rover.X, Is.EqualTo(xCoord));
+            Assert.That(rover.Y, Is.EqualTo(yCoord));
+            Assert.That(rover.Bearing, Is.EqualTo(bearing));
         });
     }
 
+
     [Test]
-    public void Given_Mars_Rover_Initailised_With_A_Position_Coordinates_And_Bearing_Are_Stroed()
+    public void Mars_Rover_Trows_Exception_If_Initailised_With_A_Position_Out_Of_Bounds()
     {
         //Arrange
-        var rover = new MarsRover(0, 0, 'N');
 
         //Act
 
-
         //Assert
-        Assert.Multiple(() =>
-        {
-            Assert.That(rover.X, Is.EqualTo(0));
-            Assert.That(rover.Y, Is.EqualTo(0));
-            Assert.That(rover.Bearing, Is.EqualTo('N'));
-        });
+        Assert.Throws<ArgumentException>(() => new MarsRover());
     }
 }
