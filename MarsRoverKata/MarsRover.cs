@@ -20,17 +20,32 @@ namespace MarsRoverKata
             }
         }
 
+
+        public void Move()
+        {
+            switch (Bearing)
+            {
+                case 'N':
+                    YCoordinate++;
+                    break;
+                case 'E':
+                    XCoordinate++;
+                    break;
+                case 'S':
+                    YCoordinate--;
+                    break;
+                case 'W':
+                    XCoordinate--;
+                    break;
+            }
+        }
+
         public void ExecuteInstruction(char instruction)
         {
-            if (instruction == 'M' && Bearing == 'N')
+            if (instruction == 'M')
             {
-                YCoordinate++;
+                Move();
             }
-            if (instruction == 'M' && Bearing == 'E')
-            {
-                XCoordinate++;
-            }
-
         }
     }
 }

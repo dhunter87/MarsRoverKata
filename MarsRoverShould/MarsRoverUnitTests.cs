@@ -43,42 +43,34 @@ public class MarsRoverUnitTests
         Assert.Throws<ArgumentException>(() => new MarsRover(0, 0, 'Q'));
     }
 
-    [Test]
-    public void Mars_Rover_Y_Coordinate_Changes_When_Bearing_Is_N_ExecuteInstruction_Is_Called_With_M()
+    [TestCase(0,0,'N', 0, 1, 'N')]
+    [TestCase(0,0,'E', 1, 0, 'E')]
+    [TestCase(1,1,'S', 1, 0, 'S')]
+    [TestCase(1,1,'W', 0, 1, 'W')]
+    public void Mars_Rover_X_Coordinate_Changes_When_Bearing_Is_W_And_ExecuteInstruction_Is_Called_With_M(
+        int xCoord, int yCoord, char bearing,
+        int expectedXCoord, int expectedYCoord, char expectedBearing)
     {
         //Arrange
-        var rover = new MarsRover(0, 0, 'N');
+        var rover = new MarsRover(xCoord, yCoord, bearing);
 
         //Act
         rover.ExecuteInstruction('M');
 
         //Assert
-        Assert.That(rover.YCoordinate, Is.EqualTo(1));
+        Assert.That(rover.XCoordinate, Is.EqualTo(expectedXCoord));
+        Assert.That(rover.YCoordinate, Is.EqualTo(expectedYCoord));
+        Assert.That(rover.Bearing, Is.EqualTo(expectedBearing));
     }
 
     [Test]
-    public void Mars_Rover_X_Coordinate_Changes_When_Bearing_Is_E_And_ExecuteInstruction_Is_Called_With_M()
+    public void Mars_Rover_Trows_Exception_If_Moved_Out_Of_Bounds()
     {
         //Arrange
-        var rover = new MarsRover(0, 0, 'E');
-
+        var rover = new MarsRover(0, 0, 'S');
         //Act
-        rover.ExecuteInstruction('M');
-
+        
         //Assert
-        Assert.That(rover.XCoordinate, Is.EqualTo(1));
-    }
-
-    [Test]
-    public void Mars_Rover_X_Coordinate_Changes_When_Bearing_Is_W_And_ExecuteInstruction_Is_Called_With_M()
-    {
-        //Arrange
-        var rover = new MarsRover(1, 0, 'W');
-
-        //Act
-        rover.ExecuteInstruction('M');
-
-        //Assert
-        Assert.That(rover.XCoordinate, Is.EqualTo(0));
+        Assert.Throws<ArgumentException>(() => rover.ExecuteInstruction('M'));
     }
 }
