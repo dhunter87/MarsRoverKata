@@ -45,7 +45,7 @@ public class MarsRoverUnitTests
 
 
     [Test]
-    public void Mars_Rover_Trows_Exception_If_Initailised_With_A_Position_Out_Of_Bounds()
+    public void Mars_Rover_Trows_Exception_If_Initailised_With_A_X_Coordinate_Out_Of_Bounds()
     {
         //Arrange
 
@@ -53,5 +53,16 @@ public class MarsRoverUnitTests
 
         //Assert
         Assert.Throws<ArgumentException>(() => new MarsRover(-1, 0, 'N'));
+    }
+
+    [Test]
+    public void Mars_Rover_Trows_Exception_If_Initailised_With_A_Y_Coordinate_Out_Of_Bounds()
+    {
+        //Arrange
+
+        //Act
+
+        //Assert
+        Assert.Throws<ArgumentException>(() => new MarsRover(0, -1, 'N'));
     }
 }

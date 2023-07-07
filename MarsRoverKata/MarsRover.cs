@@ -14,7 +14,10 @@ namespace MarsRoverKata
 
         public MarsRover(int xCoordinate, int yCoodinate, char bearing)
         {
-
+            if (xCoordinate < 0)
+            {
+                throw new ArgumentException();
+            }
             X = xCoordinate;
             Y = yCoodinate;
             Bearing = bearing;
