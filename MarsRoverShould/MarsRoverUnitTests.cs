@@ -65,4 +65,15 @@ public class MarsRoverUnitTests
         //Assert
         Assert.Throws<ArgumentException>(() => new MarsRover(0, -1, 'N'));
     }
+
+    [Test]
+    public void Mars_Rover_Trows_Exception_If_Initailised_With_An_Invalid_Bearing()
+    {
+        //Arrange
+
+        //Act
+
+        //Assert
+        Assert.Throws<ArgumentException>(() => new MarsRover(0, 0, 'Q'));
+    }
 }

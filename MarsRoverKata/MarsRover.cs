@@ -18,6 +18,10 @@ namespace MarsRoverKata
             {
                 throw new ArgumentException();
             }
+            if (yCoodinate < 0)
+            {
+                throw new ArgumentException();
+            }
             X = xCoordinate;
             Y = yCoodinate;
             Bearing = bearing;
