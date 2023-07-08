@@ -24,9 +24,9 @@ public class MarsRoverUnitTests
         //Assert
         Assert.Multiple(() =>
         {
-            Assert.That(rover.XCoordinate, Is.EqualTo(xCoord));
-            Assert.That(rover.YCoordinate, Is.EqualTo(yCoord));
-            Assert.That(rover.Bearing, Is.EqualTo(bearing));
+            Assert.That(rover.Position.XCoordinate, Is.EqualTo(xCoord));
+            Assert.That(rover.Position.YCoordinate, Is.EqualTo(yCoord));
+            Assert.That(rover.Position.Bearing, Is.EqualTo(bearing));
         });
     }
 
@@ -58,9 +58,9 @@ public class MarsRoverUnitTests
         rover.ExecuteInstruction('M');
 
         //Assert
-        Assert.That(rover.XCoordinate, Is.EqualTo(expectedXCoord));
-        Assert.That(rover.YCoordinate, Is.EqualTo(expectedYCoord));
-        Assert.That(rover.Bearing, Is.EqualTo(expectedBearing));
+        Assert.That(rover.Position.XCoordinate, Is.EqualTo(expectedXCoord));
+        Assert.That(rover.Position.YCoordinate, Is.EqualTo(expectedYCoord));
+        Assert.That(rover.Position.Bearing, Is.EqualTo(expectedBearing));
     }
 
     [TestCase(0,0,'N','W')]
@@ -76,7 +76,7 @@ public class MarsRoverUnitTests
         rover.ExecuteInstruction('L');
 
         //Assert
-        Assert.That(rover.Bearing, Is.EqualTo(expectedBearing));
+        Assert.That(rover.Position.Bearing, Is.EqualTo(expectedBearing));
     }
 
     [TestCase(0, 0, 'N', 'E')]
@@ -92,7 +92,7 @@ public class MarsRoverUnitTests
         rover.ExecuteInstruction('R');
 
         //Assert
-        Assert.That(rover.Bearing, Is.EqualTo(expectedBearing));
+        Assert.That(rover.Position.Bearing, Is.EqualTo(expectedBearing));
     }
 
     [Test]

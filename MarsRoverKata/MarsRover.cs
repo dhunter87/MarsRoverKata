@@ -3,77 +3,73 @@ namespace MarsRoverKata
 {
 	public class MarsRover
 	{
-        private readonly CoordinatesValidator validator;
-
-        public int XCoordinate { get; private set; }
-		public int YCoordinate { get; private set; }
-        public char Bearing { get; private set; }
+        private readonly CoordinatesValidator _validator;
+        public Position Position;
 
         public MarsRover(int xCoordinate, int yCoodinate, char bearing)
         {
-            validator = new CoordinatesValidator();
-            if (validator.IsValid(xCoordinate, yCoodinate, bearing))
+            _validator = new CoordinatesValidator();
+
+            if (_validator.IsValid(xCoordinate, yCoodinate, bearing))
             {
-                XCoordinate = xCoordinate;
-                YCoordinate = yCoodinate;
-                Bearing = bearing;
+                Position = new Position(xCoordinate, yCoodinate, bearing);
             }
         }
 
 
         public void Move()
         {
-            switch (Bearing)
+            switch (Position.Bearing)
             {
                 case 'N':
-                    YCoordinate++;
+                    Position.YCoordinate++;
                     break;
                 case 'E':
-                    XCoordinate++;
+                    Position.XCoordinate++;
                     break;
                 case 'S':
-                    YCoordinate--;
+                    Position.YCoordinate--;
                     break;
                 case 'W':
-                    XCoordinate--;
+                    Position.XCoordinate--;
                     break;
             }
         }
 
         public void TurnLeft()
         {
-            switch (Bearing)
+            switch (Position.Bearing)
             {
                 case 'N':
-                    Bearing = 'W';
+                    Position.Bearing = 'W';
                     break;
                 case 'W':
-                    Bearing = 'S';
+                    Position.Bearing = 'S';
                     break;
                 case 'S':
-                    Bearing = 'E';
+                    Position.Bearing = 'E';
                     break;
                 case 'E':
-                    Bearing = 'N';
+                    Position.Bearing = 'N';
                     break;
             }
         }
 
         private void TurnRight()
         {
-            switch (Bearing)
+            switch (Position.Bearing)
             {
                 case 'N':
-                    Bearing = 'E';
+                    Position.Bearing = 'E';
                     break;
                 case 'E':
-                    Bearing = 'S';
+                    Position.Bearing = 'S';
                     break;
                 case 'S':
-                    Bearing = 'W';
+                    Position.Bearing = 'W';
                     break;
                 case 'W':
-                    Bearing = 'N';
+                    Position.Bearing = 'N';
                     break;
             }
         }
