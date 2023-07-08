@@ -89,7 +89,7 @@ public class MarsRoverUnitTests
         var rover = new MarsRover(xCord, yCord, bearing);
 
         //Act
-        rover.ExecuteInstruction('L');
+        rover.ExecuteInstruction('R');
 
         //Assert
         Assert.That(rover.Bearing, Is.EqualTo(expectedBearing));
