@@ -87,4 +87,17 @@ public class MarsRoverUnitTests
         //Assert
         Assert.That(rover.Bearing, Is.EqualTo('W'));
     }
+
+    [Test]
+    public void Given_Bearing_Is_W_Mars_Rover_Changes_Bearing_When_Given_L_Instruction()
+    {
+        //Arrange
+        var rover = new MarsRover(0, 0, 'W');
+
+        //Act
+        rover.ExecuteInstruction('L');
+
+        //Assert
+        Assert.That(rover.Bearing, Is.EqualTo('S'));
+    }
 }

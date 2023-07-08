@@ -46,6 +46,13 @@ namespace MarsRoverKata
             {
                 Move();
             }
+            if (instruction == 'L')
+            {
+                if (Bearing == 'N')
+                {
+                    Bearing = 'W';
+                }
+            }
         }
     }
 }
