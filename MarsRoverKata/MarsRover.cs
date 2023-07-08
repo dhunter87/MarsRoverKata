@@ -89,17 +89,31 @@ namespace MarsRoverKata
             }
         }
 
-        public void ExecuteInstructions(string instructions)
+        public void ExecuteInstructions(string instructions, List<char>? invalidCommands = null)
         {
+            if (invalidCommands == null)
+            {
+                invalidCommands = new List<char>();
+            }
+
             if (!string.IsNullOrEmpty(instructions))
             {
-
-                if (Enum.TryParse(Char.ToUpper(instructions[0]).ToString(), out RoverCommand command))
+                if (Enum.TryParse(Char.ToUpper(instructions[0]).ToString(), out RoverCommand currentCommand))
                 {
-                    ExecuteInstruction(command);
-                    ExecuteInstructions(instructions.Substring(1));
+                    ExecuteInstruction(currentCommand);
                 }
+                else
+                {
+                    invalidCommands.Add(instructions[0]);
+                }
+
+                ExecuteInstructions(instructions.Substring(1), invalidCommands);
             }
+            if (invalidCommands.Any())
+            {
+                Console.WriteLine($"Invalid commands: {string.Join(", ", invalidCommands.Distinct<char>())}");
+            }
+            
         }
 
         public void ExecuteInstruction(RoverCommand instruction)
@@ -112,11 +126,6 @@ namespace MarsRoverKata
             {
                 Rotate(instruction);
             }
-        }
-
-        private bool IsValidInstruction(char instruction)
-        {
-            return instruction == 'L' || instruction == 'R' || instruction == 'M';
         }
 
     }
