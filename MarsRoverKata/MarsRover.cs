@@ -10,10 +10,12 @@ namespace MarsRoverKata
         {
             _validator = new CoordinatesValidator();
 
-            if (_validator.IsValid(xCoordinate, yCoodinate, bearing))
+            if (!_validator.IsValid(xCoordinate, yCoodinate, bearing))
             {
-                Position = new Position(xCoordinate, yCoodinate, bearing);
+                throw new ArgumentException();
             }
+
+            Position = new Position(xCoordinate, yCoodinate, bearing);
         }
 
         public void Move()
@@ -75,7 +77,11 @@ namespace MarsRoverKata
 
         public void ExecuteInstructions(string instructions)
         {
-            throw new NotImplementedException();
+            if (!string.IsNullOrEmpty(instructions))
+            {
+                ExecuteInstruction(instructions[0]);
+                ExecuteInstructions(instructions.Substring(1));
+            }
         }
 
         public void ExecuteInstruction(char instruction)

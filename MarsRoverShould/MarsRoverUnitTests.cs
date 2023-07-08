@@ -15,13 +15,8 @@ public class MarsRoverUnitTests
     [TestCase(0100,10000,'S')]
     public void Given_Mars_Rover_Initailised_The_Coordinates_And_Bearing_Are_Stroed(int xCoord, int yCoord, char bearing)
     {
-        //Arrange
         var rover = new MarsRover(xCoord, yCoord, bearing);
 
-        //Act
-
-
-        //Assert
         Assert.Multiple(() =>
         {
             Assert.That(rover.Position.XCoordinate, Is.EqualTo(xCoord));
@@ -35,11 +30,6 @@ public class MarsRoverUnitTests
     [TestCase(0, 0, 'Q')]
     public void Mars_Rover_Trows_Exception_If_Initailised_With_An_Coordinate_Or_Bearing(int xCoord, int yCoord, char bearing)
     {
-        //Arrange
-
-        //Act
-
-        //Assert
         Assert.Throws<ArgumentException>(() => new MarsRover(0, 0, 'Q'));
     }
 
@@ -51,16 +41,16 @@ public class MarsRoverUnitTests
         int xCoord, int yCoord, char bearing,
         int expectedXCoord, int expectedYCoord, char expectedBearing)
     {
-        //Arrange
         var rover = new MarsRover(xCoord, yCoord, bearing);
 
-        //Act
         rover.ExecuteInstruction('M');
 
-        //Assert
-        Assert.That(rover.Position.XCoordinate, Is.EqualTo(expectedXCoord));
-        Assert.That(rover.Position.YCoordinate, Is.EqualTo(expectedYCoord));
-        Assert.That(rover.Position.Bearing, Is.EqualTo(expectedBearing));
+        Assert.Multiple(() =>
+        {
+            Assert.That(rover.Position.XCoordinate, Is.EqualTo(expectedXCoord));
+            Assert.That(rover.Position.YCoordinate, Is.EqualTo(expectedYCoord));
+            Assert.That(rover.Position.Bearing, Is.EqualTo(expectedBearing));
+        });
     }
 
     [TestCase(0,0,'N','W')]
@@ -69,13 +59,10 @@ public class MarsRoverUnitTests
     [TestCase(0,0,'E','N')]
     public void Mars_Rover_Changes_Bearing_When_Given_L_Instruction(int xCord, int yCord, char bearing, char expectedBearing)
     {
-        //Arrange
         var rover = new MarsRover(xCord, yCord, bearing);
 
-        //Act
         rover.ExecuteInstruction('L');
 
-        //Assert
         Assert.That(rover.Position.Bearing, Is.EqualTo(expectedBearing));
     }
 
@@ -85,26 +72,29 @@ public class MarsRoverUnitTests
     [TestCase(0, 0, 'W', 'N')]
     public void Mars_Rover_Changes_Bearing_When_Given_R_Instruction(int xCord, int yCord, char bearing, char expectedBearing)
     {
-        //Arrange
         var rover = new MarsRover(xCord, yCord, bearing);
 
-        //Act
         rover.ExecuteInstruction('R');
 
-        //Assert
         Assert.That(rover.Position.Bearing, Is.EqualTo(expectedBearing));
     }
 
-    [Test]
-    public void Mars_Rover_Executes_A_Sequence_Of_Instructions()
+    [TestCase(0,0,'N',"MM",0,2,'N')]
+    [TestCase(0,0,'N',"MMRM",1,2,'E')]
+    [TestCase(5,5,'S',"MM",5,3,'S')]
+    [TestCase(5,5,'S',"MMRM",4,3,'W')]
+    public void Mars_Rover_Executes_A_Sequence_Of_Instructions_MMRM(int xCord, int yCord, char bearing, string instructions, int expectedXCoord, int expectedYCoord, char expectedBearing)
     {
-        //Arrange
-        var rover = new MarsRover(0, 0, 'N');
-        //Act
-        rover.ExecuteInstructions("MM");
+        var rover = new MarsRover(xCord, yCord, bearing);
 
-        //Assert
-        Assert.That(rover.Position.YCoordinate, Is.EqualTo(2));
+        rover.ExecuteInstructions(instructions);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(rover.Position.YCoordinate, Is.EqualTo(expectedYCoord));
+            Assert.That(rover.Position.XCoordinate, Is.EqualTo(expectedXCoord));
+            Assert.That(rover.Position.Bearing, Is.EqualTo(expectedBearing));
+        });
     }
 
     [Test]
