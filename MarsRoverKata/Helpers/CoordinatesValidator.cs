@@ -1,14 +1,9 @@
 ﻿using System;
-namespace MarsRoverKata
+namespace MarsRoverKata.Helpers
 {
-	public class CoordinatesValidator
+	public static class CoordinatesValidator
 	{
-		public CoordinatesValidator()
-		{
-
-		}
-
-        public bool IsValid(int xCoordinate, int yCoodinate, char bearing)
+        public static bool IsValid(int xCoordinate, int yCoodinate, char bearing)
         {
             if (xCoordinate < 0 || yCoodinate < 0)
             {
@@ -19,7 +14,6 @@ namespace MarsRoverKata
                 throw new ArgumentException();
             }
             return true;
-
         }
     }
 }

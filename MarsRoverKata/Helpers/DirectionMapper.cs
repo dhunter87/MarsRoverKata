@@ -1,14 +1,14 @@
 ﻿using System;
-namespace MarsRoverKata.Mappers
+namespace MarsRoverKata.Helpers
 {
-	public class Mapper
-	{
+	public static class DirectionMapper
+    {
         const char North = 'N';
         const char South = 'S';
         const char West = 'W';
         const char East = 'E';
         
-        public Dictionary<char, (int, int)> DirectionOfTravel = new Dictionary<char, (int, int)>
+        public static Dictionary<char, (int, int)> DirectionOfTravel = new Dictionary<char, (int, int)>
         {
             {North, (0, 1) },
             {East, (1, 0) },
@@ -16,7 +16,7 @@ namespace MarsRoverKata.Mappers
             {West, (-1, 0) }
         };
 
-        public Dictionary<char, int> BearingRotation = new Dictionary<char, int>
+        public static Dictionary<char, int> BearingRotation = new Dictionary<char, int>
         {
             { North, 0 },
             { East, 1 },
@@ -25,7 +25,7 @@ namespace MarsRoverKata.Mappers
         };
 
 
-        public (int, int) GetDirectionDelta(char currentBearing)
+        public static (int, int) GetDirectionDelta(char currentBearing)
         {
             if (DirectionOfTravel.TryGetValue(currentBearing, out var directionDelta))
             {
@@ -34,12 +34,12 @@ namespace MarsRoverKata.Mappers
             throw new ArgumentException($"Invalid bearing: {currentBearing}");
         }
 
-        internal int GetCurrentBearing(Position position)
+        internal static int GetCurrentBearing(char bearing)
         {
-            return BearingRotation[position.Bearing];
+            return BearingRotation[bearing];
         }
 
-        internal char GetNewBearing(int newRotationValue)
+        internal static char GetNewBearing(int newRotationValue)
         {
             return BearingRotation.Single(kvp => kvp.Value == newRotationValue).Key;
         }

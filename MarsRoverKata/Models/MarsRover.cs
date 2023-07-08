@@ -1,22 +1,17 @@
 ﻿using System;
-using MarsRoverKata.Mappers;
+using MarsRoverKata.Helpers;
 
-namespace MarsRoverKata
+namespace MarsRoverKata.Models
 {
     public class MarsRover
     {
-        private readonly CoordinatesValidator _validator;
         public Position Position;
-        private readonly Mapper _mapper;
 
         public MarsRover(int xCoordinate, int yCoodinate, char bearing)
         {
-            _validator = new CoordinatesValidator();
-            _mapper = new Mapper();
-
             bearing = Char.ToUpper(bearing);
 
-            if (!_validator.IsValid(xCoordinate, yCoodinate, bearing))
+            if (!CoordinatesValidator.IsValid(xCoordinate, yCoodinate, bearing))
             {
                 throw new ArgumentException();
             }
@@ -66,17 +61,17 @@ namespace MarsRoverKata
 
         public void Move()
         {
-            (int deltaXCoordinate, int deltaYCoordinate) = _mapper.GetDirectionDelta(Position.Bearing);
+            (int deltaXCoordinate, int deltaYCoordinate) = DirectionMapper.GetDirectionDelta(Position.Bearing);
             Position.XCoordinate += deltaXCoordinate;
             Position.YCoordinate += deltaYCoordinate;
         }
 
         private void Rotate(int bearingIncrementor)
         {
-            var currentRotationValue = _mapper.GetCurrentBearing(Position);
+            var currentRotationValue = DirectionMapper.GetCurrentBearing(Position.Bearing);
             var newRotationValue = (currentRotationValue + bearingIncrementor) % 4;
 
-            Position.Bearing = _mapper.GetNewBearing(newRotationValue);
+            Position.Bearing = DirectionMapper.GetNewBearing(newRotationValue);
         }
     }
 }

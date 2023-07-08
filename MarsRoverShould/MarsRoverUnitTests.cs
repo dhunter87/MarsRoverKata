@@ -1,10 +1,12 @@
-﻿using MarsRoverKata;
+﻿using MarsRoverKata.Models;
+using MarsRoverKata.Helpers;
 using NUnit.Framework;
 
 namespace MarsRoverShould;
 
 public class MarsRoverUnitTests
 {
+
     [SetUp]
     public void Setup()
     {

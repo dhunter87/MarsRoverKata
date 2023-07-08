@@ -1,5 +1,5 @@
 ﻿using System;
-namespace MarsRoverKata
+namespace MarsRoverKata.Helpers
 {
 	public enum RoverCommand
 	{

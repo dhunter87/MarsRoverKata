@@ -1,4 +1,4 @@
-﻿namespace MarsRoverKata
+﻿namespace MarsRoverKata.Models
 {
     public class Position
     {
