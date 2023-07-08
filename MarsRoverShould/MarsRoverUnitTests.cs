@@ -108,17 +108,35 @@ public class MarsRoverUnitTests
         });
     }
 
-    [Test]
-    public void Mars_Rover_Executes_A_Sequence_Of_Instructions_MMRM()
+    [TestCase(0, 0, 'N', "mm", 0, 2, 'N')]
+    [TestCase(0, 0, 'N', "mmrm", 1, 2, 'E')]
+    [TestCase(5, 5, 'S', "Mm", 5, 3, 'S')]
+    [TestCase(5, 5, 'S', "MmRm", 4, 3, 'W')]
+    public void Given_Valid_Lowecase_Values_ExecuteInstructions_Perfoms_Expected_Actions(int xCord, int yCord, char bearing, string instructions, int expectedXCoord, int expectedYCoord, char expectedBearing)
     {
-        var rover = new MarsRover(0,0,'N');
+        var rover = new MarsRover(xCord, yCord, bearing);
 
-        rover.ExecuteInstructions("m");
+        rover.ExecuteInstructions(instructions);
 
         Assert.Multiple(() =>
         {
-            Assert.That(rover.Position.YCoordinate, Is.EqualTo(0));
-            Assert.That(rover.Position.XCoordinate, Is.EqualTo(1));
+            Assert.That(rover.Position.YCoordinate, Is.EqualTo(expectedYCoord));
+            Assert.That(rover.Position.XCoordinate, Is.EqualTo(expectedXCoord));
+            Assert.That(rover.Position.Bearing, Is.EqualTo(expectedBearing));
+        });
+    }
+
+    [Test]
+    public void Mars_Rover_Executes_A_Sequence_Of_Instructions_MMRM_And_Ignores_Invalid_Commands()
+    {
+        var rover = new MarsRover(0, 0, 'N');
+
+        rover.ExecuteInstructions("QM");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(rover.Position.XCoordinate, Is.EqualTo(0));
+            Assert.That(rover.Position.YCoordinate, Is.EqualTo(1));
             Assert.That(rover.Position.Bearing, Is.EqualTo('N'));
         });
     }

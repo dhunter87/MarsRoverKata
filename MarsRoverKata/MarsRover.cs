@@ -93,7 +93,8 @@ namespace MarsRoverKata
         {
             if (!string.IsNullOrEmpty(instructions))
             {
-                if (Enum.TryParse(instructions[0].ToString(), out RoverCommand command))
+
+                if (Enum.TryParse(Char.ToUpper(instructions[0]).ToString(), out RoverCommand command))
                 {
                     ExecuteInstruction(command);
                     ExecuteInstructions(instructions.Substring(1));
