@@ -6,6 +6,31 @@ namespace MarsRoverKata
         private readonly CoordinatesValidator _validator;
         public Position Position;
 
+        public Dictionary<char, (int, int)> DirectionOfTravelMapper = new Dictionary<char, (int, int)>
+        {
+            {'N', (0, 1) },
+            {'E', (1, 0) },
+            {'S', (0, -1) },
+            {'W', (-1, 0) }
+        };
+
+        public Dictionary<char, int> BearingRotationMapper = new Dictionary<char, int>
+        {
+            { 'N', 0 },
+            { 'E', 1 },
+            { 'S', 2 },
+            { 'W', 3 }
+        };
+
+        public (int , int) GetDirectionDelta(char currentBearing)
+        {
+            if (DirectionOfTravelMapper.TryGetValue(currentBearing, out var directionDelta))
+            {
+                return directionDelta;
+            }
+            throw new ArgumentException($"Invalid bearing: {currentBearing}");
+        }
+
         public MarsRover(int xCoordinate, int yCoodinate, char bearing)
         {
             bearing = Char.ToUpper(bearing);
@@ -17,76 +42,6 @@ namespace MarsRoverKata
             }
 
             Position = new Position(xCoordinate, yCoodinate, bearing);
-        }
-
-        public void Move()
-        {
-            switch (Position.Bearing)
-            {
-                case 'N':
-                    Position.YCoordinate++;
-                    break;
-                case 'E':
-                    Position.XCoordinate++;
-                    break;
-                case 'S':
-                    Position.YCoordinate--;
-                    break;
-                case 'W':
-                    Position.XCoordinate--;
-                    break;
-            }
-        }
-
-        public void Rotate(RoverCommand instruction)
-        {
-            if (instruction == RoverCommand.L)
-            {
-                TurnLeft();
-            }
-            if(instruction == RoverCommand.R)
-            {
-                TurnRight();
-            }
-
-        }
-
-        public void TurnLeft()
-        {
-            switch (Position.Bearing)
-            {
-                case 'N':
-                    Position.Bearing = 'W';
-                    break;
-                case 'W':
-                    Position.Bearing = 'S';
-                    break;
-                case 'S':
-                    Position.Bearing = 'E';
-                    break;
-                case 'E':
-                    Position.Bearing = 'N';
-                    break;
-            }
-        }
-
-        private void TurnRight()
-        {
-            switch (Position.Bearing)
-            {
-                case 'N':
-                    Position.Bearing = 'E';
-                    break;
-                case 'E':
-                    Position.Bearing = 'S';
-                    break;
-                case 'S':
-                    Position.Bearing = 'W';
-                    break;
-                case 'W':
-                    Position.Bearing = 'N';
-                    break;
-            }
         }
 
         public void ExecuteInstructions(string instructions, List<char>? invalidCommands = null)
@@ -109,11 +64,11 @@ namespace MarsRoverKata
 
                 ExecuteInstructions(instructions.Substring(1), invalidCommands);
             }
+
             if (invalidCommands.Any())
             {
                 Console.WriteLine($"Invalid commands: {string.Join(", ", invalidCommands.Distinct<char>())}");
             }
-            
         }
 
         public void ExecuteInstruction(RoverCommand instruction)
@@ -122,12 +77,47 @@ namespace MarsRoverKata
             {
                 Move();
             }
+
             if (instruction == RoverCommand.L || instruction == RoverCommand.R)
             {
                 Rotate(instruction);
             }
         }
 
+        public void Move()
+        {
+            (int deltaXCoordinate, int deltaYCoordinate) = GetDirectionDelta(Position.Bearing);
+            Position.XCoordinate += deltaXCoordinate;
+            Position.YCoordinate += deltaYCoordinate;
+        }
+
+        public void Rotate(RoverCommand instruction)
+        {
+            if (instruction == RoverCommand.L)
+            {
+                TurnLeft();
+            }
+            if(instruction == RoverCommand.R)
+            {
+                TurnRight();
+            }
+        }
+
+        public void TurnLeft()
+        {
+            var currentRotationValue = BearingRotationMapper[Position.Bearing];
+            var newRotationValue = (currentRotationValue + 3) % 4;
+
+            Position.Bearing = BearingRotationMapper.Single(kvp => kvp.Value == newRotationValue).Key;
+        }
+
+        private void TurnRight()
+        {
+            var currentRotationValue = BearingRotationMapper[Position.Bearing];
+            var newRotationValue = (currentRotationValue + 1) % 4;
+
+            Position.Bearing = BearingRotationMapper.Single(kvp => kvp.Value == newRotationValue).Key;
+        }
     }
 }
 
