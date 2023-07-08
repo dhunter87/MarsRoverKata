@@ -6,9 +6,11 @@ namespace MarsRoverKata.Models
     public class MarsRover
     {
         public Position Position;
+        public Platau Platau;
 
-        public MarsRover(int xCoordinate, int yCoodinate, char bearing)
+        public MarsRover(int xCoordinate, int yCoodinate, char bearing, Platau platau)
         {
+            Platau = platau;
             bearing = Char.ToUpper(bearing);
 
             if (!CoordinatesValidator.IsValid(xCoordinate, yCoodinate, bearing))
@@ -62,8 +64,16 @@ namespace MarsRoverKata.Models
         public void Move()
         {
             (int deltaXCoordinate, int deltaYCoordinate) = DirectionMapper.GetDirectionDelta(Position.Bearing);
-            Position.XCoordinate += deltaXCoordinate;
-            Position.YCoordinate += deltaYCoordinate;
+            
+            var nextXCoordinate = Position.XCoordinate + deltaXCoordinate;
+            var nextYCoordinate = Position.YCoordinate + deltaYCoordinate;
+
+            if (Platau.IsValildMove(nextXCoordinate, nextYCoordinate))
+            {
+                Position.XCoordinate += deltaXCoordinate;
+                Position.YCoordinate += deltaYCoordinate;
+            }
+
         }
 
         private void Rotate(int bearingIncrementor)

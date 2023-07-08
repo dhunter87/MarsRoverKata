@@ -1,4 +1,6 @@
 ﻿using System;
+using MarsRoverKata.Helpers;
+
 namespace MarsRoverKata.Models
 {
     public class Platau
@@ -8,8 +10,22 @@ namespace MarsRoverKata.Models
 
         public Platau(int maxXCoordinate, int maxYCoordinate)
         {
-            MaxXCoordinate = maxXCoordinate;
-            MaxYCoordinate = maxYCoordinate;
+            if (CoordinatesValidator.IsValid(maxXCoordinate, maxYCoordinate))
+            {
+                MaxXCoordinate = maxXCoordinate;
+                MaxYCoordinate = maxYCoordinate;
+            }
+        }
+
+        public (int, int) GetPlatauCoordinatesUpperLimits()
+        {
+            return (MaxXCoordinate, MaxYCoordinate);
+        }
+
+        public bool IsValildMove(int xCoordinate, int yCoordinate)
+        {
+            return xCoordinate >= 0 && xCoordinate <= MaxXCoordinate &&
+                yCoordinate >= 0 && yCoordinate <= MaxYCoordinate;
         }
     }
 }
