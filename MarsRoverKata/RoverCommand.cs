@@ -3,9 +3,9 @@ namespace MarsRoverKata
 {
 	public enum RoverCommand
 	{
-		M, // Move()
-		L, // TurnLeft()
-		R  // TurnRight()
+		R = 1,  // TurnRight()
+		M = 2, // Move()
+		L = 3 // TurnLeft()
 	}
 }
 

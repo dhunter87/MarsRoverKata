@@ -7,4 +7,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Mappers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mappers\" />
+  </ItemGroup>
 </Project>
