@@ -8,6 +8,7 @@ namespace MarsRoverKata
 
         public MarsRover(int xCoordinate, int yCoodinate, char bearing)
         {
+            bearing = Char.ToUpper(bearing);
             _validator = new CoordinatesValidator();
 
             if (!_validator.IsValid(xCoordinate, yCoodinate, bearing))
@@ -35,6 +36,19 @@ namespace MarsRoverKata
                     Position.XCoordinate--;
                     break;
             }
+        }
+
+        public void Rotate(RoverCommand instruction)
+        {
+            if (instruction == RoverCommand.L)
+            {
+                TurnLeft();
+            }
+            if(instruction == RoverCommand.R)
+            {
+                TurnRight();
+            }
+
         }
 
         public void TurnLeft()
@@ -79,25 +93,29 @@ namespace MarsRoverKata
         {
             if (!string.IsNullOrEmpty(instructions))
             {
-                ExecuteInstruction(instructions[0]);
-                ExecuteInstructions(instructions.Substring(1));
+                if (Enum.TryParse(instructions[0].ToString(), out RoverCommand command))
+                {
+                    ExecuteInstruction(command);
+                    ExecuteInstructions(instructions.Substring(1));
+                }
             }
         }
 
-        public void ExecuteInstruction(char instruction)
+        public void ExecuteInstruction(RoverCommand instruction)
         {
-            if (instruction == 'M')
+            if (instruction == RoverCommand.M)
             {
                 Move();
             }
-            if (instruction == 'L')
+            if (instruction == RoverCommand.L || instruction == RoverCommand.R)
             {
-                TurnLeft();
+                Rotate(instruction);
             }
-            if (instruction == 'R')
-            {
-                TurnRight();
-            }
+        }
+
+        private bool IsValidInstruction(char instruction)
+        {
+            return instruction == 'L' || instruction == 'R' || instruction == 'M';
         }
 
     }

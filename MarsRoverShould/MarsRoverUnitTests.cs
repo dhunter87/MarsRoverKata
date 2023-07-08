@@ -13,7 +13,7 @@ public class MarsRoverUnitTests
     [TestCase(0,0,'N')]
     [TestCase(3,5,'W')]
     [TestCase(0100,10000,'S')]
-    public void Given_Mars_Rover_Initailised_The_Coordinates_And_Bearing_Are_Stroed(int xCoord, int yCoord, char bearing)
+    public void Given_Mars_Rover_Initailised_The_Coordinates_And_Bearing_Are_Stored(int xCoord, int yCoord, char bearing)
     {
         var rover = new MarsRover(xCoord, yCoord, bearing);
 
@@ -23,6 +23,17 @@ public class MarsRoverUnitTests
             Assert.That(rover.Position.YCoordinate, Is.EqualTo(yCoord));
             Assert.That(rover.Position.Bearing, Is.EqualTo(bearing));
         });
+    }
+
+    [TestCase('n', 'N')]
+    [TestCase('e', 'E')]
+    [TestCase('s', 'S')]
+    [TestCase('w', 'W')]
+    public void Given_Mars_Rover_Initailised_With_A_Lowecase_Bearing_Value_The_Bearing_Is_Stored_In_Uppercase(char bearing, char expectedBearing)
+    {
+        var rover = new MarsRover(0, 0, bearing);
+
+        Assert.That(rover.Position.Bearing, Is.EqualTo(expectedBearing));
     }
 
     [TestCase(-1, 0, 'N')]
@@ -43,7 +54,7 @@ public class MarsRoverUnitTests
     {
         var rover = new MarsRover(xCoord, yCoord, bearing);
 
-        rover.ExecuteInstruction('M');
+        rover.ExecuteInstruction(RoverCommand.M);
 
         Assert.Multiple(() =>
         {
@@ -61,7 +72,7 @@ public class MarsRoverUnitTests
     {
         var rover = new MarsRover(xCord, yCord, bearing);
 
-        rover.ExecuteInstruction('L');
+        rover.ExecuteInstruction(RoverCommand.L);
 
         Assert.That(rover.Position.Bearing, Is.EqualTo(expectedBearing));
     }
@@ -74,7 +85,7 @@ public class MarsRoverUnitTests
     {
         var rover = new MarsRover(xCord, yCord, bearing);
 
-        rover.ExecuteInstruction('R');
+        rover.ExecuteInstruction(RoverCommand.R);
 
         Assert.That(rover.Position.Bearing, Is.EqualTo(expectedBearing));
     }
@@ -98,6 +109,21 @@ public class MarsRoverUnitTests
     }
 
     [Test]
+    public void Mars_Rover_Executes_A_Sequence_Of_Instructions_MMRM()
+    {
+        var rover = new MarsRover(0,0,'N');
+
+        rover.ExecuteInstructions("m");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(rover.Position.YCoordinate, Is.EqualTo(0));
+            Assert.That(rover.Position.XCoordinate, Is.EqualTo(1));
+            Assert.That(rover.Position.Bearing, Is.EqualTo('N'));
+        });
+    }
+
+    [Test]
     [Ignore("This test is being ignored for until implementation has developed further.")]
     public void Mars_Rover_Trows_Exception_If_Moved_Out_Of_Bounds()
     {
@@ -106,7 +132,7 @@ public class MarsRoverUnitTests
         //Act
 
         //Assert
-        Assert.Throws<ArgumentException>(() => rover.ExecuteInstruction('M'));
+        Assert.Throws<ArgumentException>(() => rover.ExecuteInstruction(RoverCommand.M));
     }
 
 }
