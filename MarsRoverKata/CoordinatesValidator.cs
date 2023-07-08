@@ -7,6 +7,7 @@ namespace MarsRoverKata
 		{
 
 		}
+
         public bool IsValid(int xCoordinate, int yCoodinate, char bearing)
         {
             if (xCoordinate < 0 || yCoodinate < 0)
