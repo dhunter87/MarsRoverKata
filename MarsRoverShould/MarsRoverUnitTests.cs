@@ -63,6 +63,38 @@ public class MarsRoverUnitTests
         Assert.That(rover.Bearing, Is.EqualTo(expectedBearing));
     }
 
+    [TestCase(0,0,'N','W')]
+    [TestCase(0,0,'W','S')]
+    [TestCase(0,0,'S','E')]
+    [TestCase(0,0,'E','N')]
+    public void Mars_Rover_Changes_Bearing_When_Given_L_Instruction(int xCord, int yCord, char bearing, char expectedBearing)
+    {
+        //Arrange
+        var rover = new MarsRover(xCord, yCord, bearing);
+
+        //Act
+        rover.ExecuteInstruction('L');
+
+        //Assert
+        Assert.That(rover.Bearing, Is.EqualTo(expectedBearing));
+    }
+
+    [TestCase(0, 0, 'N', 'E')]
+    [TestCase(0, 0, 'E', 'S')]
+    [TestCase(0, 0, 'S', 'W')]
+    [TestCase(0, 0, 'W', 'N')]
+    public void Mars_Rover_Changes_Bearing_When_Given_R_Instruction(int xCord, int yCord, char bearing, char expectedBearing)
+    {
+        //Arrange
+        var rover = new MarsRover(xCord, yCord, bearing);
+
+        //Act
+        rover.ExecuteInstruction('L');
+
+        //Assert
+        Assert.That(rover.Bearing, Is.EqualTo(expectedBearing));
+    }
+
     [Test]
     [Ignore("This test is being ignored for until implementation has developed further.")]
     public void Mars_Rover_Trows_Exception_If_Moved_Out_Of_Bounds()
@@ -75,42 +107,4 @@ public class MarsRoverUnitTests
         Assert.Throws<ArgumentException>(() => rover.ExecuteInstruction('M'));
     }
 
-    [Test]
-    public void Mars_Rover_Changes_Bearing_When_Given_L_Instruction()
-    {
-        //Arrange
-        var rover = new MarsRover(0, 0, 'N');
-
-        //Act
-        rover.ExecuteInstruction('L');
-
-        //Assert
-        Assert.That(rover.Bearing, Is.EqualTo('W'));
-    }
-
-    [Test]
-    public void Given_Bearing_Is_W_Mars_Rover_Changes_Bearing_When_Given_L_Instruction()
-    {
-        //Arrange
-        var rover = new MarsRover(0, 0, 'W');
-
-        //Act
-        rover.ExecuteInstruction('L');
-
-        //Assert
-        Assert.That(rover.Bearing, Is.EqualTo('S'));
-    }
-
-    [Test]
-    public void Given_Bearing_Is_S_Mars_Rover_Changes_Bearing_When_Given_L_Instruction()
-    {
-        //Arrange
-        var rover = new MarsRover(0, 0, 'S');
-
-        //Act
-        rover.ExecuteInstruction('L');
-
-        //Assert
-        Assert.That(rover.Bearing, Is.EqualTo('E'));
-    }
 }

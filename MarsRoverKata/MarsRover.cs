@@ -40,6 +40,25 @@ namespace MarsRoverKata
             }
         }
 
+        public void TurnLeft()
+        {
+            switch (Bearing)
+            {
+                case 'N':
+                    Bearing = 'W';
+                    break;
+                case 'W':
+                    Bearing = 'S';
+                    break;
+                case 'S':
+                    Bearing = 'E';
+                    break;
+                case 'E':
+                    Bearing = 'N';
+                    break;
+            }
+        }
+
         public void ExecuteInstruction(char instruction)
         {
             if (instruction == 'M')
@@ -48,16 +67,7 @@ namespace MarsRoverKata
             }
             if (instruction == 'L')
             {
-                if (Bearing == 'N')
-                {
-                    Bearing = 'W';
-                    return;
-                }
-                if (Bearing == 'W')
-                {
-                    Bearing = 'S';
-                    return;
-                }
+                TurnLeft();
             }
         }
     }
