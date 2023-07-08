@@ -8,7 +8,8 @@ namespace MarsRoverKata.Models
 
         public Platau(int maxXCoordinate, int maxYCoordinate)
         {
-            
+            MaxXCoordinate = maxXCoordinate;
+            MaxYCoordinate = maxYCoordinate;
         }
     }
 }
