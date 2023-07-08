@@ -51,6 +51,12 @@ namespace MarsRoverKata
                 if (Bearing == 'N')
                 {
                     Bearing = 'W';
+                    return;
+                }
+                if (Bearing == 'W')
+                {
+                    Bearing = 'S';
+                    return;
                 }
             }
         }
