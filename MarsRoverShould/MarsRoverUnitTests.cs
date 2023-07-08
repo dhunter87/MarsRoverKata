@@ -96,6 +96,18 @@ public class MarsRoverUnitTests
     }
 
     [Test]
+    public void Mars_Rover_Executes_A_Sequence_Of_Instructions()
+    {
+        //Arrange
+        var rover = new MarsRover(0, 0, 'N');
+        //Act
+        rover.ExecuteInstructions("MM");
+
+        //Assert
+        Assert.That(rover.Position.YCoordinate, Is.EqualTo(2));
+    }
+
+    [Test]
     [Ignore("This test is being ignored for until implementation has developed further.")]
     public void Mars_Rover_Trows_Exception_If_Moved_Out_Of_Bounds()
     {

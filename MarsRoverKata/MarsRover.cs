@@ -1,8 +1,8 @@
 ﻿using System;
 namespace MarsRoverKata
 {
-	public class MarsRover
-	{
+    public class MarsRover
+    {
         private readonly CoordinatesValidator _validator;
         public Position Position;
 
@@ -15,7 +15,6 @@ namespace MarsRoverKata
                 Position = new Position(xCoordinate, yCoodinate, bearing);
             }
         }
-
 
         public void Move()
         {
@@ -72,6 +71,11 @@ namespace MarsRoverKata
                     Position.Bearing = 'N';
                     break;
             }
+        }
+
+        public void ExecuteInstructions(string instructions)
+        {
+            throw new NotImplementedException();
         }
 
         public void ExecuteInstruction(char instruction)
