@@ -6,19 +6,20 @@ namespace MarsRover.Models
 		public Platau Platau;
 		public Player Player;
 
-		public MarsMission()
+		public MarsMission(int maxXCoordinate, int maxYCoordinate)
 		{
-			Player = new Player();
+			Platau = CreatePlatau(maxXCoordinate, maxYCoordinate);
+			Player = new Player(Platau);
 		}
 
-        public void CreatePlatau(int maxXCoordinate, int maxYCoordinate)
+        public Platau CreatePlatau(int maxXCoordinate, int maxYCoordinate)
         {
-			Platau = new Platau(maxXCoordinate, maxYCoordinate);
+			return new Platau(maxXCoordinate, maxYCoordinate);
         }
 
         public void CreateRover(int startingXCoordinate, int startingYCoordinate, char startingBearing)
         {
-            throw new NotImplementedException();
+			Player.AddTeamMember();
         }
     }
 }

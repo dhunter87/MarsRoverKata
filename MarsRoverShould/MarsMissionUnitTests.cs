@@ -12,7 +12,9 @@ namespace MarsMissionShould
 		[SetUp]
 		public void Setup()
 		{
-            _mission = new MarsMission();
+            var maxXCoordinate = 5;
+            var maxYCoordinate = 5;
+            _mission = new MarsMission(maxXCoordinate, maxYCoordinate);
 		}
 
 		[Test]
@@ -45,7 +47,21 @@ namespace MarsMissionShould
         {
             _mission.CreateRover(1,0,'N');
 
-            Assert.That(_mission.Player, Is.Not.Null);
+            Assert.That(_mission.Player.Team[0], Is.Not.Null);
+        }
+
+        [TestCase(1,0,'N')]
+        [TestCase(5,5,'E')]
+        [TestCase(1, 5, 'S')]
+        public void MarsMission_Player_Can_Create_New_Rover(int xCoordinate, int yCoordinate, char bearing)
+        {
+            _mission.CreateRover(xCoordinate, yCoordinate, bearing);
+
+            var rover = _mission.Player.Team[0];
+
+            Assert.That(rover.Position.XCoordinate, Is.EqualTo(xCoordinate));
+            Assert.That(rover.Position.YCoordinate, Is.EqualTo(yCoordinate));
+            Assert.That(rover.Position.Bearing, Is.EqualTo(bearing));
         }
 
         [Test]
