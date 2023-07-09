@@ -27,6 +27,29 @@ namespace MarsRover.Helpers
             }
         }
 
+        public static int SetUpTeamLimits()
+        {
+            while (true)
+            {
+                Console.WriteLine("Enter max Number of Rovers a Player can have on their Team!");
+                var teamLimit = Console.ReadLine();
+
+                if (!int.TryParse(teamLimit, out int maxTeamMembers))
+                {
+                    Console.WriteLine("Invalid input format.");
+                    continue;
+
+                }
+                if (maxTeamMembers <= 0 || maxTeamMembers > 10)
+                {
+                    Console.WriteLine("Invalid input - out of range.");
+                    continue;
+                }
+
+                return maxTeamMembers;
+            }
+        }
+
         public static KeyValuePair<char, (int, int)> SetupRoverCoordinates()
         {
             Console.WriteLine("Enter Rover Coordinates And Bearing to start Mars Mission!");

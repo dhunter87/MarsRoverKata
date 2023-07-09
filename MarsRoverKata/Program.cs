@@ -7,8 +7,9 @@ class Program
     static void Main()
     {
         var maxCoordinates = MissionInstructions.SetupPlatauCoordinates();
+        var maxTeamMembers = MissionInstructions.SetUpTeamLimits();
 
-        var mission = new MarsMission(maxCoordinates.Item1, maxCoordinates.Item2);
+        var mission = new MarsMission(maxCoordinates.Item1, maxCoordinates.Item2, maxTeamMembers);
 
         var initialRoverCoordinates = MissionInstructions.SetupRoverCoordinates();
 

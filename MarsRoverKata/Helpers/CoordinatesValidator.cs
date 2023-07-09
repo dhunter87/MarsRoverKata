@@ -1,9 +1,11 @@
 ﻿using System;
+using MarsRover.Models;
+
 namespace MarsRover.Helpers
 {
 	public static class CoordinatesValidator
 	{
-        public static bool IsValid(int xCoordinate, int yCoodinate, char bearing)
+        public static bool IsValid(int xCoordinate, int yCoodinate, char bearing, Platau platau)
         {
 
             if (xCoordinate < 0 || yCoodinate < 0)

@@ -43,9 +43,11 @@ public class RoverUnitTests
     [TestCase(-1, 0, 'N')]
     [TestCase(0, -1, 'N')]
     [TestCase(0, 0, 'Q')]
+    [TestCase(10000, 0, 'N')]
+    [TestCase(0, 10000, 'N')]
     public void Mars_Rover_Trows_Exception_If_Initailised_With_An_Invalid_Coordinate_Or_Bearing(int xCoord, int yCoord, char bearing)
     {
-        Assert.Throws<ArgumentException>(() => new Rover(0, 0, 'Q', Platau));
+        Assert.Throws<ArgumentException>(() => new Rover(xCoord, yCoord, bearing, Platau));
     }
 
     [TestCase(0, 0, 'N', 0, 1, 'N')]

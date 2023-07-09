@@ -14,7 +14,8 @@ namespace MarsMissionShould
 		{
             var maxXCoordinate = 5;
             var maxYCoordinate = 5;
-            _mission = new MarsMission(maxXCoordinate, maxYCoordinate);
+            var teamLimits = 5;
+            _mission = new MarsMission(maxXCoordinate, maxYCoordinate, teamLimits);
 		}
 
 		[Test]
@@ -59,19 +60,35 @@ namespace MarsMissionShould
             Assert.That(_mission.Player.Team.Count(), Is.EqualTo(2));
         }
 
-        [Test]
-        public void MarsMission_Player_Can_Not_Create_More_Than_X_Number_Of_New_Rovers()
+        [TestCase(10, 6)]
+        [TestCase(6, 6)]
+        [TestCase(1, 1)]
+        public void MarsMission_Player_Can_Not_Create_More_Than_X_Number_Of_New_Rovers(int limit, int expectedCount)
         {
-            var teamLimits = 5;
+            var maxCoord = 5;
+            _mission = new MarsMission(maxCoord, maxCoord, limit);
 
-            _mission.CreateRover(3, 2, 'N');
+            _mission.CreateRover(3, 2, 'N'); // invalid poitions
             _mission.CreateRover(3, 2, 'N');
             _mission.CreateRover(3, 2, 'N');
             _mission.CreateRover(3, 2, 'N');
             _mission.CreateRover(3, 2, 'N');
             _mission.CreateRover(3, 2, 'N');
 
-            Assert.That(_mission.Player.Team.Count(), Is.EqualTo(5));
+            Assert.That(_mission.Player.Team.Count(), Is.EqualTo(expectedCount));
+        }
+
+        [TestCase(0, 6)]
+        //[TestCase(-1, 0)]
+        [TestCase(6, 0)]
+        //[TestCase(0, -1)]
+        public void MarsMission_Player_Can_Not_Create_New_Rovers_Outside_The_Bounds_Of_The_Platau(int xCoord, int yCoord)
+        {
+            var maxCoord = 5;
+            var teamLimit = 5;
+            _mission = new MarsMission(maxCoord, maxCoord, teamLimit);
+
+            Assert.Throws<ArgumentException>(() => _mission.CreateRover(xCoord, yCoord, 'N'));
         }
 
         [TestCase(1,0,'W')]
