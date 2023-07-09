@@ -51,19 +51,18 @@ namespace PlatauShould
         }
 
         [Test]
-        [Ignore("until implamantaed")]
         public void Platau_Should_Have_At_Least_One_Goal_Point_When_Initiated()
         {
             var platau = new Platau(Constants.MaxXCoordinate, Constants.MaxYCoordinate);
 
-            //var xCoordinate = platau.goalPoint.Item1;
-            //var yCoordinate = platau.goalPoint.Item2;
+            var xCoordinate = platau.goalPoint.Item1;
+            var yCoordinate = platau.goalPoint.Item2;
 
-            //var xCoordinateWithinPlatau = xCoordinate >= 0 && xCoordinate <= Constants.MaxXCoordinate;
-            //var yCoordinateWithinPlatau = yCoordinate >= 0 && yCoordinate <= Constants.MaxYCoordinate;
+            var xCoordinateWithinPlatau = xCoordinate >= 0 && xCoordinate <= Constants.MaxXCoordinate;
+            var yCoordinateWithinPlatau = yCoordinate >= 0 && yCoordinate <= Constants.MaxYCoordinate;
 
-            //Assert.That(xCoordinateWithinPlatau, Is.EqualTo(true));
-            //Assert.That(yCoordinateWithinPlatau, Is.EqualTo(true));
+            Assert.That(xCoordinateWithinPlatau, Is.EqualTo(true));
+            Assert.That(yCoordinateWithinPlatau, Is.EqualTo(true));
         }
     }
 }

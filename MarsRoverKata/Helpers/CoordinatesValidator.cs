@@ -31,6 +31,16 @@ namespace MarsRover.Helpers
 
             return true;
         }
+
+        public static bool IsValid(int maxXCoordinate, int maxYCoordinate,int platauMaxXCoordinate, int platauMaxYCoordinate)
+        {
+            if (maxXCoordinate >= 0 && maxXCoordinate <= platauMaxXCoordinate &&
+                maxYCoordinate >= 0 && maxYCoordinate <= platauMaxYCoordinate)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
 
