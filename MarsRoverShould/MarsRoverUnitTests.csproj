@@ -19,4 +19,10 @@
   <ItemGroup>
     <ProjectReference Include="..\MarsRoverKata\MarsRover.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="TestHelpers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TestHelpers\" />
+  </ItemGroup>
 </Project>

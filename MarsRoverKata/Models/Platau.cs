@@ -10,11 +10,18 @@ namespace MarsRover.Models
 
         public Platau(int maxXCoordinate, int maxYCoordinate)
         {
+
+
             if (CoordinatesValidator.IsValid(maxXCoordinate, maxYCoordinate))
             {
                 MaxXCoordinate = maxXCoordinate;
                 MaxYCoordinate = maxYCoordinate;
             }
+        }
+
+        private int GenerateGoalpointCoordinate()
+        {
+            throw new NotImplementedException();
         }
 
         public (int, int) GetPlatauCoordinatesUpperLimits()
