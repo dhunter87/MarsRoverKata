@@ -7,9 +7,11 @@ namespace MarsRover.Models
     {
         public Position Position;
         public Platau Platau;
+        private readonly string RoverID;
 
-        public Rover(int xCoordinate, int yCoodinate, char bearing, Platau platau)
+        public Rover(int xCoordinate, int yCoodinate, char bearing, Platau platau, string id)
         {
+            RoverID = id;
             Platau = platau;
             bearing = Char.ToUpper(bearing);
 
@@ -85,6 +87,11 @@ namespace MarsRover.Models
             var newRotationValue = (currentRotationValue + bearingIncrementor) % 4;
 
             Position.Bearing = DirectionMapper.GetNewBearing(newRotationValue);
+        }
+
+        public string GetId()
+        {
+            return RoverID;
         }
     }
 }

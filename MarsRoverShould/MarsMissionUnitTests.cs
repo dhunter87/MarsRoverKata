@@ -25,6 +25,16 @@ namespace MarsMissionShould
 			Assert.That(_mission, Is.Not.Null);
 		}
 
+        [TestCase(1, 1)]
+        public void MarsMission_GetCommandList_Should_Return_Correct_Limit_Value(int actualInstructionLimit, int expectedValue)
+        {
+            _mission = new MarsMission(_maxXCoordinate, _maxYCoordinate, _teamLimit, actualInstructionLimit);
+
+            var instructionLimit = _mission.GetCommandLimit();
+
+            Assert.That(instructionLimit, Is.EqualTo(expectedValue));
+        }
+
         [Test]
         public void MarsMission_Platau_Is_Not_Null_When_Initialised()
         {           
@@ -120,7 +130,7 @@ namespace MarsMissionShould
 
             AssertBeforeAction(xCoordinate, yCoordinate, bearing, rover);
 
-            _mission.Player.GiveRoverInstructions("M");
+            _mission.Player.GiveRoverInstructions(rover, "M", _instructionLimit);
 
             AssertAfterAction(expectedXCoordinate, expectedYCoordinate, expectedBearing, rover);
         }
@@ -136,7 +146,7 @@ namespace MarsMissionShould
 
             AssertBeforeAction(xCoordinate, yCoordinate, bearing, rover);
 
-            _mission.Player.GiveRoverInstructions(instructions);
+            _mission.Player.GiveRoverInstructions(rover, instructions, _instructionLimit);
 
             AssertAfterAction(expectedXCoordinate, expectedYCoordinate, expectedBearing, rover);
         }
@@ -154,7 +164,7 @@ namespace MarsMissionShould
 
             AssertBeforeAction(xCoordinate, yCoordinate, bearing, rover);
 
-            _mission.Player.GiveRoverInstructions(instructions);
+            _mission.Player.GiveRoverInstructions(rover, instructions, instructionLimit);
 
             AssertAfterAction(expectedXCoordinate, expectedYCoordinate, expectedBearing, rover);
         }

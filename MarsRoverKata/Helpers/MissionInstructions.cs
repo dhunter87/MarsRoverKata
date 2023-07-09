@@ -100,6 +100,20 @@ namespace MarsRover.Helpers
                 return instructions;
             }
         }
+
+        public static int SetupInstructionLimit()
+        {
+            Console.WriteLine("Enter Number of Instructions each Rover can take per move!");
+            var instructions = Console.ReadLine();
+
+            if (!int.TryParse(instructions, out int instructionLimit))
+            {
+                Console.WriteLine("Invalid input. Limit set to 5 by default");
+                return 5;
+            }
+
+            return instructionLimit;
+        }
     }
 }
 
