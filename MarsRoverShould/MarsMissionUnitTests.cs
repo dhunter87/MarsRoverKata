@@ -7,41 +7,51 @@ namespace MarsMissionShould
 	[TestFixture]
 	public class MarsMissionUnitTests
 	{
+        MarsMission _mission;
+
 		[SetUp]
 		public void Setup()
 		{
-
+            _mission = new MarsMission();
 		}
 
 		[Test]
 		public void MarsMission_Should_Not_Be_Null_When_Initialised()
 		{
-			var marsMission = new MarsMission();
-
-			Assert.That(marsMission, Is.Not.Null);
+			Assert.That(_mission, Is.Not.Null);
 		}
 
         [Test]
         public void MarsMission_Platau_Is_Not_Null_When_Initialised()
-        {
-            var marsMission = new MarsMission();
-
-			marsMission.CreatePlatau(5, 5);
+        {           
+            _mission.CreatePlatau(5, 5);
 
             Assert.Multiple(() =>
             {
-				Assert.That(marsMission.Platau, Is.Not.Null);
-                Assert.That(marsMission.Platau.MaxXCoordinate, Is.EqualTo(5));
-                Assert.That(marsMission.Platau.MaxYCoordinate, Is.EqualTo(5));
+				Assert.That(_mission.Platau, Is.Not.Null);
+                Assert.That(_mission.Platau.MaxXCoordinate, Is.EqualTo(5));
+                Assert.That(_mission.Platau.MaxYCoordinate, Is.EqualTo(5));
             });
         }
 
         [Test]
         public void MarsMission_Player_Is_Not_Null_When_Initialised()
         {
-            var marsMission = new MarsMission();
+            Assert.That(_mission.Player, Is.Not.Null);
+        }
 
-            Assert.That(marsMission.Player, Is.Not.Null);
+        [Test]
+        public void MarsMission_Player_Can_Create_New_Rover()
+        {
+            _mission.CreateRover(1,0,'N');
+
+            Assert.That(_mission.Player, Is.Not.Null);
+        }
+
+        [Test]
+        public void MarsMission_StartMission_()
+        {
+            Assert.That(_mission.Player, Is.Not.Null);
         }
     }
 }
