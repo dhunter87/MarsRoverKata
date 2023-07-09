@@ -1,7 +1,8 @@
 ﻿using System;
+using MarsRover.Models;
 using NUnit.Framework;
 
-namespace MarsRoverKataUnitTests
+namespace MarsMissionShould
 {
 	[TestFixture]
 	public class MarsMissionUnitTests
@@ -13,19 +14,23 @@ namespace MarsRoverKataUnitTests
 		}
 
 		[Test]
-		public void MarsMissionShould_Not_Be_Null_When_Initialised()
+		public void MarsMission_Should_Not_Be_Null_When_Initialised()
 		{
-			var masrMission = new MarsMission();
+			var marsMission = new MarsMission();
 
-			Assert.That(masrMission, Is.Not.Null);
+			Assert.That(marsMission, Is.Not.Null);
 		}
-	}
 
-    internal class MarsMission
-    {
-        public MarsMission()
+        [Test]
+        public void MarsMission_Platau_Not_Be_Null_When_Initialised()
         {
-			throw new NotImplementedException();
+            var marsMission = new MarsMission();
+
+			marsMission.CreatePlatau(5, 5);
+
+            Assert.That(marsMission.Platau, Is.Not.Null);
+            Assert.That(marsMission.Platau.MaxXCoordinate, Is.EqualTo(5));
+            Assert.That(marsMission.Platau.MaxYCoordinate, Is.EqualTo(5));
         }
     }
 }
