@@ -6,7 +6,6 @@ namespace MarsRover.Helpers
 
 		public static (int, int) SetupPlatauCoordinates()
 		{
-
             while (true)
             {
                 Console.WriteLine("Enter max Platau Coordinates (e.g. 10,10) to Setup Mars Mission!");

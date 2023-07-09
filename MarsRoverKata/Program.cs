@@ -8,7 +8,7 @@ class Program
     {
         var maxCoordinates = MissionInstructions.SetupPlatauCoordinates();
 
-        MarsMission mission = new MarsMission(maxCoordinates.Item1, maxCoordinates.Item2);
+        var mission = new MarsMission(maxCoordinates.Item1, maxCoordinates.Item2);
 
         var initialRoverCoordinates = MissionInstructions.SetupRoverCoordinates();
 
@@ -16,12 +16,10 @@ class Program
                             initialRoverCoordinates.Value.Item2,
                             initialRoverCoordinates.Key);
 
-        // Give Rover Instructions
         var instructions = MissionInstructions.SetupRoverInstructions();
+
         mission.Player.GiveRoverInstructions(instructions);
        
-        //output end position
-
         Console.WriteLine("END: Pause to check output:");
         Console.ReadLine();
     }
