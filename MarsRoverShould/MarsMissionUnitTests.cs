@@ -50,6 +50,30 @@ namespace MarsMissionShould
             Assert.That(_mission.Player.Team[0], Is.Not.Null);
         }
 
+        [Test]
+        public void MarsMission_Player_Can_Create_Multiple_New_Rovers()
+        {
+            _mission.CreateRover(3, 2, 'N');
+            _mission.CreateRover(3, 2, 'N');
+
+            Assert.That(_mission.Player.Team.Count(), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void MarsMission_Player_Can_Not_Create_More_Than_X_Number_Of_New_Rovers()
+        {
+            var teamLimits = 5;
+
+            _mission.CreateRover(3, 2, 'N');
+            _mission.CreateRover(3, 2, 'N');
+            _mission.CreateRover(3, 2, 'N');
+            _mission.CreateRover(3, 2, 'N');
+            _mission.CreateRover(3, 2, 'N');
+            _mission.CreateRover(3, 2, 'N');
+
+            Assert.That(_mission.Player.Team.Count(), Is.EqualTo(5));
+        }
+
         [TestCase(1,0,'W')]
         [TestCase(5,5,'E')]
         [TestCase(1, 5, 'S')]
