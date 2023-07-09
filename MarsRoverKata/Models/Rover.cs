@@ -21,7 +21,7 @@ namespace MarsRover.Models
             Position = new Position(xCoordinate, yCoodinate, bearing);
         }
 
-        public void ExecuteInstructions(string instructions, List<char>? invalidCommands = null)
+        public void ExecuteInstructions(string instructions, List<char>? invalidCommands = null, bool isRecursiveCall = false)
         {
             if (invalidCommands == null)
             {
@@ -39,12 +39,16 @@ namespace MarsRover.Models
                     invalidCommands.Add(instructions[0]);
                 }
 
-                ExecuteInstructions(instructions.Substring(1), invalidCommands);
+                ExecuteInstructions(instructions.Substring(1), invalidCommands, true);
             }
 
             if (invalidCommands.Any())
             {
                 Console.WriteLine($"Invalid commands: {string.Join(", ", invalidCommands.Distinct<char>())}");
+            }
+            if (!isRecursiveCall)
+            {
+                Console.WriteLine($"Rover Final Position. XCoordinate: {Position.XCoordinate}, YCoordinate: {Position.YCoordinate}, Bearing: {Position.Bearing}");
             }
         }
 

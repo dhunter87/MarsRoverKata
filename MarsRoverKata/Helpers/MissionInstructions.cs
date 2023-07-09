@@ -4,7 +4,7 @@ namespace MarsRover.Helpers
 	public static class MissionInstructions
 	{
 
-		public static (int, int) GetSetupInstructions()
+		public static (int, int) SetupPlatauCoordinates()
 		{
 
             while (true)
@@ -28,7 +28,7 @@ namespace MarsRover.Helpers
             }
         }
 
-        public static KeyValuePair<char, (int, int)> GetRoverSetupInstructions()
+        public static KeyValuePair<char, (int, int)> SetupRoverCoordinates()
         {
             Console.WriteLine("Enter Rover Coordinates And Bearing to start Mars Mission!");
             Console.WriteLine("Rover Coordinates must be within Platau maximum Coordinates");
@@ -56,6 +56,26 @@ namespace MarsRover.Helpers
                 var initialBearing = Char.ToUpper(initialPosition[2][0]);
 
                 return new KeyValuePair<char, (int, int)>(initialBearing, (initialXCoordinate, initialYCoordinate));
+            }
+        }
+
+        public static string SetupRoverInstructions()
+        {
+            Console.WriteLine("Enter Rover Instructions to Roam Mars!");
+            Console.WriteLine("Instructions must be R (Rotate 90 degrees Right), L (Rotate 90 degrees Left) or M (Move forward 1 grid square)");
+            Console.WriteLine("e.g. MMMMMRRMMMMMLLMMMMMRRMMM");
+
+            while (true)
+            {
+                var instructions = Console.ReadLine();
+
+                if (instructions == null)
+                {
+                    Console.WriteLine("Invalid input.");
+                    continue;
+                }
+
+                return instructions;
             }
         }
     }
