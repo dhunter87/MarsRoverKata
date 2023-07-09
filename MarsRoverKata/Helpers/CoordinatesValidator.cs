@@ -8,7 +8,8 @@ namespace MarsRover.Helpers
         public static bool IsValid(int xCoordinate, int yCoodinate, char bearing, Platau platau)
         {
 
-            if (xCoordinate < 0 || yCoodinate < 0)
+            if (xCoordinate < 0 || xCoordinate > platau.MaxXCoordinate ||
+                yCoodinate < 0 || yCoodinate > platau.MaxYCoordinate)
             {
                 throw new ArgumentException();
             }

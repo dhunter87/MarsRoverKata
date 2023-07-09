@@ -77,7 +77,6 @@ namespace MarsRover.Models
                 Position.XCoordinate += deltaXCoordinate;
                 Position.YCoordinate += deltaYCoordinate;
             }
-
         }
 
         private void Rotate(int bearingIncrementor)

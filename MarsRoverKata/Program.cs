@@ -9,13 +9,19 @@ class Program
         var maxCoordinates = MissionInstructions.SetupPlatauCoordinates();
         var maxTeamMembers = MissionInstructions.SetUpTeamLimits();
 
-        var mission = new MarsMission(maxCoordinates.Item1, maxCoordinates.Item2, maxTeamMembers);
+        var instructionLimit = 10000;
+        var mission = new MarsMission(maxCoordinates.Item1, maxCoordinates.Item2, maxTeamMembers, instructionLimit);
 
         var initialRoverCoordinates = MissionInstructions.SetupRoverCoordinates();
 
-        mission.CreateRover(initialRoverCoordinates.Value.Item1,
-                            initialRoverCoordinates.Value.Item2,
-                            initialRoverCoordinates.Key);
+        var team1 = mission.Player.Team;
+
+        while (team1.Count < maxTeamMembers)
+        {
+            mission.CreateRover(initialRoverCoordinates.Value.Item1,
+                                initialRoverCoordinates.Value.Item2,
+                                initialRoverCoordinates.Key);
+        }
 
         var instructions = MissionInstructions.SetupRoverInstructions();
 

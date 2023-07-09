@@ -6,9 +6,11 @@ namespace MarsRover.Models
         public Platau Platau;
         public List<Rover> Team;
         private readonly int TeamLimit;
+        private readonly int CommandLimit;
 
-        public Player(Platau platau, int teamLimit)
+        public Player(Platau platau, int teamLimit, int instructionLimit)
 		{
+            CommandLimit = instructionLimit;
             TeamLimit = teamLimit;
             Platau = platau;
             Team = new List<Rover>();
@@ -16,7 +18,7 @@ namespace MarsRover.Models
 
         public void AddTeamMember(int xCoordinate, int yCoordinate, char bearing)
         {
-            if (Team.Count() < TeamLimit)
+            if (Team.Count < TeamLimit)
             {
                 Team.Add(new Rover(xCoordinate, yCoordinate, bearing, Platau));
             }
@@ -26,6 +28,7 @@ namespace MarsRover.Models
         {
             if (!string.IsNullOrEmpty(instructions))
             {
+
                 foreach(var rover in Team)
                 {
                     rover.ExecuteInstructions(instructions);
