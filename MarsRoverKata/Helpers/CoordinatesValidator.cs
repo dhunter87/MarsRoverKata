@@ -1,5 +1,5 @@
 ﻿using System;
-namespace MarsRoverKata.Helpers
+namespace MarsRover.Helpers
 {
 	public static class CoordinatesValidator
 	{

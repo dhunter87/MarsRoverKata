@@ -1,5 +1,5 @@
 ﻿using System;
-using MarsRoverKata.Models;
+using MarsRover.Models;
 using NUnit.Framework;
 
 namespace PlatauShould

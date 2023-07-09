@@ -18,6 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MarsRoverKata\MarsRoverKata.csproj" />
+    <ProjectReference Include="..\MarsRoverKata\MarsRover.csproj" />
   </ItemGroup>
 </Project>

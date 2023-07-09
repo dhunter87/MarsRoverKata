@@ -1,14 +1,14 @@
 ﻿using System;
-using MarsRoverKata.Helpers;
+using MarsRover.Helpers;
 
-namespace MarsRoverKata.Models
+namespace MarsRover.Models
 {
-    public class MarsRover
+    public class Rover
     {
         public Position Position;
         public Platau Platau;
 
-        public MarsRover(int xCoordinate, int yCoodinate, char bearing, Platau platau)
+        public Rover(int xCoordinate, int yCoodinate, char bearing, Platau platau)
         {
             Platau = platau;
             bearing = Char.ToUpper(bearing);

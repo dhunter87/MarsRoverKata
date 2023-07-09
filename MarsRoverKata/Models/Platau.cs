@@ -1,7 +1,7 @@
 ﻿using System;
-using MarsRoverKata.Helpers;
+using MarsRover.Helpers;
 
-namespace MarsRoverKata.Models
+namespace MarsRover.Models
 {
     public class Platau
     {
