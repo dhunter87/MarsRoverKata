@@ -67,6 +67,34 @@ namespace MarsMissionShould
             });
         }
 
+
+        [TestCase(0, 0, 'E', 1, 0, 'E')]
+        [TestCase(5, 5, 'W', 4, 5, 'W')]
+        [TestCase(1, 1, 'S', 1, 0, 'S')]
+        public void MarsMission_Player_Can_Give_Rover_Instructions(int xCoordinate, int yCoordinate, char bearing, int expectedXCoordinate, int expectedYCoordinate, char expectedBearing)
+        {
+            _mission.CreateRover(xCoordinate, yCoordinate, bearing);
+
+
+            var rover = _mission.Player.Team[0];
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(rover.Position.XCoordinate, Is.EqualTo(xCoordinate));
+                Assert.That(rover.Position.YCoordinate, Is.EqualTo(yCoordinate));
+                Assert.That(rover.Position.Bearing, Is.EqualTo(bearing));
+            });
+
+            _mission.Player.GiveRoverInstructions("M");
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(rover.Position.XCoordinate, Is.EqualTo(expectedXCoordinate));
+                Assert.That(rover.Position.YCoordinate, Is.EqualTo(expectedYCoordinate));
+                Assert.That(rover.Position.Bearing, Is.EqualTo(expectedBearing));
+            });
+        }
+
         [Test]
         public void MarsMission_StartMission_()
         {

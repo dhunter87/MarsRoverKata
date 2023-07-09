@@ -16,6 +16,11 @@ namespace MarsRover.Models
         {
             Team.Add(new Rover(xCoordinate, yCoordinate, bearing, Platau));
         }
+
+        public void GiveRoverInstructions(string v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 
