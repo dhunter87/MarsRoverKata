@@ -45,12 +45,12 @@ namespace MarsMissionShould
         [Test]
         public void MarsMission_Player_Can_Create_New_Rover()
         {
-            _mission.CreateRover(1,0,'N');
+            _mission.CreateRover(3,2,'N');
 
             Assert.That(_mission.Player.Team[0], Is.Not.Null);
         }
 
-        [TestCase(1,0,'N')]
+        [TestCase(1,0,'W')]
         [TestCase(5,5,'E')]
         [TestCase(1, 5, 'S')]
         public void MarsMission_Player_Can_Create_New_Rover(int xCoordinate, int yCoordinate, char bearing)
@@ -59,9 +59,12 @@ namespace MarsMissionShould
 
             var rover = _mission.Player.Team[0];
 
-            Assert.That(rover.Position.XCoordinate, Is.EqualTo(xCoordinate));
-            Assert.That(rover.Position.YCoordinate, Is.EqualTo(yCoordinate));
-            Assert.That(rover.Position.Bearing, Is.EqualTo(bearing));
+            Assert.Multiple(() =>
+            {
+                Assert.That(rover.Position.XCoordinate, Is.EqualTo(xCoordinate));
+                Assert.That(rover.Position.YCoordinate, Is.EqualTo(yCoordinate));
+                Assert.That(rover.Position.Bearing, Is.EqualTo(bearing));
+            });
         }
 
         [Test]

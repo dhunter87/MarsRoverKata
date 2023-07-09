@@ -19,7 +19,7 @@ namespace MarsRover.Models
 
         public void CreateRover(int startingXCoordinate, int startingYCoordinate, char startingBearing)
         {
-			Player.AddTeamMember();
+			Player.AddTeamMember(startingXCoordinate, startingYCoordinate, startingBearing);
         }
     }
 }

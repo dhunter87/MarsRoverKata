@@ -12,9 +12,9 @@ namespace MarsRover.Models
             Team = new List<Rover>();
 		}
 
-        public void AddTeamMember()
+        public void AddTeamMember(int xCoordinate, int yCoordinate, char bearing)
         {
-            Team.Add(new Rover(0,0,'N', Platau));
+            Team.Add(new Rover(xCoordinate, yCoordinate, bearing, Platau));
         }
     }
 }
