@@ -27,13 +27,6 @@ namespace PlayerShould
 		}
 
         [Test]
-        public void Player_Score_Should_Be_Zero_When_Initialised()
-        {
-			var playerScore = Player.GetScore();
-			Assert.That(playerScore, Is.EqualTo(0)) ;
-        }
-
-        [Test]
         public void Platau_Should_Not_Be_Null_When_Player_Is_Initialised()
         {
             Assert.That(Player.Platau, Is.Not.Null);
@@ -93,6 +86,27 @@ namespace PlayerShould
                 Assert.That(Rover.Position.XCoordinate, Is.EqualTo(expectedXCoord));
                 Assert.That(Rover.Position.YCoordinate, Is.EqualTo(expectedYCoord));
             });
+        }
+
+        [Test]
+        public void Player_Score_Should_Be_Zero_When_Initialised()
+        {
+            var playerScore = Player.GetScore();
+            Assert.That(playerScore, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void Player_Score_Should_Increase_By_One_When_Rover_Reaches_Goalpoint()
+        {
+            Platau = new Platau(0, 1);
+            Player = new Player(Platau, Constants.TeamLimit, Constants.InstructionLimit);
+
+            var playerScore = Player.GetScore();
+            Assert.That(playerScore, Is.EqualTo(0));
+
+            Player.GiveRoverInstructions(Rover, "M");
+
+            Assert.That(playerScore, Is.EqualTo(1));
         }
     }
 }
