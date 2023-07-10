@@ -5,9 +5,10 @@ namespace MarsRover.Models
 	{
         public Platau Platau;
         public List<Rover> Team;
-
+        private int? Score;
         public Player(Platau platau, int teamLimit, int instructionLimit)
 		{
+            Score = 0;
             Platau = platau;
             Team = new List<Rover>();
 		}
@@ -18,6 +19,11 @@ namespace MarsRover.Models
             {
                 Team.Add(new Rover(xCoordinate, yCoordinate, bearing, Platau, id));
             }
+        }
+
+        public object GetScore()
+        {
+            throw new NotImplementedException();
         }
 
         public void GiveRoverInstructions(Rover rover, string instructions, int instructionLimit)

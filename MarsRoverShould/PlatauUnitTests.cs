@@ -18,11 +18,13 @@ namespace PlatauShould
 		[TestCase(10, 5000)]
 		[TestCase(0, 0)]
 		public void Platau_Should_Not_Be_Null_When_Initialised_With_Coordinates(int maxXCoordinate, int maxYCoordinate)
-		{
-			var platau = new Platau(maxXCoordinate, maxYCoordinate);
-
-			Assert.That(platau.MaxXCoordinate, Is.EqualTo(maxXCoordinate));
-			Assert.That(platau.MaxYCoordinate, Is.EqualTo(maxYCoordinate));
+        {
+            var platau = new Platau(maxXCoordinate, maxYCoordinate);
+            Assert.Multiple(() =>
+            {
+                Assert.That(platau.MaxXCoordinate, Is.EqualTo(maxXCoordinate));
+                Assert.That(platau.MaxYCoordinate, Is.EqualTo(maxYCoordinate));
+            });
         }
 
         [TestCase(-5, 5)]
@@ -61,8 +63,11 @@ namespace PlatauShould
             var xCoordinateWithinPlatau = xCoordinate >= 0 && xCoordinate <= Constants.MaxXCoordinate;
             var yCoordinateWithinPlatau = yCoordinate >= 0 && yCoordinate <= Constants.MaxYCoordinate;
 
-            Assert.That(xCoordinateWithinPlatau, Is.EqualTo(true));
-            Assert.That(yCoordinateWithinPlatau, Is.EqualTo(true));
+            Assert.Multiple(() =>
+            {
+                Assert.That(xCoordinateWithinPlatau, Is.EqualTo(true));
+                Assert.That(yCoordinateWithinPlatau, Is.EqualTo(true));
+            });
         }
     }
 }

@@ -24,7 +24,6 @@ namespace MarsRover.Helpers
             { West, 3 }
         };
 
-
         public static (int, int) GetDirectionDelta(char currentBearing)
         {
             if (DirectionOfTravel.TryGetValue(currentBearing, out var directionDelta))
