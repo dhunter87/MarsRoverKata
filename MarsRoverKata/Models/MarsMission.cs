@@ -23,7 +23,7 @@ namespace MarsRover.Models
 
         public void CreateRover(int startingXCoordinate, int startingYCoordinate, char startingBearing, string id)
         {
-			Player.AddTeamMember(startingXCoordinate, startingYCoordinate, startingBearing, TeamLimit, id);
+			Player.AddTeamMember(startingXCoordinate, startingYCoordinate, startingBearing, id);
         }
 
         public int GetCommandLimit()

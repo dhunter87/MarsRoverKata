@@ -127,7 +127,7 @@ namespace MarsMissionShould
 
             AssertBeforeAction(xCoordinate, yCoordinate, bearing, rover);
 
-            _mission.Player.GiveRoverInstructions(rover, "M", Constants.InstructionLimit);
+            _mission.Player.GiveRoverInstructions(rover, "M");
 
             AssertAfterAction(expectedXCoordinate, expectedYCoordinate, expectedBearing, rover);
         }
@@ -143,7 +143,7 @@ namespace MarsMissionShould
 
             AssertBeforeAction(xCoordinate, yCoordinate, bearing, rover);
 
-            _mission.Player.GiveRoverInstructions(rover, instructions, Constants.InstructionLimit);
+            _mission.Player.GiveRoverInstructions(rover, instructions);
 
             AssertAfterAction(expectedXCoordinate, expectedYCoordinate, expectedBearing, rover);
         }
@@ -161,7 +161,7 @@ namespace MarsMissionShould
 
             AssertBeforeAction(xCoordinate, yCoordinate, bearing, rover);
 
-            _mission.Player.GiveRoverInstructions(rover, instructions, instructionLimit);
+            _mission.Player.GiveRoverInstructions(rover, instructions);
 
             AssertAfterAction(expectedXCoordinate, expectedYCoordinate, expectedBearing, rover);
         }

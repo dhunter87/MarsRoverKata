@@ -5,32 +5,37 @@ namespace MarsRover.Models
 	{
         public Platau Platau;
         public List<Rover> Team;
-        private int? Score;
+        private int Score;
+        private readonly int TeamLimit;
+        private readonly int InstructionLimit;
+
         public Player(Platau platau, int teamLimit, int instructionLimit)
 		{
+            TeamLimit = teamLimit;
+            InstructionLimit = instructionLimit;
             Score = 0;
             Platau = platau;
             Team = new List<Rover>();
 		}
 
-        public void AddTeamMember(int xCoordinate, int yCoordinate, char bearing, int teamLimit, string id)
+        public void AddTeamMember(int xCoordinate, int yCoordinate, char bearing, string id)
         {
-            if (Team.Count < teamLimit)
+            if (Team.Count < TeamLimit)
             {
                 Team.Add(new Rover(xCoordinate, yCoordinate, bearing, Platau, id));
             }
         }
 
-        public object GetScore()
+        public int GetScore()
         {
-            throw new NotImplementedException();
+            return Score;
         }
 
-        public void GiveRoverInstructions(Rover rover, string instructions, int instructionLimit)
+        public void GiveRoverInstructions(Rover rover, string instructions)
         {
-            if (instructions.Length > instructionLimit)
+            if (instructions.Length > InstructionLimit)
             {
-                instructions = instructions.Substring(0, instructionLimit);
+                instructions = instructions.Substring(0, InstructionLimit);
             }
             if (!string.IsNullOrEmpty(instructions))
             { 

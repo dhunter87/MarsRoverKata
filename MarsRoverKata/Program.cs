@@ -30,7 +30,7 @@ class Program
             Console.WriteLine($"RoverId: {rover.GetId()}:");
             Console.WriteLine($"XCoordinate: {rover.Position.XCoordinate}, YCoordinate: {rover.Position.YCoordinate}, Bearing: {rover.Position.Bearing}");
             var instructions = MissionInstructions.SetupRoverInstructions();
-            mission.Player.GiveRoverInstructions(rover, instructions, mission.GetCommandLimit());
+            mission.Player.GiveRoverInstructions(rover, instructions);
         }
        
         Console.WriteLine("END: Pause to check output:");
