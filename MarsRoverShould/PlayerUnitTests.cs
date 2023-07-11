@@ -100,38 +100,60 @@ namespace PlayerShould
         [Test]
         public void Player_Score_Should_Increase_By_One_When_Rover_Reaches_Goalpoint()
         {
-            var dummyPlatau = new PlateauFake(10, 10);
+            var fakePlatau = new PlateauFake(10, 10);
+            fakePlatau.GenerateGamePoint(0, 1);
 
-            var rover = new Rover(0, 0, 'N', dummyPlatau, Constants.RoverId);
-            var player = new Player(dummyPlatau, Constants.TeamLimit, Constants.InstructionLimit);
+            var player = new Player(fakePlatau, Constants.TeamLimit, Constants.InstructionLimit);
 
-            var playerScore = player.GetScore();
-            Assert.That(playerScore, Is.EqualTo(0));
-
-            playerScore = MoveRoverAndCheckScore(rover, player, expectedScore: 1);
-        }
-
-        [Test]
-        public void Player_Score_Should_Increase_By_One_Each_Time_Rover_Reaches_A_Goalpoint()
-        {
-            var dummyPlatau = new PlateauFake(10, 10);
-
-            var player = new Player(dummyPlatau, Constants.TeamLimit, Constants.InstructionLimit);
             player.AddTeamMember(0, 0, 'N', Constants.RoverId);
             var rover = player.Team[0];
 
             var playerScore = player.GetScore();
             Assert.That(playerScore, Is.EqualTo(0));
 
-            playerScore = MoveRoverAndCheckScore(rover, player, expectedScore: 1);
-
-            playerScore = MoveRoverAndCheckScore(rover, player, expectedScore: 2);
+            playerScore = MoveRoverAndCheckScore(rover, player, "M", expectedScore: 1);
         }
 
-        private static int MoveRoverAndCheckScore(Rover rover, Player player, int expectedScore)
+        [Test]
+        public void Player_Score_Should_Increase_By_One_Each_Time_Rover_Reaches_A_Goalpoint()
+        {
+            var fakePlatau = new PlateauFake(10, 10);
+            fakePlatau.GenerateGamePoint(0, 1);
+            fakePlatau.GenerateGamePoint(0, 2);
+
+            var player = new Player(fakePlatau, Constants.TeamLimit, Constants.InstructionLimit);
+            player.AddTeamMember(0, 0, 'N', Constants.RoverId);
+            var rover = player.Team[0];
+
+            var playerScore = player.GetScore();
+            Assert.That(playerScore, Is.EqualTo(0));
+
+            playerScore = MoveRoverAndCheckScore(rover, player, "M", expectedScore: 1);
+
+            playerScore = MoveRoverAndCheckScore(rover, player, "M", expectedScore: 2);
+        }
+
+        [Test]
+        public void Player_Can_Score_More_Than_One_Point_Per_Move()
+        {
+            var fakePlatau = new PlateauFake(10, 10);
+            fakePlatau.GenerateGamePoint(0, 1);
+            fakePlatau.GenerateGamePoint(0, 2);
+
+            var player = new Player(fakePlatau, Constants.TeamLimit, Constants.InstructionLimit);
+            player.AddTeamMember(0, 0, 'N', Constants.RoverId);
+            var rover = player.Team[0];
+
+            var playerScore = player.GetScore();
+            Assert.That(playerScore, Is.EqualTo(0));
+
+            playerScore = MoveRoverAndCheckScore(rover, player, "MM", expectedScore: 2);
+        }
+
+        private static int MoveRoverAndCheckScore(Rover rover, Player player, string instructions, int expectedScore)
         {
             int playerScore;
-            player.GiveRoverInstructions(rover, "M");
+            player.GiveRoverInstructions(rover, instructions);
 
             playerScore = player.GetScore();
             Assert.That(playerScore, Is.EqualTo(expectedScore));

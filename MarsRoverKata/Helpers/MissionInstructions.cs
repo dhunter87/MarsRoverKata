@@ -3,13 +3,12 @@ namespace MarsRover.Helpers
 {
 	public static class MissionInstructions
 	{
-
 		public static (int, int) SetupPlateauCoordinates()
 		{
             while (true)
             {
                 Console.WriteLine("Enter max Plateau Coordinates (e.g. 10,10) to Setup Mars Mission!");
-                var plateauSize = Console.ReadLine().Split(',');
+                var plateauSize = Console.ReadLine()?.Split(',');
 
                 if (plateauSize?.Length != 2)
                 {

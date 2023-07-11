@@ -36,8 +36,6 @@ namespace MarsRover.Models
 
         public void GiveRoverInstructions(Rover rover, string instructions)
         {
-            Score = 0;
-
             if (instructions.Length > InstructionLimit)
             {
                 instructions = instructions.Substring(0, InstructionLimit);

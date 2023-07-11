@@ -1,4 +1,6 @@
 ﻿using System;
+using MarsRover.Models;
+
 namespace MarsRover.Interfaces
 {
     public interface IPlateau
@@ -11,6 +13,8 @@ namespace MarsRover.Interfaces
         bool IsValildMove(int xCoordinate, int yCoordinate);
 
         bool IsGamePointMove(int xCoordinate, int yCoordinate);
+
+        bool HasGamePoints();
     }
 }
 

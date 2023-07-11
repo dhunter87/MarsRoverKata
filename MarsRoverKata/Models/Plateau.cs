@@ -27,7 +27,6 @@ namespace MarsRover.Models
             for (int i = 0; i < 3; i++)
             {
                 GamePoints.Add(new GamePoint(maxXCoordinate, maxYCoordinate));
-
             }
         }
 
