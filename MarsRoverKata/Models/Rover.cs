@@ -43,7 +43,7 @@ namespace MarsRover.Models
                     invalidCommands.Add(instructions[0]);
                 }
 
-                ExecuteInstructions(instructions.Substring(1), invalidCommands, true);
+                score = ExecuteInstructions(instructions.Substring(1), invalidCommands, true, score);
             }
 
             if (invalidCommands.Any())
@@ -56,7 +56,7 @@ namespace MarsRover.Models
                 Console.WriteLine($"Score This Move: {score}");
                 return score;
             }
-            return 0;
+            return score;
         }
 
         public int ExecuteInstruction(RoverCommand instruction)

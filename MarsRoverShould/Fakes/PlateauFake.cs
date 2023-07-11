@@ -29,7 +29,8 @@ namespace MarsRoverUnitTests.Dummies
 
         public bool IsValildMove(int xCoordinate, int yCoordinate)
         {
-            return true;
+            return xCoordinate >= 0 && xCoordinate <= MaxXCoordinate &&
+                yCoordinate >= 0 && yCoordinate <= MaxYCoordinate;
         }
 
         public bool IsGamePointMove(int xCoordinate, int yCoordinate)
