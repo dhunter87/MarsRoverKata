@@ -6,14 +6,9 @@ namespace MarsRover.Models
 {
     public class Plateau : IPlateau
     {
-
-        private (int, int) GoalPoint => (x,y);
-
         public int MaxXCoordinate { get; private set; }
         public int MaxYCoordinate { get; private set; }
-
-        public int x;
-        public int y;
+        private readonly List<GamePoint> GamePoints;    
 
         public Plateau(int maxXCoordinate, int maxYCoordinate)
         {
@@ -23,17 +18,17 @@ namespace MarsRover.Models
                 MaxYCoordinate = maxYCoordinate;
             }
 
-            if (CoordinatesValidator.IsValid(maxXCoordinate, maxYCoordinate, MaxXCoordinate, MaxYCoordinate))
+            if (!CoordinatesValidator.IsValid(maxXCoordinate, maxYCoordinate, MaxXCoordinate, MaxYCoordinate))
             {
-                x = GenerateGoalpointCoordinate(maxXCoordinate);
-                y = GenerateGoalpointCoordinate(maxYCoordinate);
+                throw new ArgumentException();
             }
-        }
 
-        private int GenerateGoalpointCoordinate(int maxCoord)
-        {
-            Random random = new Random();
-            return random.Next(maxCoord+1);
+            GamePoints = new List<GamePoint>();
+            for (int i = 0; i < 3; i++)
+            {
+                GamePoints.Add(new GamePoint(maxXCoordinate, maxYCoordinate));
+
+            }
         }
 
         public (int, int) GetPlatauCoordinatesUpperLimits()
@@ -49,8 +44,14 @@ namespace MarsRover.Models
 
         public bool IsGamePointMove(int xCoordinate, int yCoordinate)
         {
-            return xCoordinate == GoalPoint.Item1 &&
-                    yCoordinate == GoalPoint.Item2;
+            var matchedPoint = GamePoints.FirstOrDefault(p => p.EqualsCoordinates(xCoordinate, yCoordinate));
+
+            return matchedPoint != null;
+        }
+
+        public bool HasGamePoints()
+        {
+            return GamePoints.Count > 0;
         }
     }
 }

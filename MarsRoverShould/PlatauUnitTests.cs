@@ -55,19 +55,9 @@ namespace PlatauShould
         [Test]
         public void Platau_Should_Have_At_Least_One_Goal_Point_When_Initiated()
         {
-            var platau = new Plateau(Constants.MaxXCoordinate, Constants.MaxYCoordinate);
+            var plateau = new Plateau(Constants.MaxXCoordinate, Constants.MaxYCoordinate);
 
-            var xCoordinate = platau.x;
-            var yCoordinate = platau.y;
-
-            var xCoordinateWithinPlatau = xCoordinate >= 0 && xCoordinate <= Constants.MaxXCoordinate;
-            var yCoordinateWithinPlatau = yCoordinate >= 0 && yCoordinate <= Constants.MaxYCoordinate;
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(xCoordinateWithinPlatau, Is.EqualTo(true));
-                Assert.That(yCoordinateWithinPlatau, Is.EqualTo(true));
-            });
+            Assert.That(plateau.HasGamePoints(), Is.EqualTo(true));
         }
 
         //[Test]
