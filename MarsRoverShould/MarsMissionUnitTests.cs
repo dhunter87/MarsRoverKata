@@ -53,6 +53,12 @@ namespace MarsMissionShould
         }
 
         [Test]
+        public void MarsMission_Players_List_Should_Have_At_least_One_Player()
+        {
+            Assert.That(_mission.Players, Is.EqualTo(1));
+        }
+
+        [Test]
         public void MarsMission_Player_Can_Create_New_Rover()
         {
             _mission.CreateRover(3,2,'N', Constants.RoverId);
