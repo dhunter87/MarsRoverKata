@@ -101,15 +101,14 @@ namespace PlayerShould
         {
             FakePlateau.GenerateGamePoint(0, 1);
 
-            var player = new Player(FakePlateau, Constants.TeamLimit, Constants.InstructionLimit);
+            Player = new Player(FakePlateau, Constants.TeamLimit, Constants.InstructionLimit);
 
-            player.AddTeamMember(0, 0, 'N', Constants.RoverId);
-            var rover = player.Team[0];
+            Player.AddTeamMember(0, 0, 'N', Constants.RoverId);
 
-            var playerScore = player.GetScore();
+            var playerScore = Player.GetScore();
             Assert.That(playerScore, Is.EqualTo(0));
 
-            playerScore = MoveRoverAndCheckScore(rover, player, "M", expectedScore: 1);
+            playerScore = MoveRoverAndCheckScore(Player.Team[0], Player, "M", expectedScore: 1);
         }
 
         [Test]
@@ -118,16 +117,14 @@ namespace PlayerShould
             FakePlateau.GenerateGamePoint(0, 1);
             FakePlateau.GenerateGamePoint(0, 2);
 
-            var player = new Player(FakePlateau, Constants.TeamLimit, Constants.InstructionLimit);
-            player.AddTeamMember(0, 0, 'N', Constants.RoverId);
-            var rover = player.Team[0];
+            Player.AddTeamMember(0, 0, 'N', Constants.RoverId);
 
-            var playerScore = player.GetScore();
+            var playerScore = Player.GetScore();
             Assert.That(playerScore, Is.EqualTo(0));
 
-            playerScore = MoveRoverAndCheckScore(rover, player, "M", expectedScore: 1);
+            playerScore = MoveRoverAndCheckScore(Player.Team[0], Player, "M", expectedScore: 1);
 
-            playerScore = MoveRoverAndCheckScore(rover, player, "M", expectedScore: 2);
+            playerScore = MoveRoverAndCheckScore(Player.Team[0], Player, "M", expectedScore: 2);
         }
 
         [TestCase(1,1, "M")]
@@ -140,13 +137,12 @@ namespace PlayerShould
                 FakePlateau.GenerateGamePoint(0, i);
             }         
 
-            var player = new Player(FakePlateau, Constants.TeamLimit, Constants.InstructionLimit);
-            player.AddTeamMember(0, 0, 'N', Constants.RoverId);
+            Player.AddTeamMember(0, 0, 'N', Constants.RoverId);
 
-            var playerScore = player.GetScore();
+            var playerScore = Player.GetScore();
             Assert.That(playerScore, Is.EqualTo(0));
 
-            playerScore = MoveRoverAndCheckScore(player.Team[0], player, instructions, gamePointCount);
+            playerScore = MoveRoverAndCheckScore(Player.Team[0], Player, instructions, gamePointCount);
         }
 
         private static int MoveRoverAndCheckScore(Rover rover, Player player, string instructions, int expectedScore)
