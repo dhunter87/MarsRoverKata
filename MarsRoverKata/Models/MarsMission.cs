@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MarsRover.Interfaces;
 
 namespace MarsRover.Models
@@ -6,31 +7,40 @@ namespace MarsRover.Models
 	public class MarsMission
 	{
 		public IPlateau Plateau;
-		public Player Player;
         private readonly int TeamLimit;
         private readonly int CommandLimit;
+        private List<Player> Players;
 
-        public MarsMission(int maxXCoordinate, int maxYCoordinate, int teamLimit, int instructionLimit)
+        public MarsMission(int maxXCoordinate, int maxYCoordinate, int teamLimit, int instructionLimit, int players)
 		{
             TeamLimit = teamLimit;
             CommandLimit = instructionLimit;
 			Plateau = CreatePlatau(maxXCoordinate, maxYCoordinate);
-			Player = new Player(Plateau, TeamLimit, CommandLimit);
-		}
+            Players = new List<Player>
+            {
+                new Player(Plateau, TeamLimit, CommandLimit)
+            };
+            
+        }
 
         public IPlateau CreatePlatau(int maxXCoordinate, int maxYCoordinate)
         {
 			return new Plateau(maxXCoordinate, maxYCoordinate);
         }
 
-        public void CreateRover(int startingXCoordinate, int startingYCoordinate, char startingBearing, string id)
+        public void CreateRover(Player player, int startingXCoordinate, int startingYCoordinate, char startingBearing, string id)
         {
-			Player.AddTeamMember(startingXCoordinate, startingYCoordinate, startingBearing, id);
+			player.AddTeamMember(startingXCoordinate, startingYCoordinate, startingBearing, id);
         }
 
         public int GetCommandLimit()
         {
             return CommandLimit;
+        }
+
+        public List<Player> GetConfiguredPlayers()
+        {
+            return Players;
         }
     }
 }

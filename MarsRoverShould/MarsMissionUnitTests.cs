@@ -14,7 +14,8 @@ namespace MarsMissionShould
         [SetUp]
 		public void Setup()
 		{
-            _mission = new MarsMission(Constants.MaxXCoordinate, Constants.MaxYCoordinate, Constants.TeamLimit, Constants.InstructionLimit);
+            var playerCount = 2;
+            _mission = new MarsMission(Constants.MaxXCoordinate, Constants.MaxYCoordinate, Constants.TeamLimit, Constants.InstructionLimit, playerCount);
 		}
 
 		[Test]
@@ -26,7 +27,8 @@ namespace MarsMissionShould
         [TestCase(1, 1)]
         public void MarsMission_GetCommandList_Should_Return_Correct_Limit_Value(int actualInstructionLimit, int expectedValue)
         {
-            _mission = new MarsMission(Constants.MaxXCoordinate, Constants.MaxYCoordinate, Constants.TeamLimit, actualInstructionLimit);
+            var playerCount = 2;
+            _mission = new MarsMission(Constants.MaxXCoordinate, Constants.MaxYCoordinate, Constants.TeamLimit, actualInstructionLimit, playerCount);
 
             var instructionLimit = _mission.GetCommandLimit();
 
@@ -49,21 +51,42 @@ namespace MarsMissionShould
         [Test]
         public void MarsMission_Player_Is_Not_Null_When_Initialised()
         {
-            Assert.That(_mission.Player, Is.Not.Null);
+            var players = _mission.GetConfiguredPlayers();
+            Assert.That(players, Is.Not.Null);
         }
 
         [Test]
         public void MarsMission_Players_List_Should_Have_At_least_One_Player()
         {
-            Assert.That(_mission.Players, Is.EqualTo(1));
+            var players = _mission.GetConfiguredPlayers();
+
+            Assert.That(players.Count(), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void MarsMission_Players_List_Should_Be_Configured_With_N_Number_Of_P()
+        {
+            var playerCount = 2;
+            _mission = new MarsMission(Constants.MaxXCoordinate, Constants.MaxYCoordinate, Constants.TeamLimit, instructionLimit: 5, playerCount) ;
+
+            var players = _mission.GetConfiguredPlayers();
+
+            Assert.That(players.Count(), Is.EqualTo(2));
         }
 
         [Test]
         public void MarsMission_Player_Can_Create_New_Rover()
         {
-            _mission.CreateRover(3,2,'N', Constants.RoverId);
+            var players = _mission.GetConfiguredPlayers();
 
-            Assert.That(_mission.Player.Team[0], Is.Not.Null);
+            var currentPlayer = players.FirstOrDefault();
+
+            if (currentPlayer != null)
+            {
+                _mission.CreateRover(currentPlayer ,3,2,'N', Constants.RoverId);
+
+                Assert.That(currentPlayer.Team[0], Is.Not.Null);
+            }
         }
 
         [TestCase(5, 10, 5)]
@@ -71,15 +94,22 @@ namespace MarsMissionShould
         [TestCase(5, 1, 1)]
         public void MarsMission_Player_Can_Not_Create_More_Than_X_Number_Of_New_Rovers(int testInstancesCount, int limit, int expectedCount)
         {
+            var playerCount = 2;
             var maxCoord = 5;
-            _mission = new MarsMission(maxCoord, maxCoord, limit, Constants.InstructionLimit);
+            _mission = new MarsMission(maxCoord, maxCoord, limit, Constants.InstructionLimit, playerCount);
 
-            for (int i = 0; i < testInstancesCount; i++)
+            var players = _mission.GetConfiguredPlayers();
+            var currentPlayer = players.FirstOrDefault();
+
+            if (currentPlayer != null)
             {
-                _mission.CreateRover(3, 2, 'N', Constants.RoverId);
-            }
+                for (int i = 0; i < testInstancesCount; i++)
+                {
+                    _mission.CreateRover(currentPlayer,3, 2, 'N', Constants.RoverId);
+                }
 
-            Assert.That(_mission.Player.Team.Count(), Is.EqualTo(expectedCount));
+                Assert.That(currentPlayer.Team.Count(), Is.EqualTo(expectedCount));
+            }
         }
 
         [TestCase(0, 6)]
@@ -88,10 +118,16 @@ namespace MarsMissionShould
         [TestCase(0, -1)]
         public void MarsMission_Player_Can_Not_Create_New_Rovers_Outside_The_Bounds_Of_The_Platau(int xCoord, int yCoord)
         {
+            var playerCount = 2;
             var maxCoord = 5;
-            _mission = new MarsMission(maxCoord, maxCoord, Constants.TeamLimit, Constants.InstructionLimit);
+            _mission = new MarsMission(maxCoord, maxCoord, Constants.TeamLimit, Constants.InstructionLimit, playerCount);
 
-            Assert.Throws<ArgumentException>(() => _mission.CreateRover(xCoord, yCoord, 'N', Constants.RoverId));
+            var players = _mission.GetConfiguredPlayers();
+            var currentPlayer = players.FirstOrDefault();
+            if (currentPlayer != null)
+            {
+                Assert.Throws<ArgumentException>(() => _mission.CreateRover(currentPlayer, xCoord, yCoord, 'N', Constants.RoverId));
+            }
         }
 
         [TestCase(1,0,'W')]
@@ -99,16 +135,22 @@ namespace MarsMissionShould
         [TestCase(1, 5, 'S')]
         public void MarsMission_Player_Can_Create_New_Rover(int xCoordinate, int yCoordinate, char bearing)
         {
-            _mission.CreateRover(xCoordinate, yCoordinate, bearing, Constants.RoverId);
+            var players = _mission.GetConfiguredPlayers();
+            var currentPlayer = players.FirstOrDefault();
 
-            var rover = _mission.Player.Team[0];
-
-            Assert.Multiple(() =>
+            if (currentPlayer != null)
             {
-                Assert.That(rover.Position.XCoordinate, Is.EqualTo(xCoordinate));
-                Assert.That(rover.Position.YCoordinate, Is.EqualTo(yCoordinate));
-                Assert.That(rover.Position.Bearing, Is.EqualTo(bearing));
-            });
+                _mission.CreateRover(currentPlayer, xCoordinate, yCoordinate, bearing, Constants.RoverId);
+
+                var rover = currentPlayer.Team[0];
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(rover.Position.XCoordinate, Is.EqualTo(xCoordinate));
+                    Assert.That(rover.Position.YCoordinate, Is.EqualTo(yCoordinate));
+                    Assert.That(rover.Position.Bearing, Is.EqualTo(bearing));
+                });
+            }
         }
 
 
@@ -117,15 +159,21 @@ namespace MarsMissionShould
         [TestCase(1, 1, 'S', 1, 0, 'S')]
         public void MarsMission_Player_Can_Give_Rover_Instructions(int xCoordinate, int yCoordinate, char bearing, int expectedXCoordinate, int expectedYCoordinate, char expectedBearing)
         {
-            _mission.CreateRover(xCoordinate, yCoordinate, bearing, Constants.RoverId);
+            var players = _mission.GetConfiguredPlayers();
+            var currentPlayer = players.FirstOrDefault();
 
-            var rover = _mission.Player.Team[0];
+            if (currentPlayer != null)
+            {
+                _mission.CreateRover(currentPlayer,xCoordinate, yCoordinate, bearing, Constants.RoverId);
 
-            AssertBeforeAction(xCoordinate, yCoordinate, bearing, rover);
+                var rover = currentPlayer.Team[0];
 
-            _mission.Player.GiveRoverInstructions(rover, "M");
+                AssertBeforeAction(xCoordinate, yCoordinate, bearing, rover);
 
-            AssertAfterAction(expectedXCoordinate, expectedYCoordinate, expectedBearing, rover);
+                currentPlayer.GiveRoverInstructions(rover, "M");
+
+                AssertAfterAction(expectedXCoordinate, expectedYCoordinate, expectedBearing, rover);
+            }
         }
 
         [TestCase(0, 0, 'N', 0, 1, 'W', "MLM")]
@@ -133,15 +181,21 @@ namespace MarsMissionShould
         [TestCase(1, 1, 'S', 1, 0, 'S', "MMMMM")]
         public void MarsMission_Rover_Does_Not_Move_Out_Of_Bounds_If_Given_Out_Of_Bounds_Instructions(int xCoordinate, int yCoordinate, char bearing, int expectedXCoordinate, int expectedYCoordinate, char expectedBearing, string instructions)
         {
-            _mission.CreateRover(xCoordinate, yCoordinate, bearing, Constants.RoverId);
+            var players = _mission.GetConfiguredPlayers();
+            var currentPlayer = players.FirstOrDefault();
 
-            var rover = _mission.Player.Team[0];
+            if (currentPlayer !=null)
+            {
+                _mission.CreateRover(currentPlayer,xCoordinate, yCoordinate, bearing, Constants.RoverId);
 
-            AssertBeforeAction(xCoordinate, yCoordinate, bearing, rover);
+                var rover = currentPlayer.Team[0];
 
-            _mission.Player.GiveRoverInstructions(rover, instructions);
+                AssertBeforeAction(xCoordinate, yCoordinate, bearing, rover);
 
-            AssertAfterAction(expectedXCoordinate, expectedYCoordinate, expectedBearing, rover);
+                currentPlayer.GiveRoverInstructions(rover, instructions);
+
+                AssertAfterAction(expectedXCoordinate, expectedYCoordinate, expectedBearing, rover);
+            }
         }
 
         [TestCase(0, 0, 'N', 0, 1, 'N', 1, "MLM")]
@@ -149,17 +203,24 @@ namespace MarsMissionShould
         [TestCase(2, 2, 'S', 2, 1, 'S', 1, "MMMMM")]
         public void MarsMission_Player_Can_Give_X_Number_Of_M_Instructions(int xCoordinate, int yCoordinate, char bearing, int expectedXCoordinate, int expectedYCoordinate, char expectedBearing, int instructionLimit, string instructions)
         {
-            _mission = new MarsMission(Constants.MaxXCoordinate, Constants.MaxYCoordinate, Constants.TeamLimit, instructionLimit);
+            var playerCount = 1;
+            _mission = new MarsMission(Constants.MaxXCoordinate, Constants.MaxYCoordinate, Constants.TeamLimit, instructionLimit,playerCount);
 
-            _mission.CreateRover(xCoordinate, yCoordinate, bearing, Constants.RoverId);
+            var players = _mission.GetConfiguredPlayers();
+            var currentPlayer = players.FirstOrDefault();
 
-            var rover = _mission.Player.Team[0];
+            if (currentPlayer  != null)
+            {
+                _mission.CreateRover(currentPlayer,xCoordinate, yCoordinate, bearing, Constants.RoverId);
 
-            AssertBeforeAction(xCoordinate, yCoordinate, bearing, rover);
+                var rover = currentPlayer.Team[0];
 
-            _mission.Player.GiveRoverInstructions(rover, instructions);
+                AssertBeforeAction(xCoordinate, yCoordinate, bearing, rover);
 
-            AssertAfterAction(expectedXCoordinate, expectedYCoordinate, expectedBearing, rover);
+                currentPlayer.GiveRoverInstructions(rover, instructions);
+
+                AssertAfterAction(expectedXCoordinate, expectedYCoordinate, expectedBearing, rover);
+            }
         }
 
         private static void AssertBeforeAction(int xCoordinate, int yCoordinate, char bearing, IRover rover)
