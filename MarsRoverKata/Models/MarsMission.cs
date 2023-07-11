@@ -1,9 +1,11 @@
 ﻿using System;
+using MarsRover.Interfaces;
+
 namespace MarsRover.Models
 {
 	public class MarsMission
 	{
-		public Platau Platau;
+		public IPlatau Platau;
 		public Player Player;
         private readonly int TeamLimit;
         private readonly int CommandLimit;
@@ -16,7 +18,7 @@ namespace MarsRover.Models
 			Player = new Player(Platau, TeamLimit, CommandLimit);
 		}
 
-        public Platau CreatePlatau(int maxXCoordinate, int maxYCoordinate)
+        public IPlatau CreatePlatau(int maxXCoordinate, int maxYCoordinate)
         {
 			return new Platau(maxXCoordinate, maxYCoordinate);
         }

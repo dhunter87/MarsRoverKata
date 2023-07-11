@@ -1,14 +1,17 @@
 ﻿using System;
 using MarsRover.Helpers;
+using MarsRover.Interfaces;
 
 namespace MarsRover.Models
 {
-    public class Platau
+    public class Platau : IPlatau
     {
-        public int MaxYCoordinate;
-        public int MaxXCoordinate;
 
-        public (int, int) goalPoint => (x,y);
+        private (int, int) GoalPoint => (x,y);
+
+        public int MaxXCoordinate { get; private set; }
+        public int MaxYCoordinate { get; private set; }
+
         public int x;
         public int y;
 
@@ -42,6 +45,12 @@ namespace MarsRover.Models
         {
             return xCoordinate >= 0 && xCoordinate <= MaxXCoordinate &&
                 yCoordinate >= 0 && yCoordinate <= MaxYCoordinate;
+        }
+
+        public bool IsGamePointMove(int xCoordinate, int yCoordinate)
+        {
+            return xCoordinate == GoalPoint.Item1 &&
+                    yCoordinate == GoalPoint.Item2;
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using System;
+using MarsRover.Interfaces;
 using MarsRover.Models;
 
 namespace MarsRover.Helpers
 {
 	public static class CoordinatesValidator
 	{
-        public static bool IsValid(int xCoordinate, int yCoodinate, char bearing, Platau platau)
+        public static bool IsValid(int xCoordinate, int yCoodinate, char bearing, IPlatau platau)
         {
 
             if (xCoordinate < 0 || xCoordinate > platau.MaxXCoordinate ||

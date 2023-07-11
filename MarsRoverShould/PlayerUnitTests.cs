@@ -1,5 +1,6 @@
 ﻿using System;
 using MarsRover.Models;
+using MarsRoverUnitTests.Dummies;
 using MarsRoverUnitTests.TestHelpers;
 using NUnit.Framework;
 
@@ -10,21 +11,22 @@ namespace PlayerShould
 	{
 		Player Player;
 		Platau Platau;
+        PlatauFake platauDummy;
         Rover Rover;
 
-		[SetUp]
-		public void Setup()
-		{
-            Platau = new Platau(5,5);
-            Rover = new Rover(0,0,'N',Platau, Constants.RoverId);
-			Player = new Player(Platau, Constants.TeamLimit, Constants.InstructionLimit);
-		}
+        [SetUp]
+        public void Setup()
+        {
+            Platau = new Platau(5, 5);
+            Rover = new Rover(0, 0, 'N', Platau, Constants.RoverId);
+            Player = new Player(Platau, Constants.TeamLimit, Constants.InstructionLimit);
+        }
 
-		[Test]
-		public void Player_Should_Not_Be_Null_When_Initialised()
-		{
-			Assert.That(Player, Is.Not.Null);
-		}
+        [Test]
+        public void Player_Should_Not_Be_Null_When_Initialised()
+        {
+            Assert.That(Player, Is.Not.Null);
+        }
 
         [Test]
         public void Platau_Should_Not_Be_Null_When_Player_Is_Initialised()
@@ -35,13 +37,13 @@ namespace PlayerShould
         [Test]
         public void Player_Can_Add_New_Team_Members()
         {
-			Player.AddTeamMember(0,0,'N', Constants.RoverId);
-            
+            Player.AddTeamMember(0, 0, 'N', Constants.RoverId);
+
             Assert.That(Player.Team.Count, Is.EqualTo(1));
         }
 
-        [TestCase(1,1)]
-        [TestCase(5,3)]
+        [TestCase(1, 1)]
+        [TestCase(5, 3)]
         public void Players_Team_Can_Not_Exceed_Team_Limit(int limit, int expectedCount)
         {
             Player = new Player(Platau, limit, Constants.InstructionLimit);
@@ -60,9 +62,9 @@ namespace PlayerShould
             Assert.That(Rover.Position.YCoordinate, Is.EqualTo(1));
         }
 
-        [TestCase(0,1,"M")]
-        [TestCase(0,0,"LM")]
-        [TestCase(0,2, "LMRMM")]
+        [TestCase(0, 1, "M")]
+        [TestCase(0, 0, "LM")]
+        [TestCase(0, 2, "LMRMM")]
         public void Player_Can_Not_Move_Team_Rovers_Out_Of_Bounds(int expectedXCoord, int expectedYCoord, string instructions)
         {
             Player.GiveRoverInstructions(Rover, instructions);
@@ -73,9 +75,9 @@ namespace PlayerShould
             });
         }
 
-        [TestCase(0, 1, "M",1)]
-        [TestCase(0, 1, "MM",1)]
-        [TestCase(2, 1, "MRMMMMMM",4)]
+        [TestCase(0, 1, "M", 1)]
+        [TestCase(0, 1, "MM", 1)]
+        [TestCase(2, 1, "MRMMMMMM", 4)]
         public void Players_Team_Rovers_Instructions_Are_Limited_To_InstructionLimit(int expectedXCoord, int expectedYCoord, string instructions, int limit)
         {
             Player = new Player(Platau, Constants.TeamLimit, limit);
@@ -98,15 +100,42 @@ namespace PlayerShould
         [Test]
         public void Player_Score_Should_Increase_By_One_When_Rover_Reaches_Goalpoint()
         {
-            Platau = new Platau(0, 1);
-            Player = new Player(Platau, Constants.TeamLimit, Constants.InstructionLimit);
+            var dummyPlatau = new PlatauFake(10, 10);
 
-            var playerScore = Player.GetScore();
+            var rover = new Rover(0, 0, 'N', dummyPlatau, Constants.RoverId);
+            var player = new Player(dummyPlatau, Constants.TeamLimit, Constants.InstructionLimit);
+
+            var playerScore = player.GetScore();
             Assert.That(playerScore, Is.EqualTo(0));
 
-            Player.GiveRoverInstructions(Rover, "M");
+            playerScore = MoveRoverAndCheckScore(rover, player, expectedScore: 1);
+        }
 
-            Assert.That(playerScore, Is.EqualTo(1));
+        [Test]
+        public void Player_Score_Should_Increase_By_One_Each_Time_Rover_Reaches_A_Goalpoint()
+        {
+            var dummyPlatau = new PlatauFake(10, 10);
+
+            var player = new Player(dummyPlatau, Constants.TeamLimit, Constants.InstructionLimit);
+            player.AddTeamMember(0, 0, 'N', Constants.RoverId);
+            var rover = player.Team[0];
+
+            var playerScore = player.GetScore();
+            Assert.That(playerScore, Is.EqualTo(0));
+
+            playerScore = MoveRoverAndCheckScore(rover, player, expectedScore: 1);
+
+            playerScore = MoveRoverAndCheckScore(rover, player, expectedScore: 2);
+        }
+
+        private static int MoveRoverAndCheckScore(Rover rover, Player player, int expectedScore)
+        {
+            int playerScore;
+            player.GiveRoverInstructions(rover, "M");
+
+            playerScore = player.GetScore();
+            Assert.That(playerScore, Is.EqualTo(expectedScore));
+            return playerScore;
         }
     }
 }

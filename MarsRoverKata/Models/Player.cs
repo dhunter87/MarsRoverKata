@@ -1,19 +1,21 @@
 ﻿using System;
+using MarsRover.Interfaces;
+
 namespace MarsRover.Models
 {
 	public class Player
 	{
-        public Platau Platau;
+        public IPlatau Platau;
         public List<Rover> Team;
         private int Score;
         private readonly int TeamLimit;
         private readonly int InstructionLimit;
 
-        public Player(Platau platau, int teamLimit, int instructionLimit)
+        public Player(IPlatau platau, int teamLimit, int instructionLimit)
 		{
+            Score = new int();
             TeamLimit = teamLimit;
             InstructionLimit = instructionLimit;
-            Score = 0;
             Platau = platau;
             Team = new List<Rover>();
 		}
@@ -22,8 +24,9 @@ namespace MarsRover.Models
         {
             if (Team.Count < TeamLimit)
             {
-                Team.Add(new Rover(xCoordinate, yCoordinate, bearing, Platau, id));
-            }
+                var rover = new Rover(xCoordinate, yCoordinate, bearing, Platau, id);
+                Team.Add(rover);
+            }   
         }
 
         public int GetScore()
@@ -33,15 +36,16 @@ namespace MarsRover.Models
 
         public void GiveRoverInstructions(Rover rover, string instructions)
         {
+            Score = 0;
+
             if (instructions.Length > InstructionLimit)
             {
                 instructions = instructions.Substring(0, InstructionLimit);
             }
             if (!string.IsNullOrEmpty(instructions))
-            { 
-                rover.ExecuteInstructions(instructions);
+            {
+                Score += rover.ExecuteInstructions(instructions);
             }
-
         }
     }
 }

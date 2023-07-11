@@ -1,15 +1,16 @@
 ﻿using System;
 using MarsRover.Helpers;
+using MarsRover.Interfaces;
 
 namespace MarsRover.Models
 {
     public class Rover
     {
         public Position Position;
-        public Platau Platau;
+        public IPlatau Platau;
         private readonly string RoverID;
 
-        public Rover(int xCoordinate, int yCoodinate, char bearing, Platau platau, string id)
+        public Rover(int xCoordinate, int yCoodinate, char bearing, IPlatau platau, string id)
         {
             RoverID = id;
             Platau = platau;
@@ -23,8 +24,9 @@ namespace MarsRover.Models
             Position = new Position(xCoordinate, yCoodinate, bearing);
         }
 
-        public void ExecuteInstructions(string instructions, List<char>? invalidCommands = null, bool isRecursiveCall = false)
+        public int ExecuteInstructions(string instructions, List<char>? invalidCommands = null, bool isRecursiveCall = false, int score = 0)
         {
+            
             if (invalidCommands == null)
             {
                 invalidCommands = new List<char>();
@@ -34,7 +36,7 @@ namespace MarsRover.Models
             {
                 if (Enum.TryParse(Char.ToUpper(instructions[0]).ToString(), out RoverCommand currentCommand))
                 {
-                    ExecuteInstruction(currentCommand);
+                    score += ExecuteInstruction(currentCommand);
                 }
                 else
                 {
@@ -51,23 +53,27 @@ namespace MarsRover.Models
             if (!isRecursiveCall)
             {
                 Console.WriteLine($"Rover Final Position. XCoordinate: {Position.XCoordinate}, YCoordinate: {Position.YCoordinate}, Bearing: {Position.Bearing}");
+                Console.WriteLine($"Score This Move: {score}");
+                return score;
             }
+            return 0;
         }
 
-        public void ExecuteInstruction(RoverCommand instruction)
+        public int ExecuteInstruction(RoverCommand instruction)
         {
             if (instruction == RoverCommand.M)
             {
-                Move();
+                return Move();
             }
 
             if (instruction == RoverCommand.L || instruction == RoverCommand.R)
             {
                 Rotate((int)instruction);
             }
+            return 0;
         }
 
-        public void Move()
+        public int Move()
         {
             (int deltaXCoordinate, int deltaYCoordinate) = DirectionMapper.GetDirectionDelta(Position.Bearing);
             
@@ -79,6 +85,11 @@ namespace MarsRover.Models
                 Position.XCoordinate += deltaXCoordinate;
                 Position.YCoordinate += deltaYCoordinate;
             }
+            if (Platau.IsGamePointMove(Position.XCoordinate, Position.YCoordinate))
+            {
+                return 1;
+            }
+            return 0;
         }
 
         private void Rotate(int bearingIncrementor)

@@ -57,8 +57,8 @@ namespace PlatauShould
         {
             var platau = new Platau(Constants.MaxXCoordinate, Constants.MaxYCoordinate);
 
-            var xCoordinate = platau.goalPoint.Item1;
-            var yCoordinate = platau.goalPoint.Item2;
+            var xCoordinate = platau.x;
+            var yCoordinate = platau.y;
 
             var xCoordinateWithinPlatau = xCoordinate >= 0 && xCoordinate <= Constants.MaxXCoordinate;
             var yCoordinateWithinPlatau = yCoordinate >= 0 && yCoordinate <= Constants.MaxYCoordinate;
@@ -69,6 +69,16 @@ namespace PlatauShould
                 Assert.That(yCoordinateWithinPlatau, Is.EqualTo(true));
             });
         }
+
+        //[Test]
+        //public void Platau_Should_Indicate_If_Rover_Reaches_GoalPoint()
+        //{
+        //    var platau = new Platau(Constants.MaxXCoordinate, Constants.MaxYCoordinate);
+        //    var isGamePoint = platau.IsGamePointMove();
+
+        //    Assert.That(isGamePoint, Is.EqualTo(true));
+        //}
     }
 }
 
+    
