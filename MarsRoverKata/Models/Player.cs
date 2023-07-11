@@ -6,7 +6,7 @@ namespace MarsRover.Models
 	public class Player
 	{
         public IPlateau Plateau;
-        public List<Rover> Team;
+        public List<IRover> Team;
         private int Score;
         private readonly int TeamLimit;
         private readonly int InstructionLimit;
@@ -17,7 +17,7 @@ namespace MarsRover.Models
             TeamLimit = teamLimit;
             InstructionLimit = instructionLimit;
             Plateau = platau;
-            Team = new List<Rover>();
+            Team = new List<IRover>();
 		}
 
         public void AddTeamMember(int xCoordinate, int yCoordinate, char bearing, string id)
@@ -34,7 +34,7 @@ namespace MarsRover.Models
             return Score;
         }
 
-        public void GiveRoverInstructions(Rover rover, string instructions)
+        public void GiveRoverInstructions(IRover rover, string instructions)
         {
             if (instructions.Length > InstructionLimit)
             {

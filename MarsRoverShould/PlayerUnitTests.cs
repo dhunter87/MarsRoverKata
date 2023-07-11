@@ -1,7 +1,10 @@
 ﻿using System;
+using MarsRover.Helpers;
+using MarsRover.Interfaces;
 using MarsRover.Models;
 using MarsRoverUnitTests.Dummies;
 using MarsRoverUnitTests.TestHelpers;
+using Moq;
 using NUnit.Framework;
 
 namespace PlayerShould
@@ -11,13 +14,14 @@ namespace PlayerShould
 	{
 		Player Player;
         PlateauFake FakePlateau;
-        Rover Rover;
+        Mock<IRover> MockRover;
 
         [SetUp]
         public void Setup()
         {
+            MockRover = new Mock<IRover>();
             FakePlateau = new PlateauFake(10,10);
-            Rover = new Rover(0, 0, 'N', FakePlateau, Constants.RoverId);
+
             Player = new Player(FakePlateau, Constants.TeamLimit, Constants.InstructionLimit);
         }
 
@@ -33,23 +37,16 @@ namespace PlayerShould
             Assert.That(Player.Plateau, Is.Not.Null);
         }
 
-        [Test]
-        public void Player_Can_Add_New_Team_Members()
-        {
-            Player.AddTeamMember(0, 0, 'N', Constants.RoverId);
-
-            Assert.That(Player.Team.Count, Is.EqualTo(1));
-        }
-
-        [TestCase(1, 1)]
-        [TestCase(5, 3)]
-        public void Players_Team_Can_Not_Exceed_Team_Limit(int limit, int expectedCount)
+        [TestCase(3, 1, 1)]
+        [TestCase(3, 5, 3)]
+        [TestCase(3, 3, 3)]
+        public void Players_Team_Can_Not_Exceed_Team_Limit(int actualInstanceCount, int limit, int expectedCount)
         {
             Player = new Player(FakePlateau, limit, Constants.InstructionLimit);
-
-            Player.AddTeamMember(0, 0, 'N', Constants.RoverId);
-            Player.AddTeamMember(0, 0, 'N', Constants.RoverId);
-            Player.AddTeamMember(0, 0, 'N', Constants.RoverId);
+            for (int i = 0; i < actualInstanceCount; i++)
+            {
+                Player.AddTeamMember(0, 0, 'N', Constants.RoverId);
+            }
 
             Assert.That(Player.Team.Count, Is.EqualTo(expectedCount));
         }
@@ -57,36 +54,22 @@ namespace PlayerShould
         [Test]
         public void Player_Can_Give_Team_Rovers_Instructions()
         {
-            Player.GiveRoverInstructions(Rover, "M");
-            Assert.That(Rover.Position.YCoordinate, Is.EqualTo(1));
+            Player.GiveRoverInstructions(MockRover.Object, "M");
+
+            MockRover.Verify(x => x.ExecuteInstructions(It.IsAny<string>(), It.IsAny<List<char>>(), It.IsAny<bool>(), It.IsAny<int>()), Times.Once);
         }
 
-        [TestCase(0, 1, "M")]
-        [TestCase(0, 0, "LM")]
-        [TestCase(0, 2, "LMRMM")]
-        public void Player_Can_Not_Move_Team_Rovers_Out_Of_Bounds(int expectedXCoord, int expectedYCoord, string instructions)
+        [TestCase("MMMMM", 3, "MMM")]
+        [TestCase("MMM", 3, "MMM")]
+        [TestCase("M", 3, "M")]
+        public void Players_Team_Rovers_Instructions_Are_Limited_To_InstructionLimit(string instructions, int limit, string actualInstructions)
         {
-            Player.GiveRoverInstructions(Rover, instructions);
-            Assert.Multiple(() =>
-            {
-                Assert.That(Rover.Position.XCoordinate, Is.EqualTo(expectedXCoord));
-                Assert.That(Rover.Position.YCoordinate, Is.EqualTo(expectedYCoord));
-            });
-        }
+            Player = new Player(FakePlateau, teamLimit: 1, limit);
+            Player.GiveRoverInstructions(MockRover.Object, instructions);
 
-        [TestCase(0, 1, "M", 1)]
-        [TestCase(0, 1, "MM", 1)]
-        [TestCase(2, 1, "MRMMMMMM", 4)]
-        public void Players_Team_Rovers_Instructions_Are_Limited_To_InstructionLimit(int expectedXCoord, int expectedYCoord, string instructions, int limit)
-        {
-            Player = new Player(FakePlateau, Constants.TeamLimit, limit);
-
-            Player.GiveRoverInstructions(Rover, instructions);
-            Assert.Multiple(() =>
-            {
-                Assert.That(Rover.Position.XCoordinate, Is.EqualTo(expectedXCoord));
-                Assert.That(Rover.Position.YCoordinate, Is.EqualTo(expectedYCoord));
-            });
+            MockRover.Verify(x => x.ExecuteInstructions(It.Is<string>(
+                s => s == actualInstructions), It.IsAny<List<char>>(), It.IsAny<bool>(), It.IsAny<int>()),
+                Times.Once);
         }
 
         [Test]
@@ -99,59 +82,54 @@ namespace PlayerShould
         [Test]
         public void Player_Score_Should_Increase_By_One_When_Rover_Reaches_Goalpoint()
         {
-            FakePlateau.GenerateGamePoint(0, 1);
+            var instructions = "M";
 
-            Player = new Player(FakePlateau, Constants.TeamLimit, Constants.InstructionLimit);
-
-            Player.AddTeamMember(0, 0, 'N', Constants.RoverId);
+            MockRover.Setup(r => r.ExecuteInstructions(
+                It.Is<string>(s => s == instructions),
+                It.IsAny<List<char>>(),
+                It.IsAny<bool>(),
+                It.IsAny<int>()))
+            .Returns(1);
 
             var playerScore = Player.GetScore();
             Assert.That(playerScore, Is.EqualTo(0));
 
-            playerScore = MoveRoverAndCheckScore(Player.Team[0], Player, "M", expectedScore: 1);
+            playerScore = GiveInstructionsAndCheckScore(MockRover.Object, Player, instructions);
+
+            Assert.That(playerScore, Is.EqualTo(1));
         }
 
-        [Test]
-        public void Player_Score_Should_Increase_By_One_Each_Time_Rover_Reaches_A_Goalpoint()
+        [TestCase("")]
+        [TestCase("M")]
+        [TestCase("MM")]
+        public void Player_Score_Increments_By_Value_Returned_By_Rover_Multiple_Moves(string instructions)
         {
-            FakePlateau.GenerateGamePoint(0, 1);
-            FakePlateau.GenerateGamePoint(0, 2);
+            var instructionsCount = instructions.ToArray().Length;
 
-            Player.AddTeamMember(0, 0, 'N', Constants.RoverId);
-
-            var playerScore = Player.GetScore();
-            Assert.That(playerScore, Is.EqualTo(0));
-
-            playerScore = MoveRoverAndCheckScore(Player.Team[0], Player, "M", expectedScore: 1);
-
-            playerScore = MoveRoverAndCheckScore(Player.Team[0], Player, "M", expectedScore: 2);
-        }
-
-        [TestCase(1,1, "M")]
-        [TestCase(2,2, "MM")]
-        [TestCase(3,3, "MMM")]
-        public void Player_Can_Score_More_Than_One_Point_Per_Move(int gamePointYCoord, int gamePointCount, string instructions)
-        {
-            for (int i = 1; i <= gamePointCount; i++)
-            {
-                FakePlateau.GenerateGamePoint(0, i);
-            }         
-
-            Player.AddTeamMember(0, 0, 'N', Constants.RoverId);
+            MockRover.Setup(r => r.ExecuteInstructions(
+                    It.Is<string>(s => s == instructions),
+                    It.IsAny<List<char>>(),
+                    It.IsAny<bool>(),
+                    It.IsAny<int>()))
+                .Returns(instructionsCount);
 
             var playerScore = Player.GetScore();
             Assert.That(playerScore, Is.EqualTo(0));
 
-            playerScore = MoveRoverAndCheckScore(Player.Team[0], Player, instructions, gamePointCount);
+            playerScore = GiveInstructionsAndCheckScore(MockRover.Object, Player, instructions);
+            Assert.That(playerScore, Is.EqualTo(instructionsCount));
+
+            playerScore = GiveInstructionsAndCheckScore(MockRover.Object, Player, instructions);
+            Assert.That(playerScore, Is.EqualTo(instructionsCount*2));
         }
 
-        private static int MoveRoverAndCheckScore(Rover rover, Player player, string instructions, int expectedScore)
+        private static int GiveInstructionsAndCheckScore(IRover rover, Player player, string instructions)
         {
             int playerScore;
             player.GiveRoverInstructions(rover, instructions);
 
             playerScore = player.GetScore();
-            Assert.That(playerScore, Is.EqualTo(expectedScore));
+            
             return playerScore;
         }
     }

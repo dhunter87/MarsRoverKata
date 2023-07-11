@@ -1,4 +1,5 @@
 ﻿using System;
+using MarsRover.Interfaces;
 using MarsRover.Models;
 using MarsRoverUnitTests.TestHelpers;
 using NUnit.Framework;
@@ -59,29 +60,18 @@ namespace MarsMissionShould
             Assert.That(_mission.Player.Team[0], Is.Not.Null);
         }
 
-        [Test]
-        public void MarsMission_Player_Can_Create_Multiple_New_Rovers()
-        {
-            _mission.CreateRover(3, 2, 'N', Constants.RoverId);
-            _mission.CreateRover(3, 2, 'N', Constants.RoverId);
-
-            Assert.That(_mission.Player.Team.Count(), Is.EqualTo(2));
-        }
-
-        [TestCase(10, 6)]
-        [TestCase(6, 6)]
-        [TestCase(1, 1)]
-        public void MarsMission_Player_Can_Not_Create_More_Than_X_Number_Of_New_Rovers(int limit, int expectedCount)
+        [TestCase(5, 10, 5)]
+        [TestCase(5, 5, 5)]
+        [TestCase(5, 1, 1)]
+        public void MarsMission_Player_Can_Not_Create_More_Than_X_Number_Of_New_Rovers(int testInstancesCount, int limit, int expectedCount)
         {
             var maxCoord = 5;
             _mission = new MarsMission(maxCoord, maxCoord, limit, Constants.InstructionLimit);
 
-            _mission.CreateRover(3, 2, 'N', Constants.RoverId);
-            _mission.CreateRover(3, 2, 'N', Constants.RoverId);
-            _mission.CreateRover(3, 2, 'N', Constants.RoverId);
-            _mission.CreateRover(3, 2, 'N', Constants.RoverId);
-            _mission.CreateRover(3, 2, 'N', Constants.RoverId);
-            _mission.CreateRover(3, 2, 'N', Constants.RoverId);
+            for (int i = 0; i < testInstancesCount; i++)
+            {
+                _mission.CreateRover(3, 2, 'N', Constants.RoverId);
+            }
 
             Assert.That(_mission.Player.Team.Count(), Is.EqualTo(expectedCount));
         }
@@ -135,7 +125,7 @@ namespace MarsMissionShould
         [TestCase(0, 0, 'N', 0, 1, 'W', "MLM")]
         [TestCase(5, 5, 'S', 4, 3, 'W', "MMLMMRRM")]
         [TestCase(1, 1, 'S', 1, 0, 'S', "MMMMM")]
-        public void MarsMission_Player_Can_Give_Rover_Move_Out_Of_Bounds_Instructions(int xCoordinate, int yCoordinate, char bearing, int expectedXCoordinate, int expectedYCoordinate, char expectedBearing, string instructions)
+        public void MarsMission_Rover_Does_Not_Move_Out_Of_Bounds_If_Given_Out_Of_Bounds_Instructions(int xCoordinate, int yCoordinate, char bearing, int expectedXCoordinate, int expectedYCoordinate, char expectedBearing, string instructions)
         {
             _mission.CreateRover(xCoordinate, yCoordinate, bearing, Constants.RoverId);
 
@@ -166,7 +156,7 @@ namespace MarsMissionShould
             AssertAfterAction(expectedXCoordinate, expectedYCoordinate, expectedBearing, rover);
         }
 
-        private static void AssertBeforeAction(int xCoordinate, int yCoordinate, char bearing, Rover rover)
+        private static void AssertBeforeAction(int xCoordinate, int yCoordinate, char bearing, IRover rover)
         {
             Assert.Multiple(() =>
             {
@@ -176,7 +166,7 @@ namespace MarsMissionShould
             });
         }
 
-        private static void AssertAfterAction(int expectedXCoordinate, int expectedYCoordinate, char expectedBearing, Rover rover)
+        private static void AssertAfterAction(int expectedXCoordinate, int expectedYCoordinate, char expectedBearing, IRover rover)
         {
             Assert.Multiple(() =>
             {

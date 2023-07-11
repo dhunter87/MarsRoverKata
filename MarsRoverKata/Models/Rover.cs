@@ -4,9 +4,9 @@ using MarsRover.Interfaces;
 
 namespace MarsRover.Models
 {
-    public class Rover
+    public class Rover : IRover
     {
-        public Position Position;
+        public Position Position { get; set; }
         public IPlateau Plateau;
         private readonly string RoverID;
 
@@ -73,7 +73,7 @@ namespace MarsRover.Models
             return 0;
         }
 
-        public int Move()
+        private int Move()
         {
             (int deltaXCoordinate, int deltaYCoordinate) = DirectionMapper.GetDirectionDelta(Position.Bearing);
             
@@ -89,6 +89,7 @@ namespace MarsRover.Models
             {
                 return 1;
             }
+
             return 0;
         }
 
