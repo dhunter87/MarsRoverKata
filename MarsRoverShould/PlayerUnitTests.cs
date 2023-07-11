@@ -10,16 +10,16 @@ namespace PlayerShould
 	public class PlayerUnitTests
 	{
 		Player Player;
-		Platau Platau;
-        PlatauFake platauDummy;
+		Plateau Plateau;
+        PlateauFake platauDummy;
         Rover Rover;
 
         [SetUp]
         public void Setup()
         {
-            Platau = new Platau(5, 5);
-            Rover = new Rover(0, 0, 'N', Platau, Constants.RoverId);
-            Player = new Player(Platau, Constants.TeamLimit, Constants.InstructionLimit);
+            Plateau = new Plateau(5, 5);
+            Rover = new Rover(0, 0, 'N', Plateau, Constants.RoverId);
+            Player = new Player(Plateau, Constants.TeamLimit, Constants.InstructionLimit);
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace PlayerShould
         [Test]
         public void Platau_Should_Not_Be_Null_When_Player_Is_Initialised()
         {
-            Assert.That(Player.Platau, Is.Not.Null);
+            Assert.That(Player.Plateau, Is.Not.Null);
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace PlayerShould
         [TestCase(5, 3)]
         public void Players_Team_Can_Not_Exceed_Team_Limit(int limit, int expectedCount)
         {
-            Player = new Player(Platau, limit, Constants.InstructionLimit);
+            Player = new Player(Plateau, limit, Constants.InstructionLimit);
 
             Player.AddTeamMember(0, 0, 'N', Constants.RoverId);
             Player.AddTeamMember(0, 0, 'N', Constants.RoverId);
@@ -80,7 +80,7 @@ namespace PlayerShould
         [TestCase(2, 1, "MRMMMMMM", 4)]
         public void Players_Team_Rovers_Instructions_Are_Limited_To_InstructionLimit(int expectedXCoord, int expectedYCoord, string instructions, int limit)
         {
-            Player = new Player(Platau, Constants.TeamLimit, limit);
+            Player = new Player(Plateau, Constants.TeamLimit, limit);
 
             Player.GiveRoverInstructions(Rover, instructions);
             Assert.Multiple(() =>
@@ -100,7 +100,7 @@ namespace PlayerShould
         [Test]
         public void Player_Score_Should_Increase_By_One_When_Rover_Reaches_Goalpoint()
         {
-            var dummyPlatau = new PlatauFake(10, 10);
+            var dummyPlatau = new PlateauFake(10, 10);
 
             var rover = new Rover(0, 0, 'N', dummyPlatau, Constants.RoverId);
             var player = new Player(dummyPlatau, Constants.TeamLimit, Constants.InstructionLimit);
@@ -114,7 +114,7 @@ namespace PlayerShould
         [Test]
         public void Player_Score_Should_Increase_By_One_Each_Time_Rover_Reaches_A_Goalpoint()
         {
-            var dummyPlatau = new PlatauFake(10, 10);
+            var dummyPlatau = new PlateauFake(10, 10);
 
             var player = new Player(dummyPlatau, Constants.TeamLimit, Constants.InstructionLimit);
             player.AddTeamMember(0, 0, 'N', Constants.RoverId);

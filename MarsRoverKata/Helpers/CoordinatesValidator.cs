@@ -6,11 +6,11 @@ namespace MarsRover.Helpers
 {
 	public static class CoordinatesValidator
 	{
-        public static bool IsValid(int xCoordinate, int yCoodinate, char bearing, IPlatau platau)
+        public static bool IsValid(int xCoordinate, int yCoodinate, char bearing, IPlateau plateau)
         {
 
-            if (xCoordinate < 0 || xCoordinate > platau.MaxXCoordinate ||
-                yCoodinate < 0 || yCoodinate > platau.MaxYCoordinate)
+            if (xCoordinate < 0 || xCoordinate > plateau.MaxXCoordinate ||
+                yCoodinate < 0 || yCoodinate > plateau.MaxYCoordinate)
             {
                 throw new ArgumentException();
             }

@@ -7,16 +7,16 @@ namespace MarsRover.Models
     public class Rover
     {
         public Position Position;
-        public IPlatau Platau;
+        public IPlateau Plateau;
         private readonly string RoverID;
 
-        public Rover(int xCoordinate, int yCoodinate, char bearing, IPlatau platau, string id)
+        public Rover(int xCoordinate, int yCoodinate, char bearing, IPlateau plateau, string id)
         {
             RoverID = id;
-            Platau = platau;
+            Plateau = plateau;
             bearing = Char.ToUpper(bearing);
 
-            if (!CoordinatesValidator.IsValid(xCoordinate, yCoodinate, bearing, Platau))
+            if (!CoordinatesValidator.IsValid(xCoordinate, yCoodinate, bearing, Plateau))
             {
                 throw new ArgumentException();
             }
@@ -80,12 +80,12 @@ namespace MarsRover.Models
             var nextXCoordinate = Position.XCoordinate + deltaXCoordinate;
             var nextYCoordinate = Position.YCoordinate + deltaYCoordinate;
 
-            if (Platau.IsValildMove(nextXCoordinate, nextYCoordinate))
+            if (Plateau.IsValildMove(nextXCoordinate, nextYCoordinate))
             {
                 Position.XCoordinate += deltaXCoordinate;
                 Position.YCoordinate += deltaYCoordinate;
             }
-            if (Platau.IsGamePointMove(Position.XCoordinate, Position.YCoordinate))
+            if (Plateau.IsGamePointMove(Position.XCoordinate, Position.YCoordinate))
             {
                 return 1;
             }

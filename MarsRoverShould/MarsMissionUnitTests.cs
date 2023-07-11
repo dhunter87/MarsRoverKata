@@ -39,9 +39,9 @@ namespace MarsMissionShould
 
             Assert.Multiple(() =>
             {
-				Assert.That(_mission.Platau, Is.Not.Null);
-                Assert.That(_mission.Platau.MaxXCoordinate, Is.EqualTo(5));
-                Assert.That(_mission.Platau.MaxYCoordinate, Is.EqualTo(5));
+				Assert.That(_mission.Plateau, Is.Not.Null);
+                Assert.That(_mission.Plateau.MaxXCoordinate, Is.EqualTo(5));
+                Assert.That(_mission.Plateau.MaxYCoordinate, Is.EqualTo(5));
             });
         }
 

@@ -4,7 +4,7 @@ using MarsRover.Interfaces;
 
 namespace MarsRover.Models
 {
-    public class Platau : IPlatau
+    public class Plateau : IPlateau
     {
 
         private (int, int) GoalPoint => (x,y);
@@ -15,7 +15,7 @@ namespace MarsRover.Models
         public int x;
         public int y;
 
-        public Platau(int maxXCoordinate, int maxYCoordinate)
+        public Plateau(int maxXCoordinate, int maxYCoordinate)
         {
             if (CoordinatesValidator.IsValid(maxXCoordinate, maxYCoordinate))
             {

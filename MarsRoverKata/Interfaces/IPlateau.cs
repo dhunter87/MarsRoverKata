@@ -1,7 +1,7 @@
 ﻿using System;
 namespace MarsRover.Interfaces
 {
-    public interface IPlatau
+    public interface IPlateau
     {
         int MaxXCoordinate { get; }
         int MaxYCoordinate { get; }

@@ -6,7 +6,7 @@ class Program
 {
     static void Main()
     {
-        var maxCoordinates = MissionInstructions.SetupPlatauCoordinates();
+        var maxCoordinates = MissionInstructions.SetupPlateauCoordinates();
         var maxTeamMembers = MissionInstructions.SetUpTeamLimits();
         var instructionLimit = MissionInstructions.SetupInstructionLimit();
 

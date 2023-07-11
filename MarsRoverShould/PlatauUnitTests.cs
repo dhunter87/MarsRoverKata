@@ -19,7 +19,7 @@ namespace PlatauShould
 		[TestCase(0, 0)]
 		public void Platau_Should_Not_Be_Null_When_Initialised_With_Coordinates(int maxXCoordinate, int maxYCoordinate)
         {
-            var platau = new Platau(maxXCoordinate, maxYCoordinate);
+            var platau = new Plateau(maxXCoordinate, maxYCoordinate);
             Assert.Multiple(() =>
             {
                 Assert.That(platau.MaxXCoordinate, Is.EqualTo(maxXCoordinate));
@@ -33,7 +33,7 @@ namespace PlatauShould
         [TestCase(10, -1)]
         public void Platau_Should_Not_Be_Initialised_When_Initialised_With_A_Negative_Coordinate(int maxXCoordinate, int maxYCoordinate)
         {
-            Assert.Throws<ArgumentException>(() => new Platau(maxXCoordinate, maxYCoordinate));
+            Assert.Throws<ArgumentException>(() => new Plateau(maxXCoordinate, maxYCoordinate));
         }
 
 
@@ -47,7 +47,7 @@ namespace PlatauShould
         [TestCase(0, 0, 0, -1, false)]
         public void IsValildMove_Should_Return_False_If_Coordinates_Are_Out_Of_Bounds_Of_The_Platau(int maxXCoordinate, int maxYCoordinate, int testXCoordinate, int testYCoordinate, bool expectedResult)
         {
-            var platau = new Platau(maxXCoordinate, maxYCoordinate);
+            var platau = new Plateau(maxXCoordinate, maxYCoordinate);
             var result = platau.IsValildMove(testXCoordinate, testYCoordinate);
             Assert.That(result, Is.EqualTo(expectedResult));
         }
@@ -55,7 +55,7 @@ namespace PlatauShould
         [Test]
         public void Platau_Should_Have_At_Least_One_Goal_Point_When_Initiated()
         {
-            var platau = new Platau(Constants.MaxXCoordinate, Constants.MaxYCoordinate);
+            var platau = new Plateau(Constants.MaxXCoordinate, Constants.MaxYCoordinate);
 
             var xCoordinate = platau.x;
             var yCoordinate = platau.y;
@@ -73,8 +73,8 @@ namespace PlatauShould
         //[Test]
         //public void Platau_Should_Indicate_If_Rover_Reaches_GoalPoint()
         //{
-        //    var platau = new Platau(Constants.MaxXCoordinate, Constants.MaxYCoordinate);
-        //    var isGamePoint = platau.IsGamePointMove();
+        //    var plateau = new Plateau(Constants.MaxXCoordinate, Constants.MaxYCoordinate);
+        //    var isGamePoint = plateau.IsGamePointMove();
 
         //    Assert.That(isGamePoint, Is.EqualTo(true));
         //}
