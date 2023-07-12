@@ -16,12 +16,18 @@ namespace MarsRover.Models
             TeamLimit = teamLimit;
             CommandLimit = instructionLimit;
 			Plateau = CreatePlatau(maxXCoordinate, maxYCoordinate);
-            Players = new List<Player>
-            {
-                new Player(Plateau, TeamLimit, CommandLimit)
-            };
-            
+            Players = new List<Player>();
+            SetupPlayers(players);
         }
+
+        public void SetupPlayers(int playerCount)
+        {
+            for (int i = 0; i < playerCount; i++)
+            {
+                Players.Add(new Player(Plateau, TeamLimit, CommandLimit));   
+            }
+        }
+
 
         public IPlateau CreatePlatau(int maxXCoordinate, int maxYCoordinate)
         {

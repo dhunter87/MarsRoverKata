@@ -58,20 +58,28 @@ namespace MarsMissionShould
         [Test]
         public void MarsMission_Players_List_Should_Have_At_least_One_Player()
         {
+            var instructionLimit = 5;
+            var playerCount = 1;
+
+            _mission = new MarsMission(Constants.MaxXCoordinate, Constants.MaxYCoordinate, Constants.TeamLimit, instructionLimit, playerCount);
+
             var players = _mission.GetConfiguredPlayers();
 
             Assert.That(players.Count(), Is.EqualTo(1));
         }
 
-        [Test]
-        public void MarsMission_Players_List_Should_Be_Configured_With_N_Number_Of_P()
+        [TestCase(0,1)]
+        [TestCase(1,1)]
+        [TestCase(5,5)]
+        public void MarsMission_Players_List_Should_Be_Configured_With_N_Number_Of_Players(int configuredCount, int actualCount)
         {
-            var playerCount = 2;
-            _mission = new MarsMission(Constants.MaxXCoordinate, Constants.MaxYCoordinate, Constants.TeamLimit, instructionLimit: 5, playerCount) ;
+            var instructionLimit = 5;
+
+            _mission = new MarsMission(Constants.MaxXCoordinate, Constants.MaxYCoordinate, Constants.TeamLimit, instructionLimit, configuredCount) ;
 
             var players = _mission.GetConfiguredPlayers();
 
-            Assert.That(players.Count(), Is.EqualTo(2));
+            Assert.That(players.Count(), Is.EqualTo(actualCount));
         }
 
         [Test]
