@@ -9,11 +9,13 @@ namespace MarsRover.Models
 	{
 		public IPlateau Plateau;
         private readonly int TeamLimit;
+        private readonly int GamePointLimit;
         private readonly int CommandLimit;
         private List<Player> Players;
 
         public MarsMission(MissionConfig config)
 		{
+            GamePointLimit = config.GamePoints;
             TeamLimit = config.MaxTeamMembers;
             CommandLimit = config.InstructionLimit;
 			Plateau = CreatePlatau(config.MaxCoordinates.Item1, config.MaxCoordinates.Item2);
@@ -37,7 +39,7 @@ namespace MarsRover.Models
 
         public IPlateau CreatePlatau(int maxXCoordinate, int maxYCoordinate)
         {
-			return new Plateau(maxXCoordinate, maxYCoordinate);
+			return new Plateau(maxXCoordinate, maxYCoordinate, GamePointLimit);
         }
 
         public void CreateRover(Player player, int startingXCoordinate, int startingYCoordinate, char startingBearing, string id)

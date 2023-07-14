@@ -9,11 +9,47 @@ namespace MarsRover.Helpers
         public static MissionConfig CreateMissionConfig()
         {
             var maxCoordinates = SetupPlateauCoordinates();
+            var gamePoints = SetupGamepoints();
             var maxTeamMembers = SetUpTeamLimits();
             var instructionLimit = SetupInstructionLimit();
             var playerCount = SetupPlayerCount();
 
-            return new MissionConfig(maxCoordinates, maxTeamMembers, instructionLimit, playerCount);
+            return new MissionConfig(maxCoordinates, gamePoints, maxTeamMembers, instructionLimit, playerCount);
+        }
+
+        private static int SetupGamepoints()
+        {
+            while (true)
+            {
+                var gamePointsCount = 0;
+
+                Console.WriteLine("Select Mission Difficulty. 1 = Easy, 2 = Medium, 3 = Hard!");
+                var difficulty = Console.ReadLine();
+
+                if (!int.TryParse(difficulty, out int difficultyLevel))
+                {
+                    Console.WriteLine("Invalid input format.");
+                    continue;
+
+                }
+                if (difficultyLevel <= 0)
+                {
+                    switch (difficultyLevel)
+                    {
+                        case 1:
+                            gamePointsCount = 3;
+                            break;
+                        case 2:
+                            gamePointsCount = 5;
+                            break;
+                        case 3:
+                            gamePointsCount = 10;
+                            break;
+                    }
+                }
+
+                return gamePointsCount;
+            }
         }
 
         public static void SetupTeamRovers(List<Player> players,  MarsMission mission)

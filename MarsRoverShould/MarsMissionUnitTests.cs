@@ -18,6 +18,7 @@ namespace MarsMissionShould
             var missionConfig = new MissionConfig(
                 (Constants.MaxXCoordinate,
                 Constants.MaxYCoordinate),
+                Constants.gamePointsCount,
                 Constants.TeamLimit,
                 Constants.InstructionLimit,
                 Constants.initialPlayerCount);
@@ -37,6 +38,7 @@ namespace MarsMissionShould
             var missionConfig = new MissionConfig(
                 (Constants.MaxXCoordinate,
                 Constants.MaxYCoordinate),
+                Constants.gamePointsCount,
                 Constants.TeamLimit,
                 actualInstructionLimit,
                 Constants.initialPlayerCount);
@@ -76,6 +78,7 @@ namespace MarsMissionShould
             var missionConfig = new MissionConfig(
                 (Constants.MaxXCoordinate,
                 Constants.MaxYCoordinate),
+                Constants.gamePointsCount,
                 Constants.TeamLimit,
                 Constants.InstructionLimit,
                 configuredCount);
@@ -112,6 +115,7 @@ namespace MarsMissionShould
             var missionConfig = new MissionConfig(
                 (maxCoord,
                 maxCoord),
+                Constants.gamePointsCount,
                 limit,
                 Constants.InstructionLimit,
                 Constants.initialPlayerCount);
@@ -143,6 +147,7 @@ namespace MarsMissionShould
             var missionConfig = new MissionConfig(
                 (maxCoord,
                 maxCoord),
+                Constants.gamePointsCount,
                 Constants.TeamLimit,
                 Constants.InstructionLimit,
                 Constants.initialPlayerCount);
@@ -251,6 +256,7 @@ namespace MarsMissionShould
             var missionConfig = new MissionConfig(
                 (Constants.MaxXCoordinate,
                 Constants.MaxYCoordinate),
+                Constants.gamePointsCount,
                 Constants.TeamLimit,
                 instructionLimit,
                 playerCount);

@@ -14,7 +14,7 @@ namespace PlatauShould
 		[SetUp]
 		public void Setup()
 		{
-            Plateau = new Plateau(10, 10);
+            Plateau = new Plateau(10, 10, Constants.gamePointsCount);
 
         }
 
@@ -23,7 +23,7 @@ namespace PlatauShould
 		[TestCase(0, 0)]
 		public void Platau_Should_Not_Be_Null_When_Initialised_With_Coordinates(int maxXCoordinate, int maxYCoordinate)
         {
-            Plateau = new Plateau(maxXCoordinate, maxYCoordinate);
+            Plateau = new Plateau(maxXCoordinate, maxYCoordinate, Constants.gamePointsCount);
 
             Assert.Multiple(() =>
             {
@@ -38,7 +38,7 @@ namespace PlatauShould
         [TestCase(10, -1)]
         public void Platau_Should_Not_Be_Initialised_When_Initialised_With_A_Negative_Coordinate(int maxXCoordinate, int maxYCoordinate)
         {
-            Assert.Throws<ArgumentException>(() => new Plateau(maxXCoordinate, maxYCoordinate));
+            Assert.Throws<ArgumentException>(() => new Plateau(maxXCoordinate, maxYCoordinate, Constants.gamePointsCount));
         }
 
 
@@ -52,7 +52,7 @@ namespace PlatauShould
         [TestCase(0, 0, 0, -1, false)]
         public void IsValildMove_Should_Return_False_If_Coordinates_Are_Out_Of_Bounds_Of_The_Platau(int maxXCoordinate, int maxYCoordinate, int testXCoordinate, int testYCoordinate, bool expectedResult)
         {
-            Plateau = new Plateau(maxXCoordinate, maxYCoordinate);
+            Plateau = new Plateau(maxXCoordinate, maxYCoordinate, Constants.gamePointsCount);
 
             var result = Plateau.IsValildMove(testXCoordinate, testYCoordinate);
 
@@ -62,7 +62,7 @@ namespace PlatauShould
         [Test]
         public void Platau_Should_Have_At_Least_One_Goal_Point_When_Initiated()
         {
-            var plateau = new Plateau(Constants.MaxXCoordinate, Constants.MaxYCoordinate);
+            var plateau = new Plateau(Constants.MaxXCoordinate, Constants.MaxYCoordinate, Constants.gamePointsCount);
 
             Assert.That(plateau.HasGamePoints(), Is.EqualTo(true));
         }
@@ -70,7 +70,7 @@ namespace PlatauShould
         [Test]
         public void Platau_Should_Indicate_If_Rover_Reaches_GoalPoint()
         {
-            Plateau = new Plateau(0, 0);
+            Plateau = new Plateau(0, 0, Constants.gamePointsCount);
 
             var isGamePoint = Plateau.IsGamePointMove(0,0);
 
@@ -80,7 +80,7 @@ namespace PlatauShould
         [Test]
         public void Platau_Should_Remove_Gamepoints_If_Reached_By_Rover()
         {
-            Plateau = new Plateau(0, 0);
+            Plateau = new Plateau(0, 0, 1);
 
             var isGamePoint = Plateau.IsGamePointMove(0, 0);
 

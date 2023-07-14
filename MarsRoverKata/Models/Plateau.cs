@@ -10,7 +10,7 @@ namespace MarsRover.Models
         public int MaxYCoordinate { get; private set; }
         private readonly List<GamePoint> GamePoints;    
 
-        public Plateau(int maxXCoordinate, int maxYCoordinate)
+        public Plateau(int maxXCoordinate, int maxYCoordinate, int maxGamePoints)
         {
             if (CoordinatesValidator.IsValid(maxXCoordinate, maxYCoordinate))
             {
@@ -24,7 +24,7 @@ namespace MarsRover.Models
             }
 
             GamePoints = new List<GamePoint>();
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < maxGamePoints; i++)
             {
                 GamePoints.Add(new GamePoint(maxXCoordinate, maxYCoordinate));
             }
@@ -44,6 +44,11 @@ namespace MarsRover.Models
         public bool IsGamePointMove(int xCoordinate, int yCoordinate)
         {
             var matchedPoint = GamePoints.FirstOrDefault(p => p.EqualsCoordinates(xCoordinate, yCoordinate));
+
+            if (matchedPoint != null)
+            {
+                GamePoints.Remove(matchedPoint);
+            }
 
             return matchedPoint != null;
         }
