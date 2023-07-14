@@ -56,9 +56,7 @@ public class RoverUnitTests
     [TestCase(0, 0, 'E', 1, 0, 'E')]
     [TestCase(1, 1, 'S', 1, 0, 'S')]
     [TestCase(1, 1, 'W', 0, 1, 'W')]
-    public void Mars_Rover_Coordinates_Change_Relevant_To_Its_Bearing_When_ExecuteInstruction_Is_Called_With_M_Command(
-        int xCoord, int yCoord, char bearing,
-        int expectedXCoord, int expectedYCoord, char expectedBearing)
+    public void Mars_Rover_Coordinates_Change_Relevant_To_Its_Bearing_When_ExecuteInstruction_Is_Called_With_M_Command( int xCoord, int yCoord, char bearing, int expectedXCoord, int expectedYCoord, char expectedBearing)
     {
         var rover = new Rover(xCoord, yCoord, bearing, FakePlateau, Constants.RoverId);
 

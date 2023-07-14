@@ -22,7 +22,7 @@ namespace PlayerShould
             MockRover = new Mock<IRover>();
             FakePlateau = new PlateauFake(10,10);
 
-            Player = new Player(FakePlateau, Constants.TeamLimit, Constants.InstructionLimit);
+            Player = new Player(FakePlateau, Constants.TeamLimit, Constants.InstructionLimit, Constants.PlayerOneId);
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace PlayerShould
         [TestCase(3, 3, 3)]
         public void Players_Team_Can_Not_Exceed_Team_Limit(int actualInstanceCount, int limit, int expectedCount)
         {
-            Player = new Player(FakePlateau, limit, Constants.InstructionLimit);
+            Player = new Player(FakePlateau, limit, Constants.InstructionLimit, Constants.PlayerOneId);
             for (int i = 0; i < actualInstanceCount; i++)
             {
                 Player.AddTeamMember(0, 0, 'N', Constants.RoverId);
@@ -64,7 +64,7 @@ namespace PlayerShould
         [TestCase("M", 3, "M")]
         public void Players_Team_Rovers_Instructions_Are_Limited_To_InstructionLimit(string instructions, int limit, string actualInstructions)
         {
-            Player = new Player(FakePlateau, teamLimit: 1, limit);
+            Player = new Player(FakePlateau, teamLimit: 1, limit, Constants.PlayerOneId);
             Player.GiveRoverInstructions(MockRover.Object, instructions);
 
             MockRover.Verify(x => x.ExecuteInstructions(It.Is<string>(

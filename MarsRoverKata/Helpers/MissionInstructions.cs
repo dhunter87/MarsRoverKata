@@ -1,9 +1,60 @@
 ﻿using System;
+using System.Reflection;
+using MarsRover.Models;
+
 namespace MarsRover.Helpers
 {
-	public static class MissionInstructions
+	public static class MissionSetup
 	{
-		public static (int, int) SetupPlateauCoordinates()
+        public static MissionConfig CreateMissionConfig()
+        {
+            var maxCoordinates = SetupPlateauCoordinates();
+            var maxTeamMembers = SetUpTeamLimits();
+            var instructionLimit = SetupInstructionLimit();
+            var playerCount = SetupPlayerCount();
+
+            return new MissionConfig(maxCoordinates, maxTeamMembers, instructionLimit, playerCount);
+        }
+
+        public static void SetupTeamRovers(List<Player> players,  MarsMission mission)
+        {
+            foreach (var player in players)
+            {
+                var counter = 1;
+                var initialRoverCoordinates = MissionSetup.SetupRoverCoordinates();
+                mission.CreateRover(player, initialRoverCoordinates.Value.Item1,
+                                    initialRoverCoordinates.Value.Item2,
+                                    initialRoverCoordinates.Key,
+                                    $"Player{player.PlayerId}-Rover{counter}");
+                counter++;
+            }
+        }
+
+
+        private static int SetupPlayerCount()
+        {
+            while (true)
+            {
+                Console.WriteLine("Enter Number Players Joining 'Mars Mission!'");
+                var playerCount = Console.ReadLine();
+
+                if (!int.TryParse(playerCount, out int players))
+                {
+                    Console.WriteLine("Invalid input format.");
+                    continue;
+
+                }
+                if (players <= 0)
+                {
+                    Console.WriteLine("Invalid input - out of range.");
+                    continue;
+                }
+
+                return players;
+            }
+        }
+
+		private static (int, int) SetupPlateauCoordinates()
 		{
             while (true)
             {
@@ -26,11 +77,11 @@ namespace MarsRover.Helpers
             }
         }
 
-        public static int SetUpTeamLimits()
+        private static int SetUpTeamLimits()
         {
             while (true)
             {
-                Console.WriteLine("Enter max Number of Rovers a Player can have on their Team!");
+                Console.WriteLine("Enter max Number of Rovers a Player can have on their Team! (Max players: 10)");
                 var teamLimit = Console.ReadLine();
 
                 if (!int.TryParse(teamLimit, out int maxTeamMembers))
@@ -49,7 +100,7 @@ namespace MarsRover.Helpers
             }
         }
 
-        public static KeyValuePair<char, (int, int)> SetupRoverCoordinates()
+        private static KeyValuePair<char, (int, int)> SetupRoverCoordinates()
         {
             Console.WriteLine("Enter Rover Coordinates And Bearing to start Mars Mission!");
             Console.WriteLine("Rover Coordinates must be within Platau maximum Coordinates");
@@ -100,7 +151,7 @@ namespace MarsRover.Helpers
             }
         }
 
-        public static int SetupInstructionLimit()
+        private static int SetupInstructionLimit()
         {
             Console.WriteLine("Enter Number of Instructions each Rover can take per move!");
             var instructions = Console.ReadLine();
@@ -113,6 +164,8 @@ namespace MarsRover.Helpers
 
             return instructionLimit;
         }
+
+
     }
 }
 

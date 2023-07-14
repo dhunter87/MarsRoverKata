@@ -41,7 +41,7 @@ namespace MarsRover.Models
                 else
                 {
                     invalidCommands.Add(instructions[0]);
-                }
+                }   
 
                 score = ExecuteInstructions(instructions.Substring(1), invalidCommands, true, score);
             }

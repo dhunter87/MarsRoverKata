@@ -78,6 +78,18 @@ namespace PlatauShould
         }
 
         [Test]
+        public void Platau_Should_Remove_Gamepoints_If_Reached_By_Rover()
+        {
+            Plateau = new Plateau(0, 0);
+
+            var isGamePoint = Plateau.IsGamePointMove(0, 0);
+
+            var result = Plateau.HasGamePoints();
+
+            Assert.That(result, Is.EqualTo(false));
+        }
+
+        [Test]
         public void Platau_Should_Have_At_Least_One_Gamepoint()
         {
             var hasGamePoint = Plateau.HasGamePoints();

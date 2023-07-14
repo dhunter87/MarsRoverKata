@@ -11,8 +11,11 @@ namespace MarsRover.Models
         private readonly int TeamLimit;
         private readonly int InstructionLimit;
 
-        public Player(IPlateau platau, int teamLimit, int instructionLimit)
+        public int PlayerId;
+
+        public Player(IPlateau platau, int teamLimit, int instructionLimit, int id)
 		{
+            PlayerId = id;
             Score = new int();
             TeamLimit = teamLimit;
             InstructionLimit = instructionLimit;
@@ -31,6 +34,8 @@ namespace MarsRover.Models
 
         public int GetScore()
         {
+            Console.WriteLine($"Score: {Score}");
+
             return Score;
         }
 

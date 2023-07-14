@@ -1,4 +1,5 @@
 ﻿using System;
+using MarsRover.Helpers;
 using MarsRover.Interfaces;
 using MarsRover.Models;
 using MarsRoverUnitTests.TestHelpers;
@@ -14,8 +15,14 @@ namespace MarsMissionShould
         [SetUp]
 		public void Setup()
 		{
-            var playerCount = 2;
-            _mission = new MarsMission(Constants.MaxXCoordinate, Constants.MaxYCoordinate, Constants.TeamLimit, Constants.InstructionLimit, playerCount);
+            var missionConfig = new MissionConfig(
+                (Constants.MaxXCoordinate,
+                Constants.MaxYCoordinate),
+                Constants.TeamLimit,
+                Constants.InstructionLimit,
+                Constants.initialPlayerCount);
+
+            _mission = new MarsMission(missionConfig);
 		}
 
 		[Test]
@@ -27,8 +34,14 @@ namespace MarsMissionShould
         [TestCase(1, 1)]
         public void MarsMission_GetCommandList_Should_Return_Correct_Limit_Value(int actualInstructionLimit, int expectedValue)
         {
-            var playerCount = 2;
-            _mission = new MarsMission(Constants.MaxXCoordinate, Constants.MaxYCoordinate, Constants.TeamLimit, actualInstructionLimit, playerCount);
+            var missionConfig = new MissionConfig(
+                (Constants.MaxXCoordinate,
+                Constants.MaxYCoordinate),
+                Constants.TeamLimit,
+                actualInstructionLimit,
+                Constants.initialPlayerCount);
+
+            _mission = new MarsMission(missionConfig);
 
             var instructionLimit = _mission.GetCommandLimit();
 
@@ -55,27 +68,19 @@ namespace MarsMissionShould
             Assert.That(players, Is.Not.Null);
         }
 
-        [Test]
-        public void MarsMission_Players_List_Should_Have_At_least_One_Player()
-        {
-            var instructionLimit = 5;
-            var playerCount = 1;
-
-            _mission = new MarsMission(Constants.MaxXCoordinate, Constants.MaxYCoordinate, Constants.TeamLimit, instructionLimit, playerCount);
-
-            var players = _mission.GetConfiguredPlayers();
-
-            Assert.That(players.Count(), Is.EqualTo(1));
-        }
-
-        [TestCase(0,1)]
+        [TestCase(0,1)] // has at least 1 player
         [TestCase(1,1)]
         [TestCase(5,5)]
         public void MarsMission_Players_List_Should_Be_Configured_With_N_Number_Of_Players(int configuredCount, int actualCount)
         {
-            var instructionLimit = 5;
+            var missionConfig = new MissionConfig(
+                (Constants.MaxXCoordinate,
+                Constants.MaxYCoordinate),
+                Constants.TeamLimit,
+                Constants.InstructionLimit,
+                configuredCount);
 
-            _mission = new MarsMission(Constants.MaxXCoordinate, Constants.MaxYCoordinate, Constants.TeamLimit, instructionLimit, configuredCount) ;
+            _mission = new MarsMission(missionConfig);
 
             var players = _mission.GetConfiguredPlayers();
 
@@ -102,9 +107,16 @@ namespace MarsMissionShould
         [TestCase(5, 1, 1)]
         public void MarsMission_Player_Can_Not_Create_More_Than_X_Number_Of_New_Rovers(int testInstancesCount, int limit, int expectedCount)
         {
-            var playerCount = 2;
             var maxCoord = 5;
-            _mission = new MarsMission(maxCoord, maxCoord, limit, Constants.InstructionLimit, playerCount);
+
+            var missionConfig = new MissionConfig(
+                (maxCoord,
+                maxCoord),
+                limit,
+                Constants.InstructionLimit,
+                Constants.initialPlayerCount);
+
+            _mission = new MarsMission(missionConfig);
 
             var players = _mission.GetConfiguredPlayers();
             var currentPlayer = players.FirstOrDefault();
@@ -126,15 +138,24 @@ namespace MarsMissionShould
         [TestCase(0, -1)]
         public void MarsMission_Player_Can_Not_Create_New_Rovers_Outside_The_Bounds_Of_The_Platau(int xCoord, int yCoord)
         {
-            var playerCount = 2;
             var maxCoord = 5;
-            _mission = new MarsMission(maxCoord, maxCoord, Constants.TeamLimit, Constants.InstructionLimit, playerCount);
+
+            var missionConfig = new MissionConfig(
+                (maxCoord,
+                maxCoord),
+                Constants.TeamLimit,
+                Constants.InstructionLimit,
+                Constants.initialPlayerCount);
+
+            _mission = new MarsMission(missionConfig);
 
             var players = _mission.GetConfiguredPlayers();
             var currentPlayer = players.FirstOrDefault();
+
             if (currentPlayer != null)
             {
-                Assert.Throws<ArgumentException>(() => _mission.CreateRover(currentPlayer, xCoord, yCoord, 'N', Constants.RoverId));
+                Assert.Throws<ArgumentException>(() =>
+                _mission.CreateRover(currentPlayer, xCoord, yCoord, 'N', Constants.RoverId));
             }
         }
 
@@ -148,7 +169,12 @@ namespace MarsMissionShould
 
             if (currentPlayer != null)
             {
-                _mission.CreateRover(currentPlayer, xCoordinate, yCoordinate, bearing, Constants.RoverId);
+                _mission.CreateRover(
+                    currentPlayer,
+                    xCoordinate,
+                    yCoordinate,
+                    bearing,
+                    Constants.RoverId);
 
                 var rover = currentPlayer.Team[0];
 
@@ -172,7 +198,12 @@ namespace MarsMissionShould
 
             if (currentPlayer != null)
             {
-                _mission.CreateRover(currentPlayer,xCoordinate, yCoordinate, bearing, Constants.RoverId);
+                _mission.CreateRover(
+                    currentPlayer,
+                    xCoordinate,
+                    yCoordinate,
+                    bearing,
+                    Constants.RoverId);
 
                 var rover = currentPlayer.Team[0];
 
@@ -194,7 +225,12 @@ namespace MarsMissionShould
 
             if (currentPlayer !=null)
             {
-                _mission.CreateRover(currentPlayer,xCoordinate, yCoordinate, bearing, Constants.RoverId);
+                _mission.CreateRover(
+                    currentPlayer,
+                    xCoordinate,
+                    yCoordinate,
+                    bearing,
+                    Constants.RoverId);
 
                 var rover = currentPlayer.Team[0];
 
@@ -212,14 +248,26 @@ namespace MarsMissionShould
         public void MarsMission_Player_Can_Give_X_Number_Of_M_Instructions(int xCoordinate, int yCoordinate, char bearing, int expectedXCoordinate, int expectedYCoordinate, char expectedBearing, int instructionLimit, string instructions)
         {
             var playerCount = 1;
-            _mission = new MarsMission(Constants.MaxXCoordinate, Constants.MaxYCoordinate, Constants.TeamLimit, instructionLimit,playerCount);
+            var missionConfig = new MissionConfig(
+                (Constants.MaxXCoordinate,
+                Constants.MaxYCoordinate),
+                Constants.TeamLimit,
+                instructionLimit,
+                playerCount);
+
+            _mission = new MarsMission(missionConfig);
 
             var players = _mission.GetConfiguredPlayers();
             var currentPlayer = players.FirstOrDefault();
 
             if (currentPlayer  != null)
             {
-                _mission.CreateRover(currentPlayer,xCoordinate, yCoordinate, bearing, Constants.RoverId);
+                _mission.CreateRover(
+                    currentPlayer,
+                    xCoordinate,
+                    yCoordinate,
+                    bearing,
+                    Constants.RoverId);
 
                 var rover = currentPlayer.Team[0];
 
