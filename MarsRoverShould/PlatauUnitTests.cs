@@ -80,7 +80,8 @@ namespace PlatauShould
         [Test]
         public void Platau_Should_Remove_Gamepoints_If_Reached_By_Rover()
         {
-            Plateau = new Plateau(0, 0, 1);
+            var gamePointCount = 1;
+            Plateau = new Plateau(0, 0, gamePointCount);
 
             var isGamePoint = Plateau.IsGamePointMove(0, 0);
 

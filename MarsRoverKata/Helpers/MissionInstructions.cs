@@ -32,7 +32,7 @@ namespace MarsRover.Helpers
                     continue;
 
                 }
-                if (difficultyLevel <= 0)
+                if (difficultyLevel >= 0)
                 {
                     switch (difficultyLevel)
                     {
