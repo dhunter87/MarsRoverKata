@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using MarsRover.Helpers;
 using MarsRover.Interfaces;
 using MarsRover.Models;
@@ -24,9 +25,11 @@ namespace MarsMissionShould
                 Constants.initialPlayerCount);
 
             _mission = new MarsMission(missionConfig);
-		}
+            //_mission.StartMission();
 
-		[Test]
+        }
+
+        [Test]
 		public void MarsMission_Should_Not_Be_Null_When_Initialised()
 		{
 			Assert.That(_mission, Is.Not.Null);
@@ -84,6 +87,7 @@ namespace MarsMissionShould
                 configuredCount);
 
             _mission = new MarsMission(missionConfig);
+            _mission.StartMission();
 
             var players = _mission.GetConfiguredPlayers();
 
@@ -210,6 +214,7 @@ namespace MarsMissionShould
                     bearing,
                     Constants.RoverId);
 
+
                 var rover = currentPlayer.Team[0];
 
                 AssertBeforeAction(xCoordinate, yCoordinate, bearing, rover);
@@ -262,9 +267,11 @@ namespace MarsMissionShould
                 playerCount);
 
             _mission = new MarsMission(missionConfig);
+            _mission.StartMission();
 
             var players = _mission.GetConfiguredPlayers();
             var currentPlayer = players.FirstOrDefault();
+
 
             if (currentPlayer  != null)
             {

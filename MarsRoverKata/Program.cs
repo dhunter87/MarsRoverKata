@@ -13,7 +13,8 @@ class Program
 
         var players = mission.GetConfiguredPlayers();
 
-        MissionSetup.SetupTeamRovers(players, mission);
+        mission.SetupTeamRovers();
+        mission.StartMission();
 
         while (mission.IsActive)
         {
@@ -21,12 +22,11 @@ class Program
             {
                 foreach (var rover in player.Team)
                 {
-                    PrintCurrentPosition(player,rover);
-                    var instructions = MissionSetup.SetupRoverInstructions();
+                    PrintCurrentPosition(player, rover);
+                    var instructions = mission.SetupRoverInstructions();
                     player.GiveRoverInstructions(rover, instructions);
                 }
             }
-
         }
 
         Console.WriteLine("Mission Over");

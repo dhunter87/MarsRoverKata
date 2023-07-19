@@ -44,6 +44,11 @@ namespace MarsRoverUnitTests.Dummies
         {
             return true;
         }
+
+        public void SetupGamePoints()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

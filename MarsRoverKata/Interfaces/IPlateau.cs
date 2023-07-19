@@ -15,6 +15,8 @@ namespace MarsRover.Interfaces
         bool IsGamePointMove(int xCoordinate, int yCoordinate);
 
         bool HasGamePoints();
+
+        void SetupGamePoints();
     }
 }
 

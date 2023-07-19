@@ -8,13 +8,14 @@ namespace MarsRover.Models
     {
         public int MaxXCoordinate { get; private set; }
         public int MaxYCoordinate { get; private set; }
-        private readonly List<GamePoint> GamePoints;    
+        private readonly int MaxGamePoints;
+        private List<GamePoint> GamePoints;    
 
         public Plateau(int maxXCoordinate, int maxYCoordinate, int maxGamePoints)
         {
             if (CoordinatesValidator.IsValid(maxXCoordinate, maxYCoordinate))
             {
-                MaxXCoordinate = maxXCoordinate;
+                MaxXCoordinate   = maxXCoordinate;
                 MaxYCoordinate = maxYCoordinate;
             }
 
@@ -23,10 +24,20 @@ namespace MarsRover.Models
                 throw new ArgumentException();
             }
 
-            GamePoints = new List<GamePoint>();
-            for (int i = 0; i < maxGamePoints; i++)
+            if (maxGamePoints >= 0 && maxGamePoints <= 10)
             {
-                GamePoints.Add(new GamePoint(maxXCoordinate, maxYCoordinate));
+                MaxGamePoints = maxGamePoints;
+            }
+
+            GamePoints = new List<GamePoint>();
+        }
+
+        public void SetupGamePoints()
+        {
+            GamePoints = new List<GamePoint>();
+            for (int i = 0; i < MaxGamePoints; i++)
+            {
+                GamePoints.Add(new GamePoint(MaxXCoordinate, MaxYCoordinate));
             }
         }
 
