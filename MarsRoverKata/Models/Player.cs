@@ -34,7 +34,7 @@ namespace MarsRover.Models
 
         public int GetScore()
         {
-            Console.WriteLine($"Score: {Score}");
+            Console.WriteLine($"Player: {PlayerId}, Score: {Score}");
 
             return Score;
         }

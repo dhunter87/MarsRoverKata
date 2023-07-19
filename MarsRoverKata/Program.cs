@@ -21,7 +21,7 @@ class Program
             {
                 foreach (var rover in player.Team)
                 {
-                    PrintCurrentPosition(rover);
+                    PrintCurrentPosition(player,rover);
                     var instructions = MissionSetup.SetupRoverInstructions();
                     player.GiveRoverInstructions(rover, instructions);
                 }
@@ -30,11 +30,11 @@ class Program
         }
 
         Console.WriteLine("Mission Over");
-        PrintPlayeScores(players);
+        PrintPlayerScores(players);
         Console.ReadLine();
     }
 
-    private static void PrintPlayeScores(List<Player> players)
+    private static void PrintPlayerScores(List<Player> players)
     {
         foreach (var player in players)
         {
@@ -45,8 +45,9 @@ class Program
         }
     }
 
-    private static void PrintCurrentPosition(IRover rover)
+    private static void PrintCurrentPosition(Player player, IRover rover)
     {
+        player.GetScore();
         Console.WriteLine("\n Current Rover position: \n");
         Console.WriteLine($"RoverId: {rover.GetId()}:");
         Console.WriteLine($"XCoordinate: {rover.Position.XCoordinate}, YCoordinate: {rover.Position.YCoordinate}, Bearing: {rover.Position.Bearing}");

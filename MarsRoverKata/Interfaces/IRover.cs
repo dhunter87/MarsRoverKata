@@ -8,7 +8,7 @@ namespace MarsRover.Interfaces
 	{
         public Position Position { get; set; }
 
-        int ExecuteInstructions(string instructions, List<char>? invalidCommands = null, bool isRecursiveCall = false, int score = 0);
+        int ExecuteInstructions(string instructions);
 
         int ExecuteInstruction(RoverCommand instruction);
 

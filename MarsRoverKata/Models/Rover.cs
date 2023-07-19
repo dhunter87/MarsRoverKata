@@ -1,6 +1,7 @@
 ﻿using System;
 using MarsRover.Helpers;
 using MarsRover.Interfaces;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace MarsRover.Models
 {
@@ -24,39 +25,51 @@ namespace MarsRover.Models
             Position = new Position(xCoordinate, yCoodinate, bearing);
         }
 
-        public int ExecuteInstructions(string instructions, List<char>? invalidCommands = null, bool isRecursiveCall = false, int score = 0)
+        public int ExecuteInstructions(string instructions)
         {
-            
-            if (invalidCommands == null)
-            {
-                invalidCommands = new List<char>();
-            }
+            int score = 0;
+            List<char> invalidCommands = new List<char>();
 
-            if (!string.IsNullOrEmpty(instructions))
+            foreach (var instruction in instructions)
             {
-                if (Enum.TryParse(Char.ToUpper(instructions[0]).ToString(), out RoverCommand currentCommand))
-                {
-                    score += ExecuteInstruction(currentCommand);
-                }
-                else
+                var scoreThisMove = TryExecuteSingleInstruction(Char.ToUpper(instruction));
+
+                if (scoreThisMove < 0)
                 {
                     invalidCommands.Add(instructions[0]);
-                }   
+                }
 
-                score = ExecuteInstructions(instructions.Substring(1), invalidCommands, true, score);
+                score += (int)scoreThisMove;
             }
 
+            PrintInvalidCommands(invalidCommands);
+            PrintRoverFinalPosition(score);
+
+            return score;
+        }
+
+        private int TryExecuteSingleInstruction(char instruction)
+        {
+            if (Enum.TryParse(instruction.ToString(), out RoverCommand currentCommand))
+            {
+                return ExecuteInstruction(currentCommand);
+            }
+
+            return -1;
+        }
+
+        private void PrintInvalidCommands(List<char> invalidCommands)
+        {
             if (invalidCommands.Any())
             {
-                Console.WriteLine($"Invalid commands: {string.Join(", ", invalidCommands.Distinct<char>())}");
+                Console.WriteLine($"Invalid commands: {string.Join(", ", invalidCommands.Distinct())}");
             }
-            if (!isRecursiveCall)
-            {
-                Console.WriteLine($"Rover Final Position. XCoordinate: {Position.XCoordinate}, YCoordinate: {Position.YCoordinate}, Bearing: {Position.Bearing}");
-                Console.WriteLine($"Score This Move: {score}");
-                return score;
-            }
-            return score;
+        }
+
+        private void PrintRoverFinalPosition(int score)
+        {
+            Console.WriteLine($"Rover Final Position. XCoordinate: {Position.XCoordinate}, YCoordinate: {Position.YCoordinate}, Bearing: {Position.Bearing}");
+            Console.WriteLine($"Score This Move: {score}");
         }
 
         public int ExecuteInstruction(RoverCommand instruction)

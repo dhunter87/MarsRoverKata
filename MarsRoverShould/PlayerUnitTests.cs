@@ -56,7 +56,7 @@ namespace PlayerShould
         {
             Player.GiveRoverInstructions(MockRover.Object, "M");
 
-            MockRover.Verify(x => x.ExecuteInstructions(It.IsAny<string>(), It.IsAny<List<char>>(), It.IsAny<bool>(), It.IsAny<int>()), Times.Once);
+            MockRover.Verify(x => x.ExecuteInstructions(It.IsAny<string>()), Times.Once);
         }
 
         [TestCase("MMMMM", 3, "MMM")]
@@ -67,8 +67,7 @@ namespace PlayerShould
             Player = new Player(FakePlateau, teamLimit: 1, limit, Constants.PlayerOneId);
             Player.GiveRoverInstructions(MockRover.Object, instructions);
 
-            MockRover.Verify(x => x.ExecuteInstructions(It.Is<string>(
-                s => s == actualInstructions), It.IsAny<List<char>>(), It.IsAny<bool>(), It.IsAny<int>()),
+            MockRover.Verify(x => x.ExecuteInstructions(It.Is<string>(s => s == actualInstructions)),
                 Times.Once);
         }
 
@@ -85,10 +84,7 @@ namespace PlayerShould
             var instructions = "M";
 
             MockRover.Setup(r => r.ExecuteInstructions(
-                It.Is<string>(s => s == instructions),
-                It.IsAny<List<char>>(),
-                It.IsAny<bool>(),
-                It.IsAny<int>()))
+                It.Is<string>(s => s == instructions)))
             .Returns(1);
 
             var playerScore = Player.GetScore();
@@ -107,10 +103,7 @@ namespace PlayerShould
             var instructionsCount = instructions.ToArray().Length;
 
             MockRover.Setup(r => r.ExecuteInstructions(
-                    It.Is<string>(s => s == instructions),
-                    It.IsAny<List<char>>(),
-                    It.IsAny<bool>(),
-                    It.IsAny<int>()))
+                    It.Is<string>(s => s == instructions)))
                 .Returns(instructionsCount);
 
             var playerScore = Player.GetScore();

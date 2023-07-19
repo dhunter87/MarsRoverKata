@@ -2,7 +2,6 @@
 using System.Reflection;
 using MarsRover.Configuration;
 using MarsRover.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MarsRover.Helpers
 {
