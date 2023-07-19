@@ -10,8 +10,10 @@
     <Folder Include="Helpers\" />
     <Folder Include="Models\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="Configuration\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Interfaces\" />
+    <None Remove="Configuration\" />
   </ItemGroup>
 </Project>

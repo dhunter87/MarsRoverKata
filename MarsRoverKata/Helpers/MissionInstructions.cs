@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
+using MarsRover.Configuration;
 using MarsRover.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MarsRover.Helpers
 {
@@ -8,21 +10,23 @@ namespace MarsRover.Helpers
 	{
         public static MissionConfig CreateMissionConfig()
         {
-            var maxCoordinates = SetupPlateauCoordinates();
-            var gamePoints = SetupGamepoints();
-            var maxTeamMembers = SetUpTeamLimits();
-            var instructionLimit = SetupInstructionLimit();
+
+            var difficultySetting = GetDifficultySetting();
+
+            var maxCoordinates = SetupPlateauCoordinates(difficultySetting);
+            var gamePoints = SetupGamepoints(difficultySetting);
+            var maxTeamMembers = SetUpTeamLimits(difficultySetting);
+            var instructionLimit = SetupInstructionLimit(difficultySetting);
             var playerCount = SetupPlayerCount();
 
             return new MissionConfig(maxCoordinates, gamePoints, maxTeamMembers, instructionLimit, playerCount);
         }
 
-        private static int SetupGamepoints()
+        private static DifficultySetting GetDifficultySetting()
         {
+            DifficultySetting difficultySetting;
             while (true)
             {
-                var gamePointsCount = 0;
-
                 Console.WriteLine("Select Mission Difficulty. 1 = Easy, 2 = Medium, 3 = Hard!");
                 var difficulty = Console.ReadLine();
 
@@ -30,42 +34,62 @@ namespace MarsRover.Helpers
                 {
                     Console.WriteLine("Invalid input format.");
                     continue;
-
-                }
-                if (difficultyLevel >= 0)
-                {
-                    switch (difficultyLevel)
-                    {
-                        case 1:
-                            gamePointsCount = 3;
-                            break;
-                        case 2:
-                            gamePointsCount = 5;
-                            break;
-                        case 3:
-                            gamePointsCount = 10;
-                            break;
-                    }
                 }
 
-                return gamePointsCount;
+                difficultySetting = (DifficultySetting)Enum.Parse(typeof(DifficultySetting), difficultyLevel.ToString());
+                break;
             }
+            return difficultySetting;
         }
 
-        public static void SetupTeamRovers(List<Player> players,  MarsMission mission)
+        private static (int, int) SetupPlateauCoordinates(DifficultySetting setting)
         {
-            foreach (var player in players)
+            var maxCoordinateDictionary = new Dictionary<DifficultySetting, int> { { DifficultySetting.Easy, 5 }, { DifficultySetting.Medium, 10 }, { DifficultySetting.Hard, 15 } };
+
+            if (!maxCoordinateDictionary.TryGetValue(setting, out int maxCoord))
             {
-                var counter = 1;
-                var initialRoverCoordinates = MissionSetup.SetupRoverCoordinates();
-                mission.CreateRover(player, initialRoverCoordinates.Value.Item1,
-                                    initialRoverCoordinates.Value.Item2,
-                                    initialRoverCoordinates.Key,
-                                    $"Player{player.PlayerId}-Rover{counter}");
-                counter++;
+                Console.WriteLine($"The maximum coordinate for {setting} is: {maxCoord}");
             }
+
+            return (maxCoord, maxCoord);
         }
 
+        private static int SetupGamepoints(DifficultySetting setting)
+        {
+            switch (setting)
+            {
+                case DifficultySetting.Easy:
+                    return 1;
+                case DifficultySetting.Medium:
+                    return 3;
+                case DifficultySetting.Hard:
+                    return 5;
+            }
+            return 0;
+        }
+
+        private static int SetUpTeamLimits(DifficultySetting setting)
+        {
+            // default number of rovers set to 1
+            // possible bug in directing multiple rovers
+            // reqs better UI to properly utilise multiple rovers
+            return 1;
+        }
+
+
+        private static int SetupInstructionLimit(DifficultySetting setting)
+        {
+            switch (setting)
+            {
+                case DifficultySetting.Easy:
+                    return 5;
+                case DifficultySetting.Medium:
+                    return 10;
+                case DifficultySetting.Hard:
+                    return 5;
+            }
+            return 0;
+        }
 
         private static int SetupPlayerCount()
         {
@@ -90,58 +114,26 @@ namespace MarsRover.Helpers
             }
         }
 
-		private static (int, int) SetupPlateauCoordinates()
-		{
-            while (true)
-            {
-                Console.WriteLine("Enter max Plateau Coordinates (e.g. 10,10) to Setup Mars Mission!");
-                var plateauSize = Console.ReadLine()?.Split(',');
-
-                if (plateauSize?.Length != 2)
-                {
-                    Console.WriteLine("Invalid input format.");
-                    continue;
-                }
-                if (!int.TryParse(plateauSize[0], out int maxXCoodinate) ||
-                    !int.TryParse(plateauSize[1], out int maxYCoodinate))
-                {
-                    Console.WriteLine("Invalid input. Please enter valid integer coordinates and a single character bearing.");
-                    continue;
-                }
-
-                return (maxXCoodinate, maxXCoodinate);
-            }
-        }
-
-        private static int SetUpTeamLimits()
+        public static void SetupTeamRovers(List<Player> players,  MarsMission mission)
         {
-            while (true)
+            foreach (var player in players)
             {
-                Console.WriteLine("Enter max Number of Rovers a Player can have on their Team! (Max players: 10)");
-                var teamLimit = Console.ReadLine();
-
-                if (!int.TryParse(teamLimit, out int maxTeamMembers))
-                {
-                    Console.WriteLine("Invalid input format.");
-                    continue;
-
-                }
-                if (maxTeamMembers <= 0 || maxTeamMembers > 10)
-                {
-                    Console.WriteLine("Invalid input - out of range.");
-                    continue;
-                }
-
-                return maxTeamMembers;
+                var counter = 1;
+                var initialRoverCoordinates = SetupRoverCoordinates(mission.Plateau.MaxXCoordinate);
+                mission.CreateRover(player, initialRoverCoordinates.Value.Item1,
+                                    initialRoverCoordinates.Value.Item2,
+                                    initialRoverCoordinates.Key,
+                                    $"Player{player.PlayerId}-Rover{counter}");
+                counter++;
             }
         }
 
-        private static KeyValuePair<char, (int, int)> SetupRoverCoordinates()
+        private static KeyValuePair<char, (int, int)> SetupRoverCoordinates(int maxCoordinate)
         {
             Console.WriteLine("Enter Rover Coordinates And Bearing to start Mars Mission!");
             Console.WriteLine("Rover Coordinates must be within Platau maximum Coordinates");
             Console.WriteLine("Bearing Must Be N (North), E (East), S (South), or W (West)");
-            Console.WriteLine("e.g. '10,10,N'");
+            Console.WriteLine($"e.g. between '0,0,N' And '{maxCoordinate},{maxCoordinate},S'");
 
             while (true)
             {
@@ -186,22 +178,6 @@ namespace MarsRover.Helpers
                 return instructions;
             }
         }
-
-        private static int SetupInstructionLimit()
-        {
-            Console.WriteLine("Enter Number of Instructions each Rover can take per move!");
-            var instructions = Console.ReadLine();
-
-            if (!int.TryParse(instructions, out int instructionLimit))
-            {
-                Console.WriteLine("Invalid input. Limit set to 5 by default");
-                return 5;
-            }
-
-            return instructionLimit;
-        }
-
-
     }
 }
 
