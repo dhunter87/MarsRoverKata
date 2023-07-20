@@ -1,4 +1,6 @@
 ﻿using MarsRover.Configuration;
+using MarsRover.Interfaces;
+using MarsRover.Models;
 
 namespace MarsRover.Helpers
 {
@@ -37,7 +39,7 @@ namespace MarsRover.Helpers
             return difficultySetting;
         }
 
-        private static (int, int) SetupPlateauCoordinates(DifficultySetting setting)
+        private static ICoordinate SetupPlateauCoordinates(DifficultySetting setting)
         {
             var maxCoordinateDictionary = new Dictionary<DifficultySetting, int> { { DifficultySetting.Easy, 5 }, { DifficultySetting.Medium, 10 }, { DifficultySetting.Hard, 15 } };
 
@@ -46,7 +48,7 @@ namespace MarsRover.Helpers
                 Console.WriteLine($"The maximum coordinate for {setting} is: {maxCoord}");
             }
 
-            return (maxCoord, maxCoord);
+            return Coordinate.CreateCoordinate(maxCoord, maxCoord);
         }
 
         private static int SetupGamepoints(DifficultySetting setting)

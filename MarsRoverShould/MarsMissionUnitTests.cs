@@ -17,8 +17,9 @@ namespace MarsMissionShould
 		public void Setup()
 		{
             var missionConfig = new MissionConfig(
-                (Constants.MaxXCoordinate,
-                Constants.MaxYCoordinate),
+                Coordinate.CreateCoordinate(
+                    Constants.MaxXCoordinate,
+                    Constants.MaxYCoordinate),
                 Constants.gamePointsCount,
                 Constants.TeamLimit,
                 Constants.InstructionLimit,
@@ -37,8 +38,9 @@ namespace MarsMissionShould
         public void MarsMission_GetCommandList_Should_Return_Correct_Limit_Value(int actualInstructionLimit, int expectedValue)
         {
             var missionConfig = new MissionConfig(
-                (Constants.MaxXCoordinate,
-                Constants.MaxYCoordinate),
+                Coordinate.CreateCoordinate(
+                    Constants.MaxXCoordinate,
+                    Constants.MaxYCoordinate),
                 Constants.gamePointsCount,
                 Constants.TeamLimit,
                 actualInstructionLimit,
@@ -77,8 +79,9 @@ namespace MarsMissionShould
         public void MarsMission_Players_List_Should_Be_Configured_With_N_Number_Of_Players(int configuredCount, int actualCount)
         {
             var missionConfig = new MissionConfig(
-                (Constants.MaxXCoordinate,
-                Constants.MaxYCoordinate),
+                Coordinate.CreateCoordinate(
+                    Constants.MaxXCoordinate,
+                    Constants.MaxYCoordinate),
                 Constants.gamePointsCount,
                 Constants.TeamLimit,
                 Constants.InstructionLimit,
@@ -115,8 +118,9 @@ namespace MarsMissionShould
             var maxCoord = 5;
 
             var missionConfig = new MissionConfig(
-                (maxCoord,
-                maxCoord),
+                Coordinate.CreateCoordinate(
+                    maxCoord,
+                    maxCoord),
                 Constants.gamePointsCount,
                 limit,
                 Constants.InstructionLimit,
@@ -147,8 +151,9 @@ namespace MarsMissionShould
             var maxCoord = 5;
 
             var missionConfig = new MissionConfig(
-                (maxCoord,
-                maxCoord),
+                Coordinate.CreateCoordinate(
+                    maxCoord,
+                    maxCoord),
                 Constants.gamePointsCount,
                 Constants.TeamLimit,
                 Constants.InstructionLimit,
@@ -257,8 +262,9 @@ namespace MarsMissionShould
         {
             var playerCount = 1;
             var missionConfig = new MissionConfig(
-                (Constants.MaxXCoordinate,
-                Constants.MaxYCoordinate),
+                Coordinate.CreateCoordinate(
+                    Constants.MaxXCoordinate,
+                    Constants.MaxYCoordinate),
                 Constants.gamePointsCount,
                 Constants.TeamLimit,
                 instructionLimit,

@@ -50,14 +50,7 @@ namespace MarsRover.Models
 
         public bool IsGamePointMove(int xCoordinate, int yCoordinate)
         {
-            var matchedPoint = GamePoints.FirstOrDefault(p => p.EqualsCoordinates(xCoordinate, yCoordinate));
-
-            if (matchedPoint != null)
-            {
-                GamePoints.Remove(matchedPoint);
-            }
-
-            return matchedPoint != null;
+            return GamePoints.FirstOrDefault(p => p.EqualsCoordinates(xCoordinate, yCoordinate)) != null;
         }
 
         public bool HasGamePoints()
@@ -73,6 +66,23 @@ namespace MarsRover.Models
         public void AddRover(int xCoordinate, int yCoordinate, char bearing)
         {
             RoverPositions.Add(RoverPosition.CreateRoverPosition(xCoordinate, yCoordinate, bearing));
+        }
+
+        public GamePoint GetGamePoint(int xCoordinate, int yCoordinate)
+        {
+            var matchedPoint = GamePoints.FirstOrDefault(p => p.EqualsCoordinates(xCoordinate, yCoordinate));
+
+            if (matchedPoint == null)
+            {
+               throw new Exception();
+            }
+
+            var matchedPointTreasureType = matchedPoint.TreasureType;
+            var matchedPointTreasureValue = matchedPoint.TreasureValue;
+
+            GamePoints.Remove(matchedPoint);
+
+            return (GamePoint)matchedPoint;
         }
     }
 }

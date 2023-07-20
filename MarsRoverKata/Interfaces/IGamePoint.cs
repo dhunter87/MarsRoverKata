@@ -1,9 +1,12 @@
 ﻿using System;
+using MarsRover.Models;
+
 namespace MarsRover.Interfaces
 {
 	public interface IGamePoint : ICoordinate
 	{
-        int Value { get; set; }
+        int TreasureValue { get; set; }
+        Prize TreasureType { get; set; }
         bool EqualsCoordinates(int xCoordinate, int yCoordinate);
     }
 }

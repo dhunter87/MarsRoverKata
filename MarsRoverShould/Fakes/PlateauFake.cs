@@ -8,23 +8,23 @@ namespace MarsRoverUnitTests.Dummies
 	{
         public int MaxXCoordinate { get; private set; }
         public int MaxYCoordinate { get; private set; }
-        public List<(int,int)> GamePoints;
+        public List<ICoordinate> GamePoints;
         private List<IRoverPosition> RoverPositions;
 
         public PlateauFake(int maxXCoordinate, int maxYCoordinate)
 		{
             MaxXCoordinate = maxXCoordinate;
             MaxYCoordinate = maxYCoordinate;
-            GamePoints = new List<(int, int)>();
+            GamePoints = new List<ICoordinate>();
             RoverPositions = new List<IRoverPosition>();
         }
 
         public void GenerateGamePoint(int xCoordinate, int yCoordinate)
         {
-            GamePoints.Add((xCoordinate, yCoordinate));
+            GamePoints.Add(Coordinate.CreateCoordinate(xCoordinate, yCoordinate));
         }
 
-        public (int, int) GetPlatauCoordinatesUpperLimits()
+        public ICoordinate GetPlatauCoordinatesUpperLimits()
         {
             throw new NotImplementedException();    
         }
@@ -37,7 +37,7 @@ namespace MarsRoverUnitTests.Dummies
 
         public bool IsGamePointMove(int xCoordinate, int yCoordinate)
         {
-            var matchedPoint = GamePoints.Any(p => p.Item1 == xCoordinate && p.Item2 == yCoordinate);
+            var matchedPoint = GamePoints.Any(p => p.XCoordinate == xCoordinate && p.YCoordinate == yCoordinate);
 
             return matchedPoint == true;
         }
@@ -56,6 +56,11 @@ namespace MarsRoverUnitTests.Dummies
         {
             var coord = RoverPosition.CreateRoverPosition(xCoordinate, yCoordinate, bearing); 
             RoverPositions.Add(coord);
+        }
+
+        public GamePoint GetGamePoint(int xCoordinate, int yCoordinate)
+        {
+            throw new NotImplementedException();
         }
     }
 }

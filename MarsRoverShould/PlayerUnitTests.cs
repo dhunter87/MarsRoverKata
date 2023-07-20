@@ -3,6 +3,7 @@ using MarsRover.Helpers;
 using MarsRover.Interfaces;
 using MarsRover.Models;
 using MarsRoverUnitTests.Dummies;
+using MarsRoverUnitTests.Fakes;
 using MarsRoverUnitTests.TestHelpers;
 using Moq;
 using NUnit.Framework;
@@ -23,6 +24,13 @@ namespace PlayerShould
             FakePlateau = new PlateauFake(10,10);
 
             Player = new Player(FakePlateau, Constants.TeamLimit, Constants.InstructionLimit, Constants.PlayerOneId);
+
+            MockRover.Setup(r => r.ExecuteInstructions(
+                It.IsAny<string>()))
+                .Returns(new List<IGamePoint>
+                {
+                    { new GamePointFake(1, Prize.Bronze) }
+                });
         }
 
         [Test]
@@ -78,42 +86,53 @@ namespace PlayerShould
             Assert.That(playerScore, Is.EqualTo(0));
         }
 
-        [Test]
-        public void Player_Score_Should_Increase_By_One_When_Rover_Reaches_Goalpoint()
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public void Player_Score_Should_Increase_By_TreasureValue_When_Rover_Reaches_Goalpoint(int treasureVal)
         {
             var instructions = "M";
 
             MockRover.Setup(r => r.ExecuteInstructions(
                 It.Is<string>(s => s == instructions)))
-            .Returns(1);
+            .Returns(new List<IGamePoint>
+            {
+                { new GamePointFake(treasureVal, Prize.Bronze) }
+            });
 
             var playerScore = Player.GetScore();
             Assert.That(playerScore, Is.EqualTo(0));
 
             playerScore = GiveInstructionsAndCheckScore(MockRover.Object, Player, instructions);
 
-            Assert.That(playerScore, Is.EqualTo(1));
+            Assert.That(playerScore, Is.EqualTo(treasureVal));
         }
 
-        [TestCase("")]
-        [TestCase("M")]
-        [TestCase("MM")]
-        public void Player_Score_Increments_By_Value_Returned_By_Rover_Multiple_Moves(string instructions)
+        [TestCase("", 1)]
+        [TestCase("M", 1)]
+        [TestCase("M", 2)]
+        [TestCase("MM", 1)]
+        [TestCase("MM", 2)]
+        public void Player_Score_Increments_By_Value_Returned_By_Rover_Multiple_Moves(string instructions, int treasureVal)
         {
             var instructionsCount = instructions.ToArray().Length;
+            var valuePerMove = (instructionsCount * treasureVal);
 
             MockRover.Setup(r => r.ExecuteInstructions(
                     It.Is<string>(s => s == instructions)))
-                .Returns(instructionsCount);
+                .Returns(new List<IGamePoint>
+                {
+                    { new GamePointFake(valuePerMove, Prize.Bronze) }
+                });
 
             var playerScore = Player.GetScore();
             Assert.That(playerScore, Is.EqualTo(0));
 
             playerScore = GiveInstructionsAndCheckScore(MockRover.Object, Player, instructions);
-            Assert.That(playerScore, Is.EqualTo(instructionsCount));
+            Assert.That(playerScore, Is.EqualTo(valuePerMove));
 
             playerScore = GiveInstructionsAndCheckScore(MockRover.Object, Player, instructions);
-            Assert.That(playerScore, Is.EqualTo(instructionsCount*2));
+            Assert.That(playerScore, Is.EqualTo(valuePerMove * 2));
         }
 
         private static int GiveInstructionsAndCheckScore(IRover rover, Player player, string instructions)

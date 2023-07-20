@@ -10,13 +10,13 @@ namespace MarsRover.Helpers
             {
                 var counter = 1;
                 var initialRoverCoordinates = SetupRoverCoordinates(plateau.MaxXCoordinate);
-                player.AddTeamMember(initialRoverCoordinates.Value.Item1, initialRoverCoordinates.Value.Item2, initialRoverCoordinates.Key, $"Player{player.PlayerId}-Rover{counter}");
+                player.AddTeamMember(initialRoverCoordinates.Value.XCoordinate, initialRoverCoordinates.Value.YCoordinate, initialRoverCoordinates.Key, $"Player{player.PlayerId}-Rover{counter}");
 
                 counter++;
             }
         }
 
-        public static KeyValuePair<char, (int, int)> SetupRoverCoordinates(int maxCoordinate)
+        public static KeyValuePair<char, ICoordinate> SetupRoverCoordinates(int maxCoordinate)
         {
             PrintSetupRoverCoordinateInstructions(maxCoordinate);
 
@@ -46,7 +46,7 @@ namespace MarsRover.Helpers
                     continue;
                 }
 
-                return new KeyValuePair<char, (int, int)>(initialBearing, (initialXCoordinate, initialYCoordinate));
+                return new KeyValuePair<char, ICoordinate>(initialBearing, Coordinate.CreateCoordinate(initialXCoordinate, initialYCoordinate));
             }
         }
 

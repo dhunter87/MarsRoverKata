@@ -1,4 +1,5 @@
 ﻿using MarsRover.Interfaces;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace MarsRover.Models
 {
@@ -11,6 +12,7 @@ namespace MarsRover.Models
         private int Score;
         private readonly int TeamLimit;
         private readonly int InstructionLimit;
+        List<IGamePoint> GamePoints;
 
         public Player(IPlateau platau, int teamLimit, int instructionLimit, int id)
 		{
@@ -20,6 +22,7 @@ namespace MarsRover.Models
             InstructionLimit = instructionLimit;
             Plateau = platau;
             Team = new List<IRover>();
+            GamePoints = new List<IGamePoint>();
 		}
 
         public void AddTeamMember(int xCoordinate, int yCoordinate, char bearing, string id)
@@ -34,6 +37,13 @@ namespace MarsRover.Models
 
         public int GetScore()
         {
+            Score = 0;
+
+            foreach (var gamepoint in GamePoints)
+            {
+                Score += gamepoint.TreasureValue;
+            }
+
             Console.WriteLine($"Player: {PlayerId}, Score: {Score}");
 
             return Score;
@@ -41,14 +51,18 @@ namespace MarsRover.Models
 
         public void GiveRoverInstructions(IRover rover, string instructions)
         {
+            if (string.IsNullOrEmpty(instructions))
+            {
+                return;
+            }
+
             if (instructions.Length > InstructionLimit)
             {
                 instructions = instructions.Substring(0, InstructionLimit);
             }
-            if (!string.IsNullOrEmpty(instructions))
-            {
-                Score += rover.ExecuteInstructions(instructions);
-            }
+            var points = rover.ExecuteInstructions(instructions);
+            GamePoints.AddRange(points);
+            GetScore();
         }
     }
 }

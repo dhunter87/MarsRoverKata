@@ -1,4 +1,6 @@
-﻿namespace MarsRover.Interfaces
+﻿using MarsRover.Models;
+
+namespace MarsRover.Interfaces
 {
     public interface IPlateau
     {
@@ -14,6 +16,8 @@
         void SetupGamePoints();
 
         void AddRover(int xCoordinate, int yCoordinate, char bearing);
+
+        GamePoint GetGamePoint(int xCoordinate, int yCoordinate);
     }
 }
 

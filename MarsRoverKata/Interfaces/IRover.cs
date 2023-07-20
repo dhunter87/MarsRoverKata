@@ -6,9 +6,9 @@ namespace MarsRover.Interfaces
 	{
         public IRoverPosition Position { get; set; }
 
-        int ExecuteInstructions(string instructions);
+        List<IGamePoint> ExecuteInstructions(string instructions);
 
-        int ExecuteInstruction(RoverCommand instruction);
+        void ExecuteInstruction(RoverCommand instruction);
 
         string GetId();
     }

@@ -83,6 +83,27 @@ namespace PlatauShould
         }
 
         [Test]
+        public void Platau_Should_Return_GoalPoint_Treasure_Value()
+        {
+            _plateau = new Plateau(1, 1, 1);
+
+            foreach (var position in _roverPositions)
+            {
+                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing);
+            }
+
+            _plateau.SetupGamePoints();
+
+            var isGamePoint = _plateau.IsGamePointMove(1, 1);
+            var gamePoint = _plateau.GetGamePoint(1, 1);
+
+            Assert.That(gamePoint, Is.Not.Null);
+
+            AssertTreasureValueIsValid(gamePoint.TreasureValue);
+            AssertTreasureTypeIsValid(gamePoint.TreasureType);
+        }
+
+        [Test]
         public void Platau_Should_Remove_Gamepoints_If_Reached_By_Rover()
         {
             var gamePointCount = 1;
@@ -90,6 +111,7 @@ namespace PlatauShould
             _plateau.SetupGamePoints();
 
             var isGamePoint = _plateau.IsGamePointMove(0, 0);
+            var gamePoint = _plateau.GetGamePoint(0,0);
 
             var result = _plateau.HasGamePoints();
 
@@ -123,6 +145,29 @@ namespace PlatauShould
             foreach (var roverPosition in _roverPositions)
             {
                 Assert.That(!gamepoints.Any(x => x.Equals(roverPosition)));
+            }
+        }
+
+        [Test]
+        public void Platau_GamePoints_Should_Have_GamePoint_Value()
+        {
+            _plateau = new Plateau(1, 1, 1);
+
+            foreach (var position in _roverPositions)
+            {
+                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing);
+            }
+
+            _plateau.SetupGamePoints();
+
+            var gamepoints = _plateau.GetGamePoints();
+
+            Assert.That(gamepoints, Is.Not.Null);
+            foreach (var gamepoint in gamepoints)
+            {
+                Assert.That(gamepoint.TreasureValue, Is.GreaterThan(0).And.LessThanOrEqualTo(3));
+
+                AssertTreasureTypeIsValid(gamepoint.TreasureType);
             }
         }
 
@@ -175,6 +220,34 @@ namespace PlatauShould
             var gamepoints = _plateau.GetGamePoints();
 
             Assert.That(gamepoints.Count(), Is.EqualTo(expectedGamepointCount));
+        }
+
+        private static void AssertTreasureTypeIsValid(Prize treasureType)
+        {
+            switch (treasureType)
+            {
+                case Prize.Bronze:
+                case Prize.Silver:
+                case Prize.Gold:
+                    break;
+                default:
+                    Assert.Fail($"Unexpected prize value: {treasureType}");
+                    break;
+            }
+        }
+
+        private void AssertTreasureValueIsValid(int value)
+        {
+            switch (value)
+            {
+                case 1:
+                case 2:
+                case 3:
+                    break;
+                default:
+                    Assert.Fail($"Invalid Treasure Value: {value}");
+                    break;
+            }
         }
     }
 }
