@@ -6,7 +6,7 @@ namespace MarsRover.Interfaces
 {
 	public interface IRover
 	{
-        public Position Position { get; set; }
+        public IRoverPosition Position { get; set; }
 
         int ExecuteInstructions(string instructions);
 

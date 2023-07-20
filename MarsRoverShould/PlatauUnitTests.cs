@@ -10,17 +10,17 @@ namespace PlatauShould
 	public class PlatauUnitTests
 	{
         private Plateau _plateau;
-        private List<Coordinate> _roverPositions;
+        private List<IRoverPosition> _roverPositions;
 
 		[SetUp]
 		public void Setup()
 		{
             _plateau = new Plateau(10, 10, Constants.gamePointsCount);
-            _roverPositions = new List<Coordinate>
+            _roverPositions = new List<IRoverPosition>
             {
-                new Coordinate(0,0),
-                new Coordinate(1,0),
-                new Coordinate(0,1),
+                RoverPosition.CreateRoverPosition(0,0,'N'),
+                RoverPosition.CreateRoverPosition(1,0,'N'),
+                RoverPosition.CreateRoverPosition(0,1,'N'),
             };
         }
 
@@ -46,7 +46,6 @@ namespace PlatauShould
         {
             Assert.Throws<ArgumentException>(() => new Plateau(maxXCoordinate, maxYCoordinate, Constants.gamePointsCount));
         }
-
 
         [TestCase(5, 5, 5, 5, true)]
         [TestCase(5, 5, 0, 5, true)]
@@ -107,7 +106,7 @@ namespace PlatauShould
             _plateau = new Plateau(1, 1, 1);
             foreach (var position in _roverPositions)
             {
-                _plateau.AddRover(position.XCoordinate, position.YCoordinate);
+                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing);
             }
 
             _plateau.SetupGamePoints();
@@ -131,7 +130,7 @@ namespace PlatauShould
 
             foreach (var position in _roverPositions)
             {
-                _plateau.AddRover(position.XCoordinate, position.YCoordinate);
+                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing);
             }
 
             _plateau.SetupGamePoints();
@@ -145,7 +144,6 @@ namespace PlatauShould
             }
         }
 
-        // gamepoints should not be able to be placed upon gamepoints
         [TestCase(1, 1, 4)]
         public void Platau_GamePoints_Should_Not_Clash_With_Other_Gamepoints(int maxXCoord, int maxYCord, int GamepointsCount)
         {
@@ -155,7 +153,7 @@ namespace PlatauShould
 
             var gamepoints = _plateau.GetGamePoints();
 
-            var uniqueGamepointHash = new HashSet<GamePoint>();
+            var uniqueGamepointHash = new HashSet<IGamePoint>();
 
             foreach (var element in gamepoints)
             {
@@ -164,6 +162,8 @@ namespace PlatauShould
 
             Assert.That(gamepoints.Count(), Is.EqualTo(uniqueGamepointHash.Count));
         }
+
+
         // gamepoints snould not exceed 20% available Plateau Coords i.e. MaxGamepoints = (maxX * maxY) * .20
 
     }

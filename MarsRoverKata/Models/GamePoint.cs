@@ -1,59 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using MarsRover.Interfaces;
 
 namespace MarsRover.Models
 {
-	public class GamePoint
+	public class GamePoint : IGamePoint
     {
-        private int X;
-        private int Y;
-        //private Coordinate Point; 
+        public int XCoordinate { get; set; }
+        public int YCoordinate { get; set; }
+        public int Value { get; set; }
 
-        public GamePoint(int maxXCoord, int maxYCoord, List<Coordinate> RoverPositions)
+        // Factory Method
+        public static IGamePoint CreateGamePoint(int maxXCoord, int maxYCoord, List<IRoverPosition> roverPositions, int value = 1)
         {
-            var retries = 10;
             Random random = new Random();
+            int randomisedXCoord;
+            int randomisedYCoord;
 
-            for (int i = 0; i < retries; i++) // Limit the number of attempts to prevent infinite loops
+            for (int retry = 0; retry < 10; retry++)
             {
-                var randomisedXCoord = GenerateGoalpointCoordinate(maxXCoord, random);
-                var randomisedYCoord = GenerateGoalpointCoordinate(maxYCoord, random);
+                randomisedXCoord = GenerateGoalpointCoordinate(maxXCoord, random);
+                randomisedYCoord = GenerateGoalpointCoordinate(maxYCoord, random);
 
-                if (!RoverPositions.Contains(new Coordinate(randomisedXCoord, randomisedYCoord)))
+                if (!roverPositions.Any(p => p.XCoordinate == randomisedXCoord && p.YCoordinate == randomisedYCoord))
                 {
-                    X = randomisedXCoord;
-                    Y = randomisedYCoord;
-                    //Point = new Coordinate(randomisedXCoord, randomisedYCoord);
-                    return;
+                    return new GamePoint { XCoordinate = randomisedXCoord, YCoordinate = randomisedYCoord, Value = value };
                 }
             }
+
+            throw new InvalidOperationException("Unable to find a suitable position for the GamePoint after 10 tries.");
         }
 
-        private int GenerateGoalpointCoordinate(int maxCoord, Random random)
+        private static int GenerateGoalpointCoordinate(int maxCoord, Random random)
         {
             return random.Next(maxCoord + 1);
         }
 
         public bool EqualsCoordinates(int xCoordinate, int yCoordinate)
         {
-            return X == xCoordinate && Y == yCoordinate;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            GamePoint other = (GamePoint)obj;
-            return X == other.X && Y == other.Y;
-        }
-
-        // Override GetHashCode based on X and Y coordinates
-        public override int GetHashCode()
-        {
-            return X.GetHashCode() ^ Y.GetHashCode();
+            return XCoordinate == xCoordinate && YCoordinate == yCoordinate;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace MarsRover.Models
 {
     public class Rover : IRover
     {
-        public Position Position { get; set; }
+        public IRoverPosition Position { get; set; }
         public IPlateau Plateau;
         private readonly string RoverID;
 
@@ -22,7 +22,7 @@ namespace MarsRover.Models
                 throw new ArgumentException();
             }
 
-            Position = new Position(xCoordinate, yCoodinate, bearing);
+            Position = RoverPosition.CreateRoverPosition(xCoordinate, yCoodinate, bearing);
         }
 
         public int ExecuteInstructions(string instructions)

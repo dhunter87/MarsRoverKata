@@ -2,7 +2,7 @@
 using System;
 namespace MarsRover.Interfaces
 {
-	public interface IPosition : ICoordinate
+	public interface IRoverPosition : ICoordinate
 	{
         char Bearing { get; set; }
     }
