@@ -25,8 +25,6 @@ namespace MarsMissionShould
                 Constants.initialPlayerCount);
 
             _mission = new MarsMission(missionConfig);
-            //_mission.StartMission();
-
         }
 
         [Test]

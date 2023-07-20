@@ -144,7 +144,8 @@ namespace PlatauShould
             }
         }
 
-        [TestCase(1, 1, 4)]
+        [TestCase(10, 10, 4)]
+        [TestCase(10, 10, 10)]
         public void Platau_GamePoints_Should_Not_Clash_With_Other_Gamepoints(int maxXCoord, int maxYCord, int GamepointsCount)
         {
             _plateau = new Plateau(maxXCoord, maxYCord, GamepointsCount);
@@ -153,19 +154,21 @@ namespace PlatauShould
 
             var gamepoints = _plateau.GetGamePoints();
 
-            var uniqueGamepointHash = new HashSet<IGamePoint>();
-
-            foreach (var element in gamepoints)
-            {
-                uniqueGamepointHash.Add(element);
-            }
-
-            Assert.That(gamepoints.Count(), Is.EqualTo(uniqueGamepointHash.Count));
+            Assert.That(gamepoints.Count(), Is.EqualTo(GamepointsCount));
         }
 
-
         // gamepoints snould not exceed 20% available Plateau Coords i.e. MaxGamepoints = (maxX * maxY) * .20
+        [TestCase(5, 5, 3, 2)]
+        public void Platau_GamePoints_Should_Not_20_Percent_Of_Plateau(int maxXCoord, int maxYCord, int GamepointsCount, int expectedGamepointCount)
+        {
+            _plateau = new Plateau(maxXCoord, maxYCord, GamepointsCount);
 
+            _plateau.SetupGamePoints();
+
+            var gamepoints = _plateau.GetGamePoints();
+
+            Assert.That(gamepoints.Count(), Is.EqualTo(expectedGamepointCount));
+        }
     }
 }
 
