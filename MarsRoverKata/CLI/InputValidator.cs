@@ -9,7 +9,7 @@ namespace MarsRover.Helpers
             foreach (var player in players)
             {
                 var counter = 1;
-                var initialRoverCoordinates = InputValidator.SetupRoverCoordinates(plateau.MaxXCoordinate);
+                var initialRoverCoordinates = SetupRoverCoordinates(plateau.MaxXCoordinate);
                 player.AddTeamMember(initialRoverCoordinates.Value.Item1, initialRoverCoordinates.Value.Item2, initialRoverCoordinates.Key, $"Player{player.PlayerId}-Rover{counter}");
 
                 counter++;
@@ -39,6 +39,12 @@ namespace MarsRover.Helpers
                 }
 
                 var initialBearing = Char.ToUpper(initialPosition[2][0]);
+
+                if(!CoordinatesValidator.IsRoverPositionAndBearingValid(initialXCoordinate, initialYCoordinate, initialBearing, maxCoordinate, maxCoordinate))
+                {
+                    Console.WriteLine("Invalid input. Please enter valid integer coordinates and a single character bearing.");
+                    continue;
+                }
 
                 return new KeyValuePair<char, (int, int)>(initialBearing, (initialXCoordinate, initialYCoordinate));
             }

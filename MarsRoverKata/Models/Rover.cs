@@ -15,7 +15,7 @@ namespace MarsRover.Models
             Plateau = plateau;
             bearing = Char.ToUpper(bearing);
 
-            if (!CoordinatesValidator.IsValid(xCoordinate, yCoodinate, bearing, Plateau))
+            if (!CoordinatesValidator.IsRoverPositionAndBearingValid(xCoordinate, yCoodinate, bearing, Plateau.MaxXCoordinate, Plateau.MaxYCoordinate))
             {
                 throw new ArgumentException();
             }

@@ -68,10 +68,16 @@ namespace PlatauShould
         [Test]
         public void Platau_Should_Indicate_If_Rover_Reaches_GoalPoint()
         {
-            _plateau = new Plateau(0, 0, Constants.gamePointsCount);
+            _plateau = new Plateau(1, 1, 1);
+
+            foreach (var position in _roverPositions)
+            {
+                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing);
+            }
+
             _plateau.SetupGamePoints();
 
-            var isGamePoint = _plateau.IsGamePointMove(0,0);
+            var isGamePoint = _plateau.IsGamePointMove(1,1);
 
             Assert.That(isGamePoint, Is.EqualTo(true));
         }
@@ -158,7 +164,8 @@ namespace PlatauShould
         }
 
         // gamepoints snould not exceed 20% available Plateau Coords i.e. MaxGamepoints = (maxX * maxY) * .20
-        [TestCase(5, 5, 3, 2)]
+        [TestCase(5, 5, 6, 5)]
+        [TestCase(10, 10, 50, 20)]
         public void Platau_GamePoints_Should_Not_20_Percent_Of_Plateau(int maxXCoord, int maxYCord, int GamepointsCount, int expectedGamepointCount)
         {
             _plateau = new Plateau(maxXCoord, maxYCord, GamepointsCount);

@@ -4,41 +4,54 @@ namespace MarsRover.Helpers
 {
     public static class CoordinatesValidator
 	{
-        public static bool IsValid(int xCoordinate, int yCoodinate, char bearing, IPlateau plateau)
+        public static bool IsRoverPositionAndBearingValid(int xCoordinate, int yCoodinate, char bearing, int platauMaxXCoordinate, int platauMaxYCoordinate)
         {
-
-            if (xCoordinate < 0 || xCoordinate > plateau.MaxXCoordinate ||
-                yCoodinate < 0 || yCoodinate > plateau.MaxYCoordinate)
+            if (!IsValidPosition(xCoordinate, yCoodinate, platauMaxXCoordinate, platauMaxYCoordinate) ||
+                !isValidBearing(bearing))
             {
-                throw new ArgumentException();
-            }
-            
-            if (bearing != 'N' && bearing != 'E' && bearing != 'S' && bearing != 'W')
-            {
-                throw new ArgumentException();
+                return false;
             }
 
             return true;
         }
 
-        public static bool IsValid(int xCoordinate, int yCoodinate)
+        public static bool IsInitialPlateauCoordinateValid(int xCoordinate, int yCoodinate)
         {
             if (xCoordinate < 0 || yCoodinate < 0)
             {
-                throw new ArgumentException();
+                return false;
             }
 
             return true;
         }
 
-        public static bool IsValid(int maxXCoordinate, int maxYCoordinate,int platauMaxXCoordinate, int platauMaxYCoordinate)
+        public static bool IsRoverNextMoveValid(int nextXCoordinate, int nextYCoordinate,int platauMaxXCoordinate, int platauMaxYCoordinate)
         {
-            if (maxXCoordinate >= 0 && maxXCoordinate <= platauMaxXCoordinate &&
-                maxYCoordinate >= 0 && maxYCoordinate <= platauMaxYCoordinate)
+            if (IsValidPosition(nextXCoordinate, nextYCoordinate, platauMaxXCoordinate, platauMaxYCoordinate))
             {
                 return true;
             }
             return false;
+        }
+
+        private static bool isValidBearing(char bearing)
+        {
+            if (bearing != 'N' && bearing != 'E' && bearing != 'S' && bearing != 'W')
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool IsValidPosition(int xCoordinate, int yCoodinate, int platauMaxXCoordinate, int platauMaxYCoordinate)
+        {
+            if (xCoordinate < 0 || xCoordinate > platauMaxXCoordinate ||
+                yCoodinate < 0 || yCoodinate > platauMaxYCoordinate)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
