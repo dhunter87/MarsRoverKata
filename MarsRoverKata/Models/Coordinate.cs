@@ -1,5 +1,4 @@
-﻿using System;
-using MarsRover.Interfaces;
+﻿using MarsRover.Interfaces;
 
 namespace MarsRover.Models
 {

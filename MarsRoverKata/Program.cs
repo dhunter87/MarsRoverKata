@@ -1,5 +1,4 @@
-﻿using System;
-using MarsRover.Helpers;
+﻿using MarsRover.Helpers;
 using MarsRover.Interfaces;
 using MarsRover.Models;
 
@@ -13,7 +12,7 @@ class Program
 
         var players = mission.GetPlayers();
 
-        mission.SetupTeamRovers();
+        InputValidator.SetupTeamRovers(players, mission.Plateau);
         mission.ActivateMission();
 
         while (mission.IsActive)
@@ -43,10 +42,7 @@ class Program
     {
         foreach (var player in players)
         {
-            foreach (var rover in player.Team)
-            {
-                player.GetScore();
-            }
+            player.GetScore();
         }
     }
 

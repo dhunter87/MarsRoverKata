@@ -1,8 +1,21 @@
-﻿using System;
+﻿using MarsRover.Interfaces;
+using MarsRover.Models;
 namespace MarsRover.Helpers
 {
-	public static class InputValidator
+    public static class InputValidator
 	{
+        public static void SetupTeamRovers(List<Player> players, IPlateau plateau)
+        {
+            foreach (var player in players)
+            {
+                var counter = 1;
+                var initialRoverCoordinates = InputValidator.SetupRoverCoordinates(plateau.MaxXCoordinate);
+                player.AddTeamMember(initialRoverCoordinates.Value.Item1, initialRoverCoordinates.Value.Item2, initialRoverCoordinates.Key, $"Player{player.PlayerId}-Rover{counter}");
+
+                counter++;
+            }
+        }
+
         public static KeyValuePair<char, (int, int)> SetupRoverCoordinates(int maxCoordinate)
         {
             PrintSetupRoverCoordinateInstructions(maxCoordinate);

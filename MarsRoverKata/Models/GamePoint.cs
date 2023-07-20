@@ -17,7 +17,7 @@ namespace MarsRover.Models
             int randomisedXCoord;
             int randomisedYCoord;
 
-            for (int retry = 0; retry < 10; retry++)
+            for (int retry = 0; retry < 100; retry++)
             {
                 randomisedXCoord = GenerateGoalpointCoordinate(maxXCoord, random);
                 randomisedYCoord = GenerateGoalpointCoordinate(maxYCoord, random);
@@ -28,7 +28,7 @@ namespace MarsRover.Models
                 }
             }
 
-            throw new InvalidOperationException("Unable to find a suitable position for the GamePoint after 10 tries.");
+            throw new InvalidOperationException("Unable to find a suitable position for the GamePoint after 100 tries.");
         }
 
         private static int GenerateGoalpointCoordinate(int maxCoord, Random random)

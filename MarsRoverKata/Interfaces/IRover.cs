@@ -1,10 +1,8 @@
-﻿using System;
-using MarsRover.Helpers;
-using MarsRover.Models;
+﻿using MarsRover.Helpers;
 
 namespace MarsRover.Interfaces
 {
-	public interface IRover
+    public interface IRover
 	{
         public IRoverPosition Position { get; set; }
 

@@ -1,7 +1,5 @@
-﻿using System;
-using MarsRover.Helpers;
+﻿using MarsRover.Helpers;
 using MarsRover.Interfaces;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace MarsRover.Models
 {
@@ -114,6 +112,7 @@ namespace MarsRover.Models
             Position.Bearing = DirectionMapper.GetNewBearing(newRotationValue);
         }
 
+        // CLI method only
         public string GetId()
         {
             return RoverID;

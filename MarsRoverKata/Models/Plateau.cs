@@ -1,5 +1,4 @@
-﻿using System;
-using MarsRover.Helpers;
+﻿using MarsRover.Helpers;
 using MarsRover.Interfaces;
 
 namespace MarsRover.Models
@@ -40,11 +39,6 @@ namespace MarsRover.Models
             {
                 GamePoints.Add(GamePoint.CreateGamePoint(MaxXCoordinate, MaxYCoordinate, RoverPositions));
             }
-        }
-
-        public (int, int) GetPlatauCoordinatesUpperLimits()
-        {
-            return (MaxXCoordinate, MaxYCoordinate);
         }
 
         public bool IsValildMove(int xCoordinate, int yCoordinate)

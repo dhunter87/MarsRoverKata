@@ -1,14 +1,9 @@
-﻿using System;
-using MarsRover.Models;
-
-namespace MarsRover.Interfaces
+﻿namespace MarsRover.Interfaces
 {
     public interface IPlateau
     {
         int MaxXCoordinate { get; }
         int MaxYCoordinate { get; }
-
-        (int, int) GetPlatauCoordinatesUpperLimits();
 
         bool IsValildMove(int xCoordinate, int yCoordinate);
 

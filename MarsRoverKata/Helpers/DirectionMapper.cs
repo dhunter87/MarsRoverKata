@@ -1,7 +1,6 @@
-﻿using System;
-namespace MarsRover.Helpers
+﻿namespace MarsRover.Helpers
 {
-	public static class DirectionMapper
+    public static class DirectionMapper
     {
         const char North = 'N';
         const char South = 'S';

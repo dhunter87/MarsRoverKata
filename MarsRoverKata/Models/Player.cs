@@ -1,17 +1,16 @@
-﻿using System;
-using MarsRover.Interfaces;
+﻿using MarsRover.Interfaces;
 
 namespace MarsRover.Models
 {
-	public class Player
+    public class Player
 	{
         public IPlateau Plateau;
         public List<IRover> Team;
+        
+        public int PlayerId;
         private int Score;
         private readonly int TeamLimit;
         private readonly int InstructionLimit;
-
-        public int PlayerId;
 
         public Player(IPlateau platau, int teamLimit, int instructionLimit, int id)
 		{

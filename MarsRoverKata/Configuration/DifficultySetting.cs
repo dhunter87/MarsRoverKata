@@ -1,7 +1,6 @@
-﻿using System;
-namespace MarsRover.Configuration
+﻿namespace MarsRover.Configuration
 {
-	public enum DifficultySetting
+    public enum DifficultySetting
 	{
 		Easy = 1,
 		Medium = 2,

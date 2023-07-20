@@ -22,18 +22,6 @@ namespace MarsRover.Models
             Players = new List<Player>();
             SetupPlayers(config.PlayerCount);
         }
-
-        public void SetupTeamRovers()
-        {
-            foreach (var player in Players)
-            {
-                var counter = 1;
-                var initialRoverCoordinates = InputValidator.SetupRoverCoordinates(Plateau.MaxXCoordinate);
-                player.AddTeamMember(initialRoverCoordinates.Value.Item1, initialRoverCoordinates.Value.Item2, initialRoverCoordinates.Key, $"Player{player.PlayerId}-Rover{counter}");
-
-                counter++;
-            }
-        }
         
         public void SetupPlayers(int playerCount)
         {

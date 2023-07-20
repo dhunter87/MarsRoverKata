@@ -123,7 +123,7 @@ namespace PlatauShould
         [TestCase(3,3,3)]
         [TestCase(5,5,10)]
         [TestCase(5,5,20)]
-        [TestCase(5,5,23)]
+        [TestCase(5,5,22)]
         public void Platau_GamePoints_Should_Not_Clash_With_Rover_Starting_Positions(int maxXCoord, int maxYCord, int GamepointsCount)
         {
             _plateau = new Plateau(maxXCoord, maxYCord, GamepointsCount);

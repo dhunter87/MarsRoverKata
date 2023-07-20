@@ -1,10 +1,8 @@
-﻿using System;
-using MarsRover.Interfaces;
-using MarsRover.Models;
+﻿using MarsRover.Interfaces;
 
 namespace MarsRover.Helpers
 {
-	public static class CoordinatesValidator
+    public static class CoordinatesValidator
 	{
         public static bool IsValid(int xCoordinate, int yCoodinate, char bearing, IPlateau plateau)
         {

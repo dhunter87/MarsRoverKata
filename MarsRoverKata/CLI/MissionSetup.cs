@@ -1,15 +1,11 @@
-﻿using System;
-using System.Reflection;
-using MarsRover.Configuration;
-using MarsRover.Models;
+﻿using MarsRover.Configuration;
 
 namespace MarsRover.Helpers
 {
-	public static class MissionSetup
+    public static class MissionSetup
 	{
         public static MissionConfig CreateMissionConfig()
         {
-
             var difficultySetting = GetDifficultySetting();
 
             var maxCoordinates = SetupPlateauCoordinates(difficultySetting);
@@ -75,7 +71,6 @@ namespace MarsRover.Helpers
             return 1;
         }
 
-
         private static int SetupInstructionLimit(DifficultySetting setting)
         {
             switch (setting)
@@ -112,7 +107,6 @@ namespace MarsRover.Helpers
                 return players;
             }
         }
-
     }
 }
 
