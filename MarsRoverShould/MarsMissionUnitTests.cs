@@ -69,7 +69,7 @@ namespace MarsMissionShould
         [Test]
         public void MarsMission_Player_Is_Not_Null_When_Initialised()
         {
-            var players = _mission.GetConfiguredPlayers();
+            var players = _mission.GetPlayers();
             Assert.That(players, Is.Not.Null);
         }
 
@@ -87,9 +87,9 @@ namespace MarsMissionShould
                 configuredCount);
 
             _mission = new MarsMission(missionConfig);
-            _mission.StartMission();
+            _mission.ActivateMission();
 
-            var players = _mission.GetConfiguredPlayers();
+            var players = _mission.GetPlayers();
 
             Assert.That(players.Count(), Is.EqualTo(actualCount));
         }
@@ -97,7 +97,7 @@ namespace MarsMissionShould
         [Test]
         public void MarsMission_Player_Can_Create_New_Rover()
         {
-            var players = _mission.GetConfiguredPlayers();
+            var players = _mission.GetPlayers();
 
             var currentPlayer = players.FirstOrDefault();
 
@@ -126,7 +126,7 @@ namespace MarsMissionShould
 
             _mission = new MarsMission(missionConfig);
 
-            var players = _mission.GetConfiguredPlayers();
+            var players = _mission.GetPlayers();
             var currentPlayer = players.FirstOrDefault();
 
             if (currentPlayer != null)
@@ -158,7 +158,7 @@ namespace MarsMissionShould
 
             _mission = new MarsMission(missionConfig);
 
-            var players = _mission.GetConfiguredPlayers();
+            var players = _mission.GetPlayers();
             var currentPlayer = players.FirstOrDefault();
 
             if (currentPlayer != null)
@@ -173,7 +173,7 @@ namespace MarsMissionShould
         [TestCase(1, 5, 'S')]
         public void MarsMission_Player_Can_Create_New_Rover(int xCoordinate, int yCoordinate, char bearing)
         {
-            var players = _mission.GetConfiguredPlayers();
+            var players = _mission.GetPlayers();
             var currentPlayer = players.FirstOrDefault();
 
             if (currentPlayer != null)
@@ -202,7 +202,7 @@ namespace MarsMissionShould
         [TestCase(1, 1, 'S', 1, 0, 'S')]
         public void MarsMission_Player_Can_Give_Rover_Instructions(int xCoordinate, int yCoordinate, char bearing, int expectedXCoordinate, int expectedYCoordinate, char expectedBearing)
         {
-            var players = _mission.GetConfiguredPlayers();
+            var players = _mission.GetPlayers();
             var currentPlayer = players.FirstOrDefault();
 
             if (currentPlayer != null)
@@ -230,7 +230,7 @@ namespace MarsMissionShould
         [TestCase(1, 1, 'S', 1, 0, 'S', "MMMMM")]
         public void MarsMission_Rover_Does_Not_Move_Out_Of_Bounds_If_Given_Out_Of_Bounds_Instructions(int xCoordinate, int yCoordinate, char bearing, int expectedXCoordinate, int expectedYCoordinate, char expectedBearing, string instructions)
         {
-            var players = _mission.GetConfiguredPlayers();
+            var players = _mission.GetPlayers();
             var currentPlayer = players.FirstOrDefault();
 
             if (currentPlayer !=null)
@@ -267,9 +267,9 @@ namespace MarsMissionShould
                 playerCount);
 
             _mission = new MarsMission(missionConfig);
-            _mission.StartMission();
+            _mission.ActivateMission();
 
-            var players = _mission.GetConfiguredPlayers();
+            var players = _mission.GetPlayers();
             var currentPlayer = players.FirstOrDefault();
 
 

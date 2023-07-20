@@ -10,12 +10,18 @@ namespace PlatauShould
 	public class PlatauUnitTests
 	{
         private Plateau _plateau;
+        private List<Coordinate> _roverPositions;
 
 		[SetUp]
 		public void Setup()
 		{
             _plateau = new Plateau(10, 10, Constants.gamePointsCount);
-
+            _roverPositions = new List<Coordinate>
+            {
+                new Coordinate(0,0),
+                new Coordinate(1,0),
+                new Coordinate(0,1),
+            };
         }
 
         [TestCase(5,5)]
@@ -93,6 +99,73 @@ namespace PlatauShould
 
             Assert.That(hasGamePoint, Is.EqualTo(true));
         }
+
+        // temp test (No accessor method needed beyond initial test)
+        [Test]
+        public void Platau_GamePoints_Should_Not_Clash_With_Rover_Starting_Positions()
+        {
+            _plateau = new Plateau(1, 1, 1);
+            foreach (var position in _roverPositions)
+            {
+                _plateau.AddRover(position.XCoordinate, position.YCoordinate);
+            }
+
+            _plateau.SetupGamePoints();
+
+            var gamepoints = _plateau.GetGamePoints();
+
+            Assert.That(gamepoints, Is.Not.Null); 
+            foreach (var roverPosition in _roverPositions)
+            {
+                Assert.That(!gamepoints.Any(x => x.Equals(roverPosition)));
+            }
+        }
+
+        [TestCase(3,3,3)]
+        [TestCase(5,5,10)]
+        [TestCase(5,5,20)]
+        [TestCase(5,5,23)]
+        public void Platau_GamePoints_Should_Not_Clash_With_Rover_Starting_Positions(int maxXCoord, int maxYCord, int GamepointsCount)
+        {
+            _plateau = new Plateau(maxXCoord, maxYCord, GamepointsCount);
+
+            foreach (var position in _roverPositions)
+            {
+                _plateau.AddRover(position.XCoordinate, position.YCoordinate);
+            }
+
+            _plateau.SetupGamePoints();
+
+            var gamepoints = _plateau.GetGamePoints();
+
+            Assert.That(gamepoints, Is.Not.Null);
+            foreach (var roverPosition in _roverPositions)
+            {
+                Assert.That(!gamepoints.Any(x => x.Equals(roverPosition)));
+            }
+        }
+
+        // gamepoints should not be able to be placed upon gamepoints
+        [TestCase(1, 1, 4)]
+        public void Platau_GamePoints_Should_Not_Clash_With_Other_Gamepoints(int maxXCoord, int maxYCord, int GamepointsCount)
+        {
+            _plateau = new Plateau(maxXCoord, maxYCord, GamepointsCount);
+
+            _plateau.SetupGamePoints();
+
+            var gamepoints = _plateau.GetGamePoints();
+
+            var uniqueGamepointHash = new HashSet<GamePoint>();
+
+            foreach (var element in gamepoints)
+            {
+                uniqueGamepointHash.Add(element);
+            }
+
+            Assert.That(gamepoints.Count(), Is.EqualTo(uniqueGamepointHash.Count));
+        }
+        // gamepoints snould not exceed 20% available Plateau Coords i.e. MaxGamepoints = (maxX * maxY) * .20
+
     }
 }
 

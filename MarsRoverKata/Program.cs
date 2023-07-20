@@ -11,27 +11,32 @@ class Program
 
         var mission = new MarsMission(missionConfig);
 
-        var players = mission.GetConfiguredPlayers();
+        var players = mission.GetPlayers();
 
         mission.SetupTeamRovers();
-        mission.StartMission();
+        mission.ActivateMission();
 
         while (mission.IsActive)
         {
             foreach (var player in players)
             {
-                foreach (var rover in player.Team)
-                {
-                    PrintCurrentPosition(player, rover);
-                    var instructions = mission.SetupRoverInstructions();
-                    player.GiveRoverInstructions(rover, instructions);
-                }
+                TakePlayerTurn(mission, player);
             }
         }
 
         Console.WriteLine("Mission Over");
         PrintPlayerScores(players);
         Console.ReadLine();
+    }
+
+    private static void TakePlayerTurn(MarsMission mission, Player player)
+    {
+        foreach (var rover in player.Team)
+        {
+            PrintCurrentPosition(player, rover);
+            var instructions = InputValidator.SetupRoverInstructions();
+            player.GiveRoverInstructions(rover, instructions);
+        }
     }
 
     private static void PrintPlayerScores(List<Player> players)

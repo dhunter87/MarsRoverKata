@@ -9,12 +9,14 @@ namespace MarsRoverUnitTests.Dummies
         public int MaxXCoordinate { get; private set; }
         public int MaxYCoordinate { get; private set; }
         public List<(int,int)> GamePoints;
+        private List<Coordinate> RoverPositions;
 
         public PlateauFake(int maxXCoordinate, int maxYCoordinate)
 		{
             MaxXCoordinate = maxXCoordinate;
             MaxYCoordinate = maxYCoordinate;
             GamePoints = new List<(int, int)>();
+            RoverPositions = new List<Coordinate>();
         }
 
         public void GenerateGamePoint(int xCoordinate, int yCoordinate)
@@ -48,6 +50,12 @@ namespace MarsRoverUnitTests.Dummies
         public void SetupGamePoints()
         {
             throw new NotImplementedException();
+        }
+
+        public void AddRover(int xCoordinate, int yCoordinate)
+        {
+            var coord = new Coordinate(xCoordinate, yCoordinate); 
+            RoverPositions.Add(coord);
         }
     }
 }

@@ -29,6 +29,7 @@ namespace MarsRover.Models
             {
                 var rover = new Rover(xCoordinate, yCoordinate, bearing, Plateau, id);
                 Team.Add(rover);
+                Plateau.AddRover(xCoordinate, yCoordinate);
             }   
         }
 
