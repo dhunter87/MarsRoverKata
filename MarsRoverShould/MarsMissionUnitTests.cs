@@ -135,7 +135,7 @@ namespace MarsMissionShould
             {
                 for (int i = 0; i < testInstancesCount; i++)
                 {
-                    _mission.CreateRover(currentPlayer,3, 2, 'N', Constants.RoverId);
+                    _mission.CreateRover(currentPlayer,i, 2, 'N', Constants.RoverId);
                 }
 
                 Assert.That(currentPlayer.Team.Count(), Is.EqualTo(expectedCount));

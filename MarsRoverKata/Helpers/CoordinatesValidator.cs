@@ -15,9 +15,9 @@ namespace MarsRover.Helpers
             return true;
         }
 
-        public static bool IsUnOccupiedPosition(List<IRoverPosition> roverPositions, int randomisedXCoord, int randomisedYCoord)
+        public static bool IsUnOccupiedPosition(List<IRoverPosition> roverPositions, int xCoord, int yCoord)
         {
-            return !roverPositions.Any(p => p.XCoordinate == randomisedXCoord && p.YCoordinate == randomisedYCoord);
+            return !roverPositions.Any(p => p.XCoordinate == xCoord && p.YCoordinate == yCoord);
         }
 
         public static bool IsInitialPlateauCoordinateValid(int xCoordinate, int yCoodinate)

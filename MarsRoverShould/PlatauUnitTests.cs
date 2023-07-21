@@ -127,6 +127,21 @@ namespace PlatauShould
             Assert.That(hasGamePoint, Is.EqualTo(true));
         }
 
+        [Test]
+        public void Platau_Should_Throw_Exception_If_It_Cannot_Create_Gamepoint()
+        {
+            _plateau = new Plateau(1, 1, 1);
+
+            foreach (var position in _roverPositions)
+            {
+                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing);
+            }
+
+            _plateau.AddRover(1, 1, 'N');
+            
+            Assert.Throws<InvalidOperationException>(() => _plateau.SetupGamePoints());
+        }
+
         // temp test (No accessor method needed beyond initial test)
         [Test]
         public void Platau_GamePoints_Should_Not_Clash_With_Rover_Starting_Positions()
