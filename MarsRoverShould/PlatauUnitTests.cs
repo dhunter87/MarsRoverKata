@@ -255,8 +255,22 @@ namespace PlatauShould
         [Test]
         public void Plateau_Should_Keep_Track_Of_All_Rover_Positions()
         {
-            List<IRoverPosition> roverpositions = _plateau.GetRoverPositions();
-            Assert.That(roverpositions, Is.Not.Null);
+            List<IRoverPosition> roverPositions = _plateau.GetRoverPositions();
+            Assert.That(roverPositions, Is.Not.Null);
+        }
+
+        [Test]
+        public void Plateau_Should_Not_Allow_More_Than_One_Rover_Per_Coordinate()
+        {
+            var counter = 1;
+            foreach (var position in _roverPositions)
+            {
+                _plateau.AddRover(0, 0, position.Bearing, $"{Constants.RoverId}{counter}");
+                counter++;
+            }
+
+            List<IRoverPosition> roverPositions = _plateau.GetRoverPositions();
+            Assert.That(roverPositions.Count(), Is.EqualTo(1));
         }
 
         private static void AssertTreasureTypeIsValid(Prize treasureType)

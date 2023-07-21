@@ -30,8 +30,16 @@ namespace MarsRover.Models
             if (Team.Count < TeamLimit)
             {
                 var rover = new Rover(xCoordinate, yCoordinate, bearing, Plateau, id);
+
+                TryAddRoverToPlateau(xCoordinate, yCoordinate, bearing, rover);
+            }   
+        }
+
+        private void TryAddRoverToPlateau(int xCoordinate, int yCoordinate, char bearing, IRover rover)
+        {
+            if (Plateau.AddRover(xCoordinate, yCoordinate, bearing, rover.GetId()))
+            {
                 Team.Add(rover);
-                Plateau.AddRover(xCoordinate, yCoordinate, bearing, rover.GetId());
             }   
         }
 

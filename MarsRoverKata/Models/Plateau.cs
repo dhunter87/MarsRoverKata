@@ -9,7 +9,6 @@ namespace MarsRover.Models
         public int MaxYCoordinate { get; private set; }
         private readonly int GamePointCount;
         private HashSet<IGamePoint> GamePoints;
-
         public Dictionary<string, IRoverPosition> RoverPositions;
 
         public Plateau(int maxXCoordinate, int maxYCoordinate, int maxGamePoints)
@@ -23,7 +22,6 @@ namespace MarsRover.Models
             MaxYCoordinate = maxYCoordinate;
             GamePointCount = GetGamePointCount(maxGamePoints);
             GamePoints = new HashSet<IGamePoint>();
-
             RoverPositions = new Dictionary<string, IRoverPosition>();
         }
 
@@ -65,9 +63,14 @@ namespace MarsRover.Models
             return GamePoints;
         }
 
-        public void AddRover(int xCoordinate, int yCoordinate, char bearing, string id)
+        public bool AddRover(int xCoordinate, int yCoordinate, char bearing, string id)
         {
-            RoverPositions.Add(id, RoverPosition.CreateRoverPosition(xCoordinate, yCoordinate, bearing));
+            if (CoordinatesValidator.IsUnOccupiedPosition(RoverPositions, xCoordinate, yCoordinate))
+            {
+                RoverPositions.Add(id, RoverPosition.CreateRoverPosition(xCoordinate, yCoordinate, bearing));
+                return true;
+            }
+            return false;
         }
 
         public GamePoint GetGamePoint(int xCoordinate, int yCoordinate)
@@ -86,7 +89,7 @@ namespace MarsRover.Models
 
         public List<IRoverPosition> GetRoverPositions()
         {
-            throw new NotImplementedException();
+            return RoverPositions.Values.ToList();
         }
     }
 }

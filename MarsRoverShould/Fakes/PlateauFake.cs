@@ -52,10 +52,11 @@ namespace MarsRoverUnitTests.Dummies
             throw new NotImplementedException();
         }
 
-        public void AddRover(int xCoordinate, int yCoordinate, char bearing, string id)
+        public bool AddRover(int xCoordinate, int yCoordinate, char bearing, string id)
         {
             var coord = RoverPosition.CreateRoverPosition(xCoordinate, yCoordinate, bearing); 
             RoverPositions.Add(coord);
+            return true;
         }
 
         public GamePoint GetGamePoint(int xCoordinate, int yCoordinate)
