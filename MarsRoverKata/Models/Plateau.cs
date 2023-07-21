@@ -11,6 +11,7 @@ namespace MarsRover.Models
         private HashSet<IGamePoint> GamePoints;
         public Dictionary<string, IRoverPosition> RoverPositions;
 
+
         public Plateau(int maxXCoordinate, int maxYCoordinate, int maxGamePoints)
         {
             if (!CoordinatesValidator.IsInitialPlateauCoordinateValid(maxXCoordinate, maxYCoordinate))
@@ -22,6 +23,7 @@ namespace MarsRover.Models
             MaxYCoordinate = maxYCoordinate;
             GamePointCount = GetGamePointCount(maxGamePoints);
             GamePoints = new HashSet<IGamePoint>();
+
             RoverPositions = new Dictionary<string, IRoverPosition>();
         }
 
@@ -45,7 +47,7 @@ namespace MarsRover.Models
 
         public bool IsValildMove(int xCoordinate, int yCoordinate)
         {
-            return CoordinatesValidator.IsRoverNextMoveValid(xCoordinate, yCoordinate, MaxXCoordinate, MaxYCoordinate);
+            return CoordinatesValidator.IsRoverNextMoveValid(xCoordinate, yCoordinate, MaxXCoordinate, MaxYCoordinate, RoverPositions);
         }
 
         public bool IsGamePointMove(int xCoordinate, int yCoordinate)

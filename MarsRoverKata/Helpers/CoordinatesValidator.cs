@@ -30,9 +30,10 @@ namespace MarsRover.Helpers
             return true;
         }
 
-        public static bool IsRoverNextMoveValid(int nextXCoordinate, int nextYCoordinate,int platauMaxXCoordinate, int platauMaxYCoordinate)
+        public static bool IsRoverNextMoveValid(int nextXCoordinate, int nextYCoordinate,int platauMaxXCoordinate, int platauMaxYCoordinate, Dictionary<string, IRoverPosition> roverPositions)
         {
-            if (IsValidPosition(nextXCoordinate, nextYCoordinate, platauMaxXCoordinate, platauMaxYCoordinate))
+            if (IsValidPosition(nextXCoordinate, nextYCoordinate, platauMaxXCoordinate, platauMaxYCoordinate)
+                && IsUnOccupiedPosition(roverPositions, nextXCoordinate, nextYCoordinate))
             {
                 return true;
             }

@@ -1,4 +1,5 @@
-﻿using System;       
+﻿using System;
+using MarsRover.Helpers;
 using MarsRover.Interfaces;
 using MarsRover.Models;
 
@@ -9,14 +10,14 @@ namespace MarsRoverUnitTests.Dummies
         public int MaxXCoordinate { get; private set; }
         public int MaxYCoordinate { get; private set; }
         public List<ICoordinate> GamePoints;
-        private List<IRoverPosition> RoverPositions;
+        private Dictionary<string, IRoverPosition> RoverPositions;
 
         public PlateauFake(int maxXCoordinate, int maxYCoordinate)
 		{
             MaxXCoordinate = maxXCoordinate;
             MaxYCoordinate = maxYCoordinate;
             GamePoints = new List<ICoordinate>();
-            RoverPositions = new List<IRoverPosition>();
+            RoverPositions = new Dictionary<string, IRoverPosition>();
         }
 
         public void GenerateGamePoint(int xCoordinate, int yCoordinate)
@@ -31,8 +32,8 @@ namespace MarsRoverUnitTests.Dummies
 
         public bool IsValildMove(int xCoordinate, int yCoordinate)
         {
-            return xCoordinate >= 0 && xCoordinate <= MaxXCoordinate &&
-                yCoordinate >= 0 && yCoordinate <= MaxYCoordinate;
+            return CoordinatesValidator.IsRoverNextMoveValid(xCoordinate, yCoordinate, MaxXCoordinate, MaxYCoordinate, RoverPositions);
+
         }
 
         public bool IsGamePointMove(int xCoordinate, int yCoordinate)
@@ -55,7 +56,7 @@ namespace MarsRoverUnitTests.Dummies
         public bool AddRover(int xCoordinate, int yCoordinate, char bearing, string id)
         {
             var coord = RoverPosition.CreateRoverPosition(xCoordinate, yCoordinate, bearing); 
-            RoverPositions.Add(coord);
+            RoverPositions.Add(id, coord);
             return true;
         }
 

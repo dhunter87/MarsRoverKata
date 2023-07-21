@@ -53,7 +53,7 @@ namespace PlayerShould
             Player = new Player(FakePlateau, limit, Constants.InstructionLimit, Constants.PlayerOneId);
             for (int i = 0; i < actualInstanceCount; i++)
             {
-                Player.AddTeamMember(i, 0, 'N', Constants.RoverId);
+                Player.AddTeamMember(i, 0, 'N', $"{Constants.RoverId}{i}");
             }
 
             Assert.That(Player.Team.Count, Is.EqualTo(expectedCount));
