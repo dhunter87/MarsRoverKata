@@ -24,7 +24,7 @@ public class RoverUnitTests
     {
         var roverPosition = RoverPosition.CreateRoverPosition(xCoord, yCoord, bearing);
 
-        var rover = new Rover(roverPosition, FakePlateau, $"{Constants.RoverId}1");
+        var rover = new Rover(roverPosition, FakePlateau, Constants.RoverId);
 
         Assert.Multiple(() =>
         {
@@ -42,7 +42,7 @@ public class RoverUnitTests
     {
         var roverPosition = RoverPosition.CreateRoverPosition(0, 0, bearing);
 
-        var rover = new Rover(roverPosition, FakePlateau, $"{Constants.RoverId}1");
+        var rover = new Rover(roverPosition, FakePlateau, Constants.RoverId);
 
         Assert.That(rover.Position.Bearing, Is.EqualTo(expectedBearing));
     }
@@ -56,7 +56,7 @@ public class RoverUnitTests
     {
         var roverPosition = RoverPosition.CreateRoverPosition(xCoord, yCoord, bearing);
 
-        Assert.Throws<ArgumentException>(() => new Rover(roverPosition, FakePlateau, $"{Constants.RoverId}1"));
+        Assert.Throws<ArgumentException>(() => new Rover(roverPosition, FakePlateau, Constants.RoverId));
     }
 
     [TestCase(0, 0, 'N', 0, 1, 'N')]
@@ -67,7 +67,7 @@ public class RoverUnitTests
     {
         var roverPosition = RoverPosition.CreateRoverPosition(xCoord, yCoord, bearing);
 
-        var rover = new Rover(roverPosition, FakePlateau, $"{Constants.RoverId}1");
+        var rover = new Rover(roverPosition, FakePlateau, Constants.RoverId);
 
         rover.ExecuteInstruction(RoverCommand.M);
 
@@ -87,7 +87,7 @@ public class RoverUnitTests
     {
         var roverPosition = RoverPosition.CreateRoverPosition(xCoord, yCoord, bearing);
 
-        var rover = new Rover(roverPosition, FakePlateau, $"{Constants.RoverId}1");
+        var rover = new Rover(roverPosition, FakePlateau, Constants.RoverId);
 
         rover.ExecuteInstruction(RoverCommand.L);
 
@@ -102,7 +102,7 @@ public class RoverUnitTests
     {
         var roverPosition = RoverPosition.CreateRoverPosition(xCoord, yCoord, bearing);
 
-        var rover = new Rover(roverPosition, FakePlateau, $"{Constants.RoverId}1");
+        var rover = new Rover(roverPosition, FakePlateau, Constants.RoverId);
 
         rover.ExecuteInstruction(RoverCommand.R);
 
@@ -117,7 +117,7 @@ public class RoverUnitTests
     {
         var roverPosition = RoverPosition.CreateRoverPosition(xCoord, yCoord, bearing);
 
-        var rover = new Rover(roverPosition, FakePlateau, $"{Constants.RoverId}1");
+        var rover = new Rover(roverPosition, FakePlateau, Constants.RoverId);
 
         rover.ExecuteInstructions(instructions);
 
@@ -137,7 +137,7 @@ public class RoverUnitTests
     {
         var roverPosition = RoverPosition.CreateRoverPosition(xCoord, yCoord, bearing);
 
-        var rover = new Rover(roverPosition, FakePlateau, $"{Constants.RoverId}1");
+        var rover = new Rover(roverPosition, FakePlateau, Constants.RoverId);
 
         rover.ExecuteInstructions(instructions);
 
@@ -157,7 +157,7 @@ public class RoverUnitTests
     {
         var roverPosition = RoverPosition.CreateRoverPosition(xCoord, yCoord, bearing);
 
-        var rover = new Rover(roverPosition, FakePlateau, $"{Constants.RoverId}1");
+        var rover = new Rover(roverPosition, FakePlateau, Constants.RoverId);
 
         rover.ExecuteInstructions(instructions);
 
@@ -178,7 +178,7 @@ public class RoverUnitTests
     {
         var roverPosition = RoverPosition.CreateRoverPosition(xCoord, yCoord, bearing);
 
-        var rover = new Rover(roverPosition, FakePlateau, $"{Constants.RoverId}1");
+        var rover = new Rover(roverPosition, FakePlateau, Constants.RoverId);
 
         rover.ExecuteInstructions(instructions);
 
@@ -195,14 +195,14 @@ public class RoverUnitTests
     {
         var roverPosition = RoverPosition.CreateRoverPosition(0, 0, 'N');
 
-        var rover = new Rover(roverPosition, FakePlateau, $"{Constants.RoverId}1");
+        var rover = new Rover(roverPosition, FakePlateau, Constants.RoverId);
 
         var roverPosition2 = RoverPosition.CreateRoverPosition(0, 1, 'S');
 
-        var rover2 = new Rover(roverPosition, FakePlateau, $"{Constants.RoverId}1");
+        var rover2 = new Rover(roverPosition, FakePlateau, Constants.RoverId+1);
 
-        FakePlateau.AddRover(roverPosition, $"{Constants.RoverId}1");
-        FakePlateau.AddRover(roverPosition2, $"{Constants.RoverId}2");
+        FakePlateau.AddRover(roverPosition, Constants.RoverId);
+        FakePlateau.AddRover(roverPosition2, Constants.RoverId+1);
 
         rover.ExecuteInstruction(RoverCommand.M);
         Assert.Multiple(() =>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Metrics;
+using System.Reflection;
 using MarsRover.Helpers;
 using MarsRover.Interfaces;
 using MarsRover.Models;
@@ -54,10 +55,9 @@ namespace PlayerShould
             Player = new Player(FakePlateau, limit, Constants.InstructionLimit, Constants.PlayerOneId);
             for (int i = 0; i < actualInstanceCount; i++)
             {
-
                 var roverPosition = RoverPosition.CreateRoverPosition(i, 0, 'N');
 
-                Player.AddTeamMember(roverPosition, $"{Constants.RoverId}{i}");
+                Player.AddTeamMember(roverPosition, Constants.RoverId + i);
             }
 
             Assert.That(Player.Team.Count, Is.EqualTo(expectedCount));

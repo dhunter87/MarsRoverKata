@@ -7,12 +7,12 @@ namespace MarsRover.Models
     {
         public IRoverPosition Position { get; set; }
         public IPlateau Plateau;
-        private readonly string RoverID;
+        private readonly string Id;
         public List<IGamePoint> GamePoints;
 
         public Rover(IRoverPosition position, IPlateau plateau, string id)
         {
-            RoverID = id;
+            Id = id;
             Plateau = plateau;
             var bearing = Char.ToUpper(position.Bearing);
             GamePoints = new List<IGamePoint>();
@@ -79,7 +79,7 @@ namespace MarsRover.Models
 
             var newPosition = Coordinate.CreateCoordinate(Position.XCoordinate + delta.XCoordinate, Position.YCoordinate + delta.YCoordinate);
 
-            if (Plateau.IsValildMove(newPosition, RoverID))
+            if (Plateau.IsValildMove(newPosition, Id))
             {
                 Position.XCoordinate += delta.XCoordinate;
                 Position.YCoordinate += delta.YCoordinate;
@@ -102,7 +102,7 @@ namespace MarsRover.Models
         // CLI method only
         public string GetId()
         {
-            return RoverID;
+            return Id;
         }
 
 

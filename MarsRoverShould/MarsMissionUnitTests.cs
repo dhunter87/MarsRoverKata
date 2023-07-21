@@ -12,14 +12,17 @@ namespace MarsMissionShould
 	public class MarsMissionUnitTests
 	{
         MarsMission _mission;
+        ICoordinate _maxPlateauCoordinates;
 
         [SetUp]
 		public void Setup()
 		{
-            var missionConfig = new MissionConfig(
-                Coordinate.CreateCoordinate(
+            _maxPlateauCoordinates = Coordinate.CreateCoordinate(
                     Constants.MaxXCoordinate,
-                    Constants.MaxYCoordinate),
+                    Constants.MaxYCoordinate);
+
+            var missionConfig = new MissionConfig(
+                _maxPlateauCoordinates,
                 Constants.gamePointsCount,
                 Constants.TeamLimit,
                 Constants.InstructionLimit,
@@ -38,9 +41,7 @@ namespace MarsMissionShould
         public void MarsMission_GetCommandList_Should_Return_Correct_Limit_Value(int actualInstructionLimit, int expectedValue)
         {
             var missionConfig = new MissionConfig(
-                Coordinate.CreateCoordinate(
-                    Constants.MaxXCoordinate,
-                    Constants.MaxYCoordinate),
+                _maxPlateauCoordinates,
                 Constants.gamePointsCount,
                 Constants.TeamLimit,
                 actualInstructionLimit,
@@ -81,9 +82,7 @@ namespace MarsMissionShould
         public void MarsMission_Players_List_Should_Be_Configured_With_N_Number_Of_Players(int configuredCount, int actualCount)
         {
             var missionConfig = new MissionConfig(
-                Coordinate.CreateCoordinate(
-                    Constants.MaxXCoordinate,
-                    Constants.MaxYCoordinate),
+                _maxPlateauCoordinates,
                 Constants.gamePointsCount,
                 Constants.TeamLimit,
                 Constants.InstructionLimit,
@@ -117,12 +116,8 @@ namespace MarsMissionShould
         [TestCase(5, 1, 1)]
         public void MarsMission_Player_Can_Not_Create_More_Than_X_Number_Of_New_Rovers(int testInstancesCount, int limit, int expectedCount)
         {
-            var maxCoord = 5;
-
             var missionConfig = new MissionConfig(
-                Coordinate.CreateCoordinate(
-                    maxCoord,
-                    maxCoord),
+                _maxPlateauCoordinates,
                 Constants.gamePointsCount,
                 limit,
                 Constants.InstructionLimit,
@@ -138,7 +133,7 @@ namespace MarsMissionShould
                 var counter = 1;
                 for (int i = 0; i < testInstancesCount; i++)
                 {
-                    _mission.CreateRover(currentPlayer,i, 2, 'N', $"{Constants.RoverId}{counter}");
+                    _mission.CreateRover(currentPlayer,i, 2, 'N', Constants.RoverId + counter);
                     counter++;
                 }
 
@@ -152,12 +147,8 @@ namespace MarsMissionShould
         [TestCase(0, -1)]
         public void MarsMission_Player_Can_Not_Create_New_Rovers_Outside_The_Bounds_Of_The_Platau(int xCoord, int yCoord)
         {
-            var maxCoord = 5;
-
             var missionConfig = new MissionConfig(
-                Coordinate.CreateCoordinate(
-                    maxCoord,
-                    maxCoord),
+                _maxPlateauCoordinates,
                 Constants.gamePointsCount,
                 Constants.TeamLimit,
                 Constants.InstructionLimit,
@@ -266,9 +257,7 @@ namespace MarsMissionShould
         {
             var playerCount = 1;
             var missionConfig = new MissionConfig(
-                Coordinate.CreateCoordinate(
-                    Constants.MaxXCoordinate,
-                    Constants.MaxYCoordinate),
+                _maxPlateauCoordinates,
                 Constants.gamePointsCount,
                 Constants.TeamLimit,
                 instructionLimit,
@@ -279,7 +268,6 @@ namespace MarsMissionShould
 
             var players = _mission.GetPlayers();
             var currentPlayer = players.FirstOrDefault();
-
 
             if (currentPlayer  != null)
             {

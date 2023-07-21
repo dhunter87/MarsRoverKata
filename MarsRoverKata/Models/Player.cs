@@ -1,46 +1,47 @@
 ﻿using MarsRover.Interfaces;
-using static System.Formats.Asn1.AsnWriter;
+//using static System.Formats.Asn1.AsnWriter;
 
 namespace MarsRover.Models
 {
     public class Player
-	{
+    {
         public IPlateau Plateau;
         public List<IRover> Team;
-        
-        public int PlayerId;
+
+        public string Id;
         private int Score;
         private readonly int TeamLimit;
         private readonly int InstructionLimit;
-        List<IGamePoint> GamePoints;
+        public List<IGamePoint> GamePoints;
 
         public Player(IPlateau platau, int teamLimit, int instructionLimit, int id)
-		{
-            PlayerId = id;
+        {
+            Id = $"P{id}";
             Score = new int();
             TeamLimit = teamLimit;
             InstructionLimit = instructionLimit;
             Plateau = platau;
             Team = new List<IRover>();
             GamePoints = new List<IGamePoint>();
-		}
+        }
 
-        public void AddTeamMember(IRoverPosition position, string id)
+        public bool AddTeamMember(IRoverPosition position, string id)
         {
             if (Team.Count < TeamLimit)
             {
                 var rover = new Rover(position, Plateau, id);
 
-                TryAddRoverToPlateau(position, rover);
-            }   
+                return TryAddRoverToPlateau(position, rover);
+            }
+            return false;
         }
 
-        private void TryAddRoverToPlateau(IRoverPosition position, IRover rover)
+        private bool TryAddRoverToPlateau(IRoverPosition position, IRover rover)
         {
             if (Plateau.AddRover(position, rover.GetId()))
             {
                 Team.Add(rover);
-                return;
+                return true;
             }
 
             throw new ArgumentException($"Argument Exception. Unable to place rover in position, X: {position.XCoordinate}, Y: {position.YCoordinate}");
@@ -55,7 +56,7 @@ namespace MarsRover.Models
                 Score += gamepoint.TreasureValue;
             }
 
-            Console.WriteLine($"Player: {PlayerId}, Score: {Score}");
+            Console.WriteLine($"Player: {Id}, Score: {Score}");
 
             return Score;
         }
@@ -74,6 +75,15 @@ namespace MarsRover.Models
             var points = rover.ExecuteInstructions(instructions);
             GamePoints.AddRange(points);
             GetScore();
+        }
+
+        public IGamePoint? GetGamePointAt(int x, int y)
+        {
+            if (GamePoints.Count() > 0)
+            {
+                return GamePoints.FirstOrDefault(gp => gp.EqualsCoordinates(Coordinate.CreateCoordinate(x, y)));
+            }
+            return null;
         }
     }
 }

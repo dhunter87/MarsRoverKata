@@ -1,4 +1,5 @@
-﻿using MarsRover.Helpers;
+﻿using MarsRover.CLI;
+using MarsRover.Helpers;
 using MarsRover.Interfaces;
 using MarsRover.Models;
 
@@ -25,6 +26,7 @@ class Program
 
         Console.WriteLine("Mission Over");
         PrintPlayerScores(players);
+        ConsoleAppUi.PrintRoverPositions(mission);
         Console.ReadLine();
     }
 
@@ -32,7 +34,8 @@ class Program
     {
         foreach (var rover in player.Team)
         {
-            PrintCurrentPosition(player, rover);
+            ConsoleAppUi.PrintRoverPositions(mission);
+            //PrintCurrentPosition(player, rover);
             var instructions = InputValidator.SetupRoverInstructions();
             player.GiveRoverInstructions(rover, instructions);
         }
