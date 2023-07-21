@@ -44,7 +44,9 @@ namespace MarsRover.Models
 
         public void CreateRover(Player player, int startingXCoordinate, int startingYCoordinate, char startingBearing, string id)
         {
-			player.AddTeamMember(startingXCoordinate, startingYCoordinate, startingBearing, id);
+            var position = RoverPosition.CreateRoverPosition(startingXCoordinate, startingYCoordinate, startingBearing);
+
+            player.AddTeamMember(position, id);
         }
 
         public int GetCommandLimit()

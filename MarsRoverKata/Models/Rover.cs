@@ -10,19 +10,19 @@ namespace MarsRover.Models
         private readonly string RoverID;
         public List<IGamePoint> GamePoints;
 
-        public Rover(int xCoordinate, int yCoodinate, char bearing, IPlateau plateau, string id)
+        public Rover(IRoverPosition position, IPlateau plateau, string id)
         {
             RoverID = id;
             Plateau = plateau;
-            bearing = Char.ToUpper(bearing);
+            var bearing = Char.ToUpper(position.Bearing);
             GamePoints = new List<IGamePoint>();
 
-            if (!CoordinatesValidator.IsRoverPositionAndBearingValid(xCoordinate, yCoodinate, bearing, Plateau.MaxXCoordinate, Plateau.MaxYCoordinate))
+            if (!CoordinatesValidator.IsRoverPositionAndBearingValid(position.XCoordinate, position.YCoordinate, bearing, Plateau.MaxXCoordinate, Plateau.MaxYCoordinate))
             {
                 throw new ArgumentException();
             }
 
-            Position = RoverPosition.CreateRoverPosition(xCoordinate, yCoodinate, bearing);
+            Position = RoverPosition.CreateRoverPosition(position.XCoordinate, position.YCoordinate, bearing);
         }
 
         public List<IGamePoint> ExecuteInstructions(string instructions)

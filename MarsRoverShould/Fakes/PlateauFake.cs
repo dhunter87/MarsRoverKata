@@ -53,10 +53,9 @@ namespace MarsRoverUnitTests.Dummies
             throw new NotImplementedException();
         }
 
-        public bool AddRover(int xCoordinate, int yCoordinate, char bearing, string id)
+        public bool AddRover(IRoverPosition position, string id)
         {
-            var coord = RoverPosition.CreateRoverPosition(xCoordinate, yCoordinate, bearing); 
-            RoverPositions.Add(id, coord);
+            RoverPositions.Add(id, position);
             return true;
         }
 

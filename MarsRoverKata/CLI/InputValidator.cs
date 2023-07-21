@@ -10,7 +10,10 @@ namespace MarsRover.Helpers
             {
                 var counter = 1;
                 var initialRoverCoordinates = SetupRoverCoordinates(plateau.MaxXCoordinate);
-                player.AddTeamMember(initialRoverCoordinates.Value.XCoordinate, initialRoverCoordinates.Value.YCoordinate, initialRoverCoordinates.Key, $"Player{player.PlayerId}-Rover{counter}");
+
+                var position = RoverPosition.CreateRoverPosition(initialRoverCoordinates.Value.XCoordinate, initialRoverCoordinates.Value.YCoordinate, initialRoverCoordinates.Key);
+
+                player.AddTeamMember(position, $"Player{player.PlayerId}-Rover{counter}");
 
                 counter++;
             }

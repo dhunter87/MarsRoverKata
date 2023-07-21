@@ -25,19 +25,19 @@ namespace MarsRover.Models
             GamePoints = new List<IGamePoint>();
 		}
 
-        public void AddTeamMember(int xCoordinate, int yCoordinate, char bearing, string id)
+        public void AddTeamMember(IRoverPosition position, string id)
         {
             if (Team.Count < TeamLimit)
             {
-                var rover = new Rover(xCoordinate, yCoordinate, bearing, Plateau, id);
+                var rover = new Rover(position, Plateau, id);
 
-                TryAddRoverToPlateau(xCoordinate, yCoordinate, bearing, rover);
+                TryAddRoverToPlateau(position, rover);
             }   
         }
 
-        private void TryAddRoverToPlateau(int xCoordinate, int yCoordinate, char bearing, IRover rover)
+        private void TryAddRoverToPlateau(IRoverPosition position, IRover rover)
         {
-            if (Plateau.AddRover(xCoordinate, yCoordinate, bearing, rover.GetId()))
+            if (Plateau.AddRover(position, rover.GetId()))
             {
                 Team.Add(rover);
             }   

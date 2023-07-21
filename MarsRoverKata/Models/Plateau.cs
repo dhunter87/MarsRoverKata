@@ -71,11 +71,11 @@ namespace MarsRover.Models
             return GamePoints;
         }
 
-        public bool AddRover(int xCoordinate, int yCoordinate, char bearing, string id)
+        public bool AddRover(IRoverPosition position, string id)
         {
-            if (CoordinatesValidator.IsUnOccupiedPosition(RoverPositions, xCoordinate, yCoordinate))
+            if (CoordinatesValidator.IsUnOccupiedPosition(RoverPositions, position.XCoordinate, position.YCoordinate))
             {
-                RoverPositions.Add(id, RoverPosition.CreateRoverPosition(xCoordinate, yCoordinate, bearing));
+                RoverPositions.Add(id, position);
                 return true;
             }
             return false;
