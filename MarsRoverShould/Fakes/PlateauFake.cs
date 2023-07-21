@@ -7,22 +7,20 @@ namespace MarsRoverUnitTests.Dummies
 {
 	public class PlateauFake : IPlateau
 	{
-        public int MaxXCoordinate { get; private set; }
-        public int MaxYCoordinate { get; private set; }
+        public ICoordinate MaxCoordinates { get; set; }
         public List<ICoordinate> GamePoints;
         private Dictionary<string, IRoverPosition> RoverPositions;
 
         public PlateauFake(int maxXCoordinate, int maxYCoordinate)
 		{
-            MaxXCoordinate = maxXCoordinate;
-            MaxYCoordinate = maxYCoordinate;
+            MaxCoordinates = Coordinate.CreateCoordinate(maxXCoordinate, maxYCoordinate);
             GamePoints = new List<ICoordinate>();
             RoverPositions = new Dictionary<string, IRoverPosition>();
         }
 
-        public void GenerateGamePoint(int xCoordinate, int yCoordinate)
+        public void GenerateGamePoint(ICoordinate coordinate)
         {
-            GamePoints.Add(Coordinate.CreateCoordinate(xCoordinate, yCoordinate));
+            GamePoints.Add(coordinate);
         }
 
         public ICoordinate GetPlatauCoordinatesUpperLimits()
@@ -30,15 +28,15 @@ namespace MarsRoverUnitTests.Dummies
             throw new NotImplementedException();    
         }
 
-        public bool IsValildMove(int xCoordinate, int yCoordinate, string roverId)
+        public bool IsValildMove(ICoordinate coordinate, string roverId)
         {
-            return CoordinatesValidator.IsRoverNextMoveValid(xCoordinate, yCoordinate, MaxXCoordinate, MaxYCoordinate, RoverPositions, roverId);
+            return CoordinatesValidator.IsRoverNextMoveValid(coordinate, MaxCoordinates, RoverPositions, roverId);
 
         }
 
-        public bool IsGamePointMove(int xCoordinate, int yCoordinate)
+        public bool IsGamePointMove(ICoordinate coordinate)
         {
-            var matchedPoint = GamePoints.Any(p => p.XCoordinate == xCoordinate && p.YCoordinate == yCoordinate);
+            var matchedPoint = GamePoints.Any(p => p.XCoordinate == coordinate.XCoordinate && p.YCoordinate == coordinate.YCoordinate);
 
             return matchedPoint == true;
         }
@@ -59,7 +57,7 @@ namespace MarsRoverUnitTests.Dummies
             return true;
         }
 
-        public GamePoint GetGamePoint(int xCoordinate, int yCoordinate)
+        public GamePoint GetGamePoint(ICoordinate coordinate)
         {
             throw new NotImplementedException();
         }

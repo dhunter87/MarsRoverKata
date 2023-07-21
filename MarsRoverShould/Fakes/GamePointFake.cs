@@ -17,7 +17,7 @@ namespace MarsRoverUnitTests.Fakes
         public int XCoordinate { get; set; }
         public int YCoordinate { get; set; }
 
-        public bool EqualsCoordinates(int xCoordinate, int yCoordinate)
+        public bool EqualsCoordinates(ICoordinate coordinate)
         {
             throw new NotImplementedException();
         }

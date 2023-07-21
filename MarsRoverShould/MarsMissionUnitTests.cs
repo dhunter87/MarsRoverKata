@@ -55,14 +55,16 @@ namespace MarsMissionShould
 
         [Test]
         public void MarsMission_Platau_Is_Not_Null_When_Initialised()
-        {           
-            _mission.CreatePlatau(5, 5);
+        {
+            var maxPlateauCoordinates = Coordinate.CreateCoordinate(5,5);
+
+            _mission.CreatePlatau(maxPlateauCoordinates);
 
             Assert.Multiple(() =>
             {
 				Assert.That(_mission.Plateau, Is.Not.Null);
-                Assert.That(_mission.Plateau.MaxXCoordinate, Is.EqualTo(5));
-                Assert.That(_mission.Plateau.MaxYCoordinate, Is.EqualTo(5));
+                Assert.That(_mission.Plateau.MaxCoordinates.XCoordinate, Is.EqualTo(5));
+                Assert.That(_mission.Plateau.MaxCoordinates.YCoordinate, Is.EqualTo(5));
             });
         }
 

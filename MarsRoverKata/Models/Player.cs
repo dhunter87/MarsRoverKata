@@ -40,7 +40,10 @@ namespace MarsRover.Models
             if (Plateau.AddRover(position, rover.GetId()))
             {
                 Team.Add(rover);
-            }   
+                return;
+            }
+
+            throw new ArgumentException($"Argument Exception. Unable to place rover in position, X: {position.XCoordinate}, Y: {position.YCoordinate}");
         }
 
         public int GetScore()

@@ -13,7 +13,7 @@ namespace MarsRover.Models
         public Prize TreasureType { get; set; }
 
         // Factory Method
-        public static IGamePoint CreateGamePoint(int maxXCoord, int maxYCoord, Dictionary<string, IRoverPosition> roverPositions)
+        public static IGamePoint CreateGamePoint(ICoordinate maxCoordinates, Dictionary<string, IRoverPosition> roverPositions)
         {
             Random random = new Random();
             int randomisedXCoord;
@@ -22,11 +22,14 @@ namespace MarsRover.Models
 
             for (int retry = 0; retry < 100; retry++)
             {
-                randomisedXCoord = GenerateGoalpointCoordinate(maxXCoord, random);
-                randomisedYCoord = GenerateGoalpointCoordinate(maxYCoord, random);
+                randomisedXCoord = GenerateGoalpointCoordinate(maxCoordinates.XCoordinate, random);
+                randomisedYCoord = GenerateGoalpointCoordinate(maxCoordinates.YCoordinate, random);
+
+                var randomCoordinate = Coordinate.CreateCoordinate(randomisedXCoord, randomisedYCoord);
+
                 prize = GenerateGoalPointPrize(random);
 
-                if (CoordinatesValidator.IsUnOccupiedPosition(roverPositions, randomisedXCoord, randomisedYCoord))
+                if (CoordinatesValidator.IsUnOccupiedPosition(roverPositions, randomCoordinate))
                 {
                     return new GamePoint
                     {
@@ -51,9 +54,9 @@ namespace MarsRover.Models
             return random.Next(maxCoord + 1);
         }
 
-        public bool EqualsCoordinates(int xCoordinate, int yCoordinate)
+        public bool EqualsCoordinates(ICoordinate coordinate)
         {
-            return XCoordinate == xCoordinate && YCoordinate == yCoordinate;
+            return XCoordinate == coordinate.XCoordinate && YCoordinate == coordinate.YCoordinate;
         }
     }
 }

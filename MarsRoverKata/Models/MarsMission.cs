@@ -18,9 +18,12 @@ namespace MarsRover.Models
             GamePointLimit = config.GamePoints;
             TeamLimit = config.MaxTeamMembers;
             CommandLimit = config.InstructionLimit;
-			Plateau = CreatePlatau(config.MaxCoordinates.XCoordinate, config.MaxCoordinates.YCoordinate);
+
+            Plateau = CreatePlatau(Coordinate.CreateCoordinate(config.MaxCoordinates.XCoordinate, config.MaxCoordinates.YCoordinate));
+
             Players = new List<Player>();
             SetupPlayers(config.PlayerCount);
+
         }
         
         public void SetupPlayers(int playerCount)
@@ -37,9 +40,9 @@ namespace MarsRover.Models
 
         public bool IsActive => Plateau.HasGamePoints();
 
-        public IPlateau CreatePlatau(int maxXCoordinate, int maxYCoordinate)
+        public IPlateau CreatePlatau(ICoordinate maxCoordinates)
         {
-			return new Plateau(maxXCoordinate, maxYCoordinate, GamePointLimit);
+			return new Plateau(maxCoordinates, GamePointLimit);
         }
 
         public void CreateRover(Player player, int startingXCoordinate, int startingYCoordinate, char startingBearing, string id)

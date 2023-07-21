@@ -7,7 +7,7 @@ namespace MarsRover.Interfaces
 	{
         int TreasureValue { get; set; }
         Prize TreasureType { get; set; }
-        bool EqualsCoordinates(int xCoordinate, int yCoordinate);
+        bool EqualsCoordinates(ICoordinate coordinate);
     }
 }
 

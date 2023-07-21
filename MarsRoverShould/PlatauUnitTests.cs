@@ -17,7 +17,8 @@ namespace PlatauShould
 		[SetUp]
 		public void Setup()
 		{
-            _plateau = new Plateau(10, 10, Constants.gamePointsCount);
+            var coordinate = Coordinate.CreateCoordinate(10, 10);
+            _plateau = new Plateau(coordinate, Constants.gamePointsCount);
             _roverPositions = new List<IRoverPosition>
             {
                 RoverPosition.CreateRoverPosition(0,0,'N'),
@@ -31,12 +32,14 @@ namespace PlatauShould
 		[TestCase(0, 0)]
 		public void Platau_Should_Not_Be_Null_When_Initialised_With_Coordinates(int maxXCoordinate, int maxYCoordinate)
         {
-            _plateau = new Plateau(maxXCoordinate, maxYCoordinate, Constants.gamePointsCount);
+            var coordinate = Coordinate.CreateCoordinate(maxXCoordinate, maxYCoordinate);
+
+            _plateau = new Plateau(coordinate, Constants.gamePointsCount);
 
             Assert.Multiple(() =>
             {
-                Assert.That(_plateau.MaxXCoordinate, Is.EqualTo(maxXCoordinate));
-                Assert.That(_plateau.MaxYCoordinate, Is.EqualTo(maxYCoordinate));
+                Assert.That(_plateau.MaxCoordinates.XCoordinate, Is.EqualTo(maxXCoordinate));
+                Assert.That(_plateau.MaxCoordinates.YCoordinate, Is.EqualTo(maxYCoordinate));
             });
         }
 
@@ -46,7 +49,9 @@ namespace PlatauShould
         [TestCase(10, -1)]
         public void Platau_Should_Not_Be_Initialised_When_Initialised_With_A_Negative_Coordinate(int maxXCoordinate, int maxYCoordinate)
         {
-            Assert.Throws<ArgumentException>(() => new Plateau(maxXCoordinate, maxYCoordinate, Constants.gamePointsCount));
+            var coordinate = Coordinate.CreateCoordinate(maxXCoordinate, maxYCoordinate);
+
+            Assert.Throws<ArgumentException>(() => new Plateau(coordinate, Constants.gamePointsCount));
         }
 
         [TestCase(5, 5, 5, 5, 'N', true)]
@@ -59,7 +64,10 @@ namespace PlatauShould
         [TestCase(0, 0, 0, -1, 'N', false)]
         public void IsValildMove_Should_Return_False_If_Coordinates_Are_Out_Of_Bounds_Of_The_Platau(int maxXCoordinate, int maxYCoordinate, int testXCoordinate, int testYCoordinate, char bearing, bool expectedResult)
         {
-            _plateau = new Plateau(maxXCoordinate, maxYCoordinate, Constants.gamePointsCount);
+            var coordinate = Coordinate.CreateCoordinate(maxXCoordinate, maxYCoordinate);
+            var testCoordinate = Coordinate.CreateCoordinate(testXCoordinate, testYCoordinate);
+
+            _plateau = new Plateau(coordinate, Constants.gamePointsCount);
             _plateau.SetupGamePoints();
             var roverid = $"{Constants.RoverId}1";
 
@@ -67,7 +75,7 @@ namespace PlatauShould
 
             _plateau.AddRover(roverPosition, roverid);
 
-            var result = _plateau.IsValildMove(testXCoordinate, testYCoordinate, roverid);
+            var result = _plateau.IsValildMove(testCoordinate, roverid);
 
             Assert.That(result, Is.EqualTo(expectedResult));
         }
@@ -75,7 +83,9 @@ namespace PlatauShould
         [Test]
         public void Platau_Should_Indicate_If_Rover_Reaches_GoalPoint()
         {
-            _plateau = new Plateau(1, 1, 1);
+            var coordinate = Coordinate.CreateCoordinate(1,1);
+
+            _plateau = new Plateau(coordinate, 1);
 
             var counter = 1;
             foreach (var position in _roverPositions)
@@ -88,7 +98,7 @@ namespace PlatauShould
 
             _plateau.SetupGamePoints();
 
-            var isGamePoint = _plateau.IsGamePointMove(1,1);
+            var isGamePoint = _plateau.IsGamePointMove(coordinate);
 
             Assert.That(isGamePoint, Is.EqualTo(true));
         }
@@ -96,7 +106,9 @@ namespace PlatauShould
         [Test]
         public void Platau_Should_Return_GoalPoint_Treasure_Value()
         {
-            _plateau = new Plateau(1, 1, 1);
+            var coordinate = Coordinate.CreateCoordinate(1, 1);
+
+            _plateau = new Plateau(coordinate, 1);
 
             var counter = 1;
             foreach (var position in _roverPositions)
@@ -109,8 +121,8 @@ namespace PlatauShould
 
             _plateau.SetupGamePoints();
 
-            var isGamePoint = _plateau.IsGamePointMove(1, 1);
-            var gamePoint = _plateau.GetGamePoint(1, 1);
+            var isGamePoint = _plateau.IsGamePointMove(coordinate);
+            var gamePoint = _plateau.GetGamePoint(coordinate);
 
             Assert.That(gamePoint, Is.Not.Null);
 
@@ -122,11 +134,13 @@ namespace PlatauShould
         public void Platau_Should_Remove_Gamepoints_If_Reached_By_Rover()
         {
             var gamePointCount = 1;
-            _plateau = new Plateau(0, 0, gamePointCount);
+            var coordinate = Coordinate.CreateCoordinate(0,0);
+
+            _plateau = new Plateau(coordinate, gamePointCount);
             _plateau.SetupGamePoints();
 
-            var isGamePoint = _plateau.IsGamePointMove(0, 0);
-            var gamePoint = _plateau.GetGamePoint(0,0);
+            var isGamePoint = _plateau.IsGamePointMove(coordinate);
+            var gamePoint = _plateau.GetGamePoint(coordinate);
 
             var result = _plateau.HasGamePoints();
 
@@ -145,7 +159,9 @@ namespace PlatauShould
         [Test]
         public void Platau_Should_Throw_Exception_If_It_Cannot_Create_Gamepoint()
         {
-            _plateau = new Plateau(1, 1, 1);
+            var coordinate = Coordinate.CreateCoordinate(1, 1);
+
+            _plateau = new Plateau(coordinate, 1);
 
             var counter = 1;
             foreach (var position in _roverPositions)
@@ -166,7 +182,9 @@ namespace PlatauShould
         [Test]
         public void Platau_GamePoints_Should_Not_Clash_With_Rover_Starting_Positions()
         {
-            _plateau = new Plateau(1, 1, 1);
+            var coordinate = Coordinate.CreateCoordinate(1, 1);
+
+            _plateau = new Plateau(coordinate, 1);
 
             var counter = 1;
             foreach (var position in _roverPositions)
@@ -191,7 +209,9 @@ namespace PlatauShould
         [Test]
         public void Platau_GamePoints_Should_Have_GamePoint_Value()
         {
-            _plateau = new Plateau(1, 1, 1);
+            var coordinate = Coordinate.CreateCoordinate(1, 1);
+
+            _plateau = new Plateau(coordinate, 1);
 
             var counter = 1;
             foreach (var position in _roverPositions)
@@ -221,7 +241,9 @@ namespace PlatauShould
         [TestCase(5, 5, 22)]
         public void Platau_GamePoints_Should_Not_Clash_With_Rover_Starting_Positions(int maxXCoord, int maxYCord, int GamepointsCount)
         {
-            _plateau = new Plateau(maxXCoord, maxYCord, GamepointsCount);
+            var coordinate = Coordinate.CreateCoordinate(maxXCoord, maxYCord);
+
+            _plateau = new Plateau(coordinate, GamepointsCount);
 
             var counter = 1;
             foreach (var position in _roverPositions)
@@ -247,7 +269,9 @@ namespace PlatauShould
         [TestCase(10, 10, 10)]
         public void Platau_GamePoints_Should_Not_Clash_With_Other_Gamepoints(int maxXCoord, int maxYCord, int GamepointsCount)
         {
-            _plateau = new Plateau(maxXCoord, maxYCord, GamepointsCount);
+            var coordinate = Coordinate.CreateCoordinate(maxXCoord, maxYCord);
+
+            _plateau = new Plateau(coordinate, GamepointsCount);
 
             _plateau.SetupGamePoints();
 
@@ -261,7 +285,9 @@ namespace PlatauShould
         [TestCase(10, 10, 50, 20)]
         public void Platau_GamePoints_Should_Not_20_Percent_Of_Plateau(int maxXCoord, int maxYCord, int GamepointsCount, int expectedGamepointCount)
         {
-            _plateau = new Plateau(maxXCoord, maxYCord, GamepointsCount);
+            var coordinate = Coordinate.CreateCoordinate(maxXCoord, maxYCord);
+
+            _plateau = new Plateau(coordinate, GamepointsCount);
 
             _plateau.SetupGamePoints();
 

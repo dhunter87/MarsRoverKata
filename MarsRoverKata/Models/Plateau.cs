@@ -1,26 +1,24 @@
-﻿using MarsRover.Helpers;
+using MarsRover.Helpers;
 using MarsRover.Interfaces;
 
 namespace MarsRover.Models
 {
     public class Plateau : IPlateau
     {   
-        public int MaxXCoordinate { get; private set; }
-        public int MaxYCoordinate { get; private set; }
+        public ICoordinate MaxCoordinates { get; set; }
         private readonly int GamePointCount;
         private HashSet<IGamePoint> GamePoints;
         public Dictionary<string, IRoverPosition> RoverPositions;
 
 
-        public Plateau(int maxXCoordinate, int maxYCoordinate, int maxGamePoints)
+        public Plateau(ICoordinate maxCoordinates, int maxGamePoints)
         {
-            if (!CoordinatesValidator.IsInitialPlateauCoordinateValid(maxXCoordinate, maxYCoordinate))
+            if (!CoordinatesValidator.IsInitialPlateauCoordinateValid(maxCoordinates))
             {
                 throw new ArgumentException();
             }
+            MaxCoordinates = maxCoordinates;
 
-            MaxXCoordinate = maxXCoordinate;
-            MaxYCoordinate = maxYCoordinate;
             GamePointCount = GetGamePointCount(maxGamePoints);
             GamePoints = new HashSet<IGamePoint>();
 
@@ -29,7 +27,7 @@ namespace MarsRover.Models
 
         private int GetGamePointCount(int maxGamePoints)
         {
-            var maxGamePointLimit = (int)Math.Floor((MaxXCoordinate * MaxYCoordinate) * 0.2); // limited to 20% of available Plateau
+            var maxGamePointLimit = (int)Math.Floor((MaxCoordinates.XCoordinate * MaxCoordinates.YCoordinate) * 0.2); // limited to 20% of available Plateau
             var minGamepointLimit = 1;
 
             return maxGamePointLimit <= 0 ? minGamepointLimit :
@@ -41,24 +39,24 @@ namespace MarsRover.Models
         {
             for (int i = 0; i < GamePointCount; i++)
             {
-                GamePoints.Add(GamePoint.CreateGamePoint(MaxXCoordinate, MaxYCoordinate, RoverPositions));
+                GamePoints.Add(GamePoint.CreateGamePoint(MaxCoordinates, RoverPositions));
             }
         }
 
-        public bool IsValildMove(int xCoordinate, int yCoordinate, string roverId)
+        public bool IsValildMove(ICoordinate nextCoordinates, string roverId)
         {
-            if (CoordinatesValidator.IsRoverNextMoveValid(xCoordinate, yCoordinate, MaxXCoordinate, MaxYCoordinate, RoverPositions, roverId))
+            if (CoordinatesValidator.IsRoverNextMoveValid(nextCoordinates, MaxCoordinates, RoverPositions, roverId))
             {
-                RoverPositions[roverId].XCoordinate = xCoordinate;
-                RoverPositions[roverId].YCoordinate = yCoordinate;
+                RoverPositions[roverId].XCoordinate = nextCoordinates.XCoordinate;
+                RoverPositions[roverId].YCoordinate = nextCoordinates.YCoordinate;
                 return true;
             }
             return false;
         }
 
-        public bool IsGamePointMove(int xCoordinate, int yCoordinate)
+        public bool IsGamePointMove(ICoordinate coordinate)
         {
-            return GamePoints.FirstOrDefault(p => p.EqualsCoordinates(xCoordinate, yCoordinate)) != null;
+            return GamePoints.FirstOrDefault(p => p.EqualsCoordinates(coordinate)) != null;
         }
 
         public bool HasGamePoints()
@@ -73,7 +71,7 @@ namespace MarsRover.Models
 
         public bool AddRover(IRoverPosition position, string id)
         {
-            if (CoordinatesValidator.IsUnOccupiedPosition(RoverPositions, position.XCoordinate, position.YCoordinate))
+            if (CoordinatesValidator.IsUnOccupiedPosition(RoverPositions, position))
             {
                 RoverPositions.Add(id, position);
                 return true;
@@ -81,9 +79,9 @@ namespace MarsRover.Models
             return false;
         }
 
-        public GamePoint GetGamePoint(int xCoordinate, int yCoordinate)
+        public GamePoint GetGamePoint(ICoordinate coordinate)
         {
-            var matchedPoint = GamePoints.FirstOrDefault(p => p.EqualsCoordinates(xCoordinate, yCoordinate));
+            var matchedPoint = GamePoints.FirstOrDefault(p => p.EqualsCoordinates(coordinate));
 
             if (matchedPoint == null)
             {

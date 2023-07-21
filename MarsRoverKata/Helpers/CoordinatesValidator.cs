@@ -4,10 +4,10 @@ namespace MarsRover.Helpers
 {
     public static class CoordinatesValidator
 	{
-        public static bool IsRoverPositionAndBearingValid(int xCoordinate, int yCoodinate, char bearing, int platauMaxXCoordinate, int platauMaxYCoordinate)
+        public static bool IsRoverPositionAndBearingValid(IRoverPosition position, ICoordinate platauMaxCoordinates)
         {
-            if (!IsValidPosition(xCoordinate, yCoodinate, platauMaxXCoordinate, platauMaxYCoordinate) ||
-                !isValidBearing(bearing))
+            if (!IsValidPosition(position, platauMaxCoordinates) ||
+                !isValidBearing(position.Bearing))
             {
                 return false;
             }
@@ -15,19 +15,19 @@ namespace MarsRover.Helpers
             return true;
         }
 
-        public static bool IsUnOccupiedPosition(Dictionary<string, IRoverPosition> roverPositions, int xCoord, int yCoord)
+        public static bool IsUnOccupiedPosition(Dictionary<string, IRoverPosition> roverPositions, ICoordinate coordinate)
         {
-            return !roverPositions.Any(p => p.Value.XCoordinate == xCoord && p.Value.YCoordinate == yCoord);
+            return !roverPositions.Any(p => p.Value.XCoordinate == coordinate.XCoordinate && p.Value.YCoordinate == coordinate.YCoordinate);
 
         }
-        public static bool IsUnOccupiedPosition(Dictionary<string, IRoverPosition> roverPositions, int xCoord, int yCoord, string thisRoverId)
+        public static bool IsUnOccupiedPosition(Dictionary<string, IRoverPosition> roverPositions, ICoordinate coordinate, string thisRoverId)
         {
-            return !roverPositions.Any(p => p.Value.XCoordinate == xCoord && p.Value.YCoordinate == yCoord && p.Key != thisRoverId);
+            return !roverPositions.Any(p => p.Value.XCoordinate == coordinate.XCoordinate && p.Value.YCoordinate == coordinate.YCoordinate && p.Key != thisRoverId);
         }
 
-        public static bool IsInitialPlateauCoordinateValid(int xCoordinate, int yCoodinate)
+        public static bool IsInitialPlateauCoordinateValid(ICoordinate coordinate)
         {
-            if (xCoordinate < 0 || yCoodinate < 0)
+            if (coordinate.XCoordinate < 0 || coordinate.YCoordinate < 0)
             {
                 return false;
             }
@@ -35,10 +35,10 @@ namespace MarsRover.Helpers
             return true;
         }
 
-        public static bool IsRoverNextMoveValid(int nextXCoordinate, int nextYCoordinate,int platauMaxXCoordinate, int platauMaxYCoordinate, Dictionary<string, IRoverPosition> roverPositions, string roverId)
+        public static bool IsRoverNextMoveValid(ICoordinate nextCoordinates, ICoordinate maxPlateauCoordinates, Dictionary<string, IRoverPosition> roverPositions, string roverId)
         {
-            if (IsValidPosition(nextXCoordinate, nextYCoordinate, platauMaxXCoordinate, platauMaxYCoordinate)
-                && IsUnOccupiedPosition(roverPositions, nextXCoordinate, nextYCoordinate, roverId))
+            if (IsValidPosition(nextCoordinates, maxPlateauCoordinates)
+                && IsUnOccupiedPosition(roverPositions, nextCoordinates, roverId))
             {
                 return true;
             }
@@ -55,10 +55,10 @@ namespace MarsRover.Helpers
             return true;
         }
 
-        private static bool IsValidPosition(int xCoordinate, int yCoodinate, int platauMaxXCoordinate, int platauMaxYCoordinate)
+        private static bool IsValidPosition(ICoordinate nextCoordinates, ICoordinate maxPlateauCoordinates)
         {
-            if (xCoordinate < 0 || xCoordinate > platauMaxXCoordinate ||
-                yCoodinate < 0 || yCoodinate > platauMaxYCoordinate)
+            if (nextCoordinates.XCoordinate < 0 || nextCoordinates.XCoordinate > maxPlateauCoordinates.XCoordinate ||
+                nextCoordinates.YCoordinate < 0 || nextCoordinates.YCoordinate > maxPlateauCoordinates.YCoordinate)
             {
                 return false;
             }

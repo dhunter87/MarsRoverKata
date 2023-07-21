@@ -17,7 +17,7 @@ namespace MarsRover.Models
             var bearing = Char.ToUpper(position.Bearing);
             GamePoints = new List<IGamePoint>();
 
-            if (!CoordinatesValidator.IsRoverPositionAndBearingValid(position.XCoordinate, position.YCoordinate, bearing, Plateau.MaxXCoordinate, Plateau.MaxYCoordinate))
+            if (!CoordinatesValidator.IsRoverPositionAndBearingValid(position, Plateau.MaxCoordinates))
             {
                 throw new ArgumentException();
             }
@@ -77,15 +77,17 @@ namespace MarsRover.Models
         {
             var delta = DirectionMapper.GetDirectionDelta(Position.Bearing);
 
-            if (Plateau.IsValildMove(Position.XCoordinate + delta.XCoordinate, Position.YCoordinate + delta.YCoordinate, RoverID))
+            var newPosition = Coordinate.CreateCoordinate(Position.XCoordinate + delta.XCoordinate, Position.YCoordinate + delta.YCoordinate);
+
+            if (Plateau.IsValildMove(newPosition, RoverID))
             {
                 Position.XCoordinate += delta.XCoordinate;
                 Position.YCoordinate += delta.YCoordinate;
             }
 
-            if (Plateau.IsGamePointMove(Position.XCoordinate, Position.YCoordinate))
+            if (Plateau.IsGamePointMove(Position))
             {
-                GamePoints.Add(Plateau.GetGamePoint(Position.XCoordinate, Position.YCoordinate));
+                GamePoints.Add(Plateau.GetGamePoint(Position));
             }
         }
 
