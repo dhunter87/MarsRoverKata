@@ -49,20 +49,23 @@ namespace PlatauShould
             Assert.Throws<ArgumentException>(() => new Plateau(maxXCoordinate, maxYCoordinate, Constants.gamePointsCount));
         }
 
-        [TestCase(5, 5, 5, 5, true)]
-        [TestCase(5, 5, 0, 5, true)]
-        [TestCase(5, 5, 5, 0, true)]
-        [TestCase(5, 5, 0, 0, true)]
-        [TestCase(5, 5, 5, 6, false)]
-        [TestCase(5, 5, 6, 5, false)]
-        [TestCase(0, 0, -1, 0, false)]
-        [TestCase(0, 0, 0, -1, false)]
-        public void IsValildMove_Should_Return_False_If_Coordinates_Are_Out_Of_Bounds_Of_The_Platau(int maxXCoordinate, int maxYCoordinate, int testXCoordinate, int testYCoordinate, bool expectedResult)
+        [TestCase(5, 5, 5, 5, 'N', true)]
+        [TestCase(5, 5, 0, 5, 'N', true)]
+        [TestCase(5, 5, 5, 0, 'N', true)]
+        [TestCase(5, 5, 0, 0, 'N', true)]
+        [TestCase(5, 5, 5, 6, 'N', false)]
+        [TestCase(5, 5, 6, 5, 'N', false)]
+        [TestCase(0, 0, -1, 0, 'N', false)]
+        [TestCase(0, 0, 0, -1, 'N', false)]
+        public void IsValildMove_Should_Return_False_If_Coordinates_Are_Out_Of_Bounds_Of_The_Platau(int maxXCoordinate, int maxYCoordinate, int testXCoordinate, int testYCoordinate, char bearing, bool expectedResult)
         {
             _plateau = new Plateau(maxXCoordinate, maxYCoordinate, Constants.gamePointsCount);
             _plateau.SetupGamePoints();
+            var roverid = $"{Constants.RoverId}1";
 
-            var result = _plateau.IsValildMove(testXCoordinate, testYCoordinate);
+            _plateau.AddRover(maxXCoordinate, maxYCoordinate, bearing, roverid);
+
+            var result = _plateau.IsValildMove(testXCoordinate, testYCoordinate, roverid);
 
             Assert.That(result, Is.EqualTo(expectedResult));
         }
@@ -271,6 +274,17 @@ namespace PlatauShould
 
             List<IRoverPosition> roverPositions = _plateau.GetRoverPositions();
             Assert.That(roverPositions.Count(), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Plateau_Should_Keep_Track_Of_All_Player_Movements()
+        {
+            var counter = 0;
+            foreach (var position in _roverPositions)
+            {
+                _plateau.AddRover(counter, 0, position.Bearing, $"{Constants.RoverId}{counter}");
+                counter++;
+            }
         }
 
         private static void AssertTreasureTypeIsValid(Prize treasureType)

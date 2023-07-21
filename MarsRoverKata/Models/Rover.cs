@@ -77,7 +77,7 @@ namespace MarsRover.Models
         {
             var delta = DirectionMapper.GetDirectionDelta(Position.Bearing);
 
-            if (Plateau.IsValildMove(Position.XCoordinate + delta.XCoordinate, Position.YCoordinate + delta.YCoordinate))
+            if (Plateau.IsValildMove(Position.XCoordinate + delta.XCoordinate, Position.YCoordinate + delta.YCoordinate, RoverID))
             {
                 Position.XCoordinate += delta.XCoordinate;
                 Position.YCoordinate += delta.YCoordinate;

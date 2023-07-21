@@ -45,9 +45,15 @@ namespace MarsRover.Models
             }
         }
 
-        public bool IsValildMove(int xCoordinate, int yCoordinate)
+        public bool IsValildMove(int xCoordinate, int yCoordinate, string roverId)
         {
-            return CoordinatesValidator.IsRoverNextMoveValid(xCoordinate, yCoordinate, MaxXCoordinate, MaxYCoordinate, RoverPositions);
+            if (CoordinatesValidator.IsRoverNextMoveValid(xCoordinate, yCoordinate, MaxXCoordinate, MaxYCoordinate, RoverPositions, roverId))
+            {
+                RoverPositions[roverId].XCoordinate = xCoordinate;
+                RoverPositions[roverId].YCoordinate = yCoordinate;
+                return true;
+            }
+            return false;
         }
 
         public bool IsGamePointMove(int xCoordinate, int yCoordinate)

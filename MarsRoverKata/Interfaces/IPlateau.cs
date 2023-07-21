@@ -7,7 +7,7 @@ namespace MarsRover.Interfaces
         int MaxXCoordinate { get; }
         int MaxYCoordinate { get; }
 
-        bool IsValildMove(int xCoordinate, int yCoordinate);
+        bool IsValildMove(int xCoordinate, int yCoordinate, string roverId);
 
         bool IsGamePointMove(int xCoordinate, int yCoordinate);
 

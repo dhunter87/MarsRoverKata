@@ -30,9 +30,9 @@ namespace MarsRoverUnitTests.Dummies
             throw new NotImplementedException();    
         }
 
-        public bool IsValildMove(int xCoordinate, int yCoordinate)
+        public bool IsValildMove(int xCoordinate, int yCoordinate, string roverId)
         {
-            return CoordinatesValidator.IsRoverNextMoveValid(xCoordinate, yCoordinate, MaxXCoordinate, MaxYCoordinate, RoverPositions);
+            return CoordinatesValidator.IsRoverNextMoveValid(xCoordinate, yCoordinate, MaxXCoordinate, MaxYCoordinate, RoverPositions, roverId);
 
         }
 
