@@ -13,7 +13,7 @@ namespace MarsRover.Models
         public Prize TreasureType { get; set; }
 
         // Factory Method
-        public static IGamePoint CreateGamePoint(int maxXCoord, int maxYCoord, List<IRoverPosition> roverPositions, int value = 1)
+        public static IGamePoint CreateGamePoint(int maxXCoord, int maxYCoord, List<IRoverPosition> roverPositions)
         {
             Random random = new Random();
             int randomisedXCoord;
@@ -43,7 +43,7 @@ namespace MarsRover.Models
 
         private static Prize GenerateGoalPointPrize(Random random)
         {
-            return (Prize)Enum.Parse(typeof(Prize), random.Next(4).ToString());
+            return (Prize)Enum.Parse(typeof(Prize), random.Next(1,4).ToString());
         }
 
         private static int GenerateGoalpointCoordinate(int maxCoord, Random random)
