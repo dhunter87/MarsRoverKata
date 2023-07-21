@@ -15,9 +15,11 @@ namespace MarsRover.Interfaces
 
         void SetupGamePoints();
 
-        void AddRover(int xCoordinate, int yCoordinate, char bearing);
+        void AddRover(int xCoordinate, int yCoordinate, char bearing, string id);
 
         GamePoint GetGamePoint(int xCoordinate, int yCoordinate);
+
+        List<IRoverPosition> GetRoverPositions();
     }
 }
 

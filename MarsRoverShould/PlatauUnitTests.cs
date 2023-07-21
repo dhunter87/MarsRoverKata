@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics.Metrics;
+using System.Reflection;
 using MarsRover.Interfaces;
 using MarsRover.Models;
 using MarsRoverUnitTests.TestHelpers;
@@ -70,9 +72,11 @@ namespace PlatauShould
         {
             _plateau = new Plateau(1, 1, 1);
 
+            var counter = 1;
             foreach (var position in _roverPositions)
             {
-                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing);
+                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing, $"{Constants.RoverId}{counter}");
+                counter++;
             }
 
             _plateau.SetupGamePoints();
@@ -87,9 +91,11 @@ namespace PlatauShould
         {
             _plateau = new Plateau(1, 1, 1);
 
+            var counter = 1;
             foreach (var position in _roverPositions)
             {
-                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing);
+                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing, $"{Constants.RoverId}{counter}");
+                counter++;
             }
 
             _plateau.SetupGamePoints();
@@ -132,12 +138,14 @@ namespace PlatauShould
         {
             _plateau = new Plateau(1, 1, 1);
 
+            var counter = 1;
             foreach (var position in _roverPositions)
             {
-                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing);
+                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing, $"{Constants.RoverId}{counter}");
+                counter++;
             }
 
-            _plateau.AddRover(1, 1, 'N');
+            _plateau.AddRover(1, 1, 'N', Constants.RoverId);
             
             Assert.Throws<InvalidOperationException>(() => _plateau.SetupGamePoints());
         }
@@ -147,9 +155,12 @@ namespace PlatauShould
         public void Platau_GamePoints_Should_Not_Clash_With_Rover_Starting_Positions()
         {
             _plateau = new Plateau(1, 1, 1);
+
+            var counter = 1;
             foreach (var position in _roverPositions)
             {
-                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing);
+                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing, $"{Constants.RoverId}{counter}");
+                counter++;
             }
 
             _plateau.SetupGamePoints();
@@ -168,9 +179,11 @@ namespace PlatauShould
         {
             _plateau = new Plateau(1, 1, 1);
 
+            var counter = 1;
             foreach (var position in _roverPositions)
             {
-                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing);
+                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing, $"{Constants.RoverId}{counter}");
+                counter++;
             }
 
             _plateau.SetupGamePoints();
@@ -186,17 +199,19 @@ namespace PlatauShould
             }
         }
 
-        [TestCase(3,3,3)]
-        [TestCase(5,5,10)]
-        [TestCase(5,5,20)]
-        [TestCase(5,5,22)]
+        [TestCase(3, 3, 3)]
+        [TestCase(5, 5, 10)]
+        [TestCase(5, 5, 20)]
+        [TestCase(5, 5, 22)]
         public void Platau_GamePoints_Should_Not_Clash_With_Rover_Starting_Positions(int maxXCoord, int maxYCord, int GamepointsCount)
         {
             _plateau = new Plateau(maxXCoord, maxYCord, GamepointsCount);
 
+            var counter = 1;
             foreach (var position in _roverPositions)
             {
-                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing);
+                _plateau.AddRover(position.XCoordinate, position.YCoordinate, position.Bearing, $"{Constants.RoverId}{counter}");
+                counter++;
             }
 
             _plateau.SetupGamePoints();
@@ -235,6 +250,13 @@ namespace PlatauShould
             var gamepoints = _plateau.GetGamePoints();
 
             Assert.That(gamepoints.Count(), Is.EqualTo(expectedGamepointCount));
+        }
+
+        [Test]
+        public void Plateau_Should_Keep_Track_Of_All_Rover_Positions()
+        {
+            List<IRoverPosition> roverpositions = _plateau.GetRoverPositions();
+            Assert.That(roverpositions, Is.Not.Null);
         }
 
         private static void AssertTreasureTypeIsValid(Prize treasureType)

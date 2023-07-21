@@ -52,13 +52,18 @@ namespace MarsRoverUnitTests.Dummies
             throw new NotImplementedException();
         }
 
-        public void AddRover(int xCoordinate, int yCoordinate, char bearing)
+        public void AddRover(int xCoordinate, int yCoordinate, char bearing, string id)
         {
             var coord = RoverPosition.CreateRoverPosition(xCoordinate, yCoordinate, bearing); 
             RoverPositions.Add(coord);
         }
 
         public GamePoint GetGamePoint(int xCoordinate, int yCoordinate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<IRoverPosition> GetRoverPositions()
         {
             throw new NotImplementedException();
         }
