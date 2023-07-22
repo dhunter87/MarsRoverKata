@@ -82,8 +82,12 @@ namespace MarsRover.CLI
                 currentGridSquareGamepoint.Key.TreasureType,
                 currentGridSquareGamepoint.Value.Substring(0, 2));
 
-            int gamePointExtraPadding = 6 - gamePointIndicator.Length; // Considering the length of "P1-G" is 6
-            string gamePointPadded = gamePointExtraPadding > 0 ? gamePointIndicator.PadRight(6 + gamePointExtraPadding) : gamePointIndicator;
+            // Considering the length of "P1-G" is 6
+            int gamePointExtraPadding = 6 - gamePointIndicator.Length; 
+
+            string gamePointPadded = gamePointExtraPadding > 0 ?
+                gamePointIndicator.PadRight(6 + gamePointExtraPadding) :
+                gamePointIndicator;
 
             return gamePointPadded;
         }
@@ -138,31 +142,6 @@ namespace MarsRover.CLI
                 default:
                     return "";
             }
-        }
-    }
-
-    public class PaddingConfig
-    {
-        public string CellValue;
-        public int ExtraPadding;
-        public int LeftPadding;
-        public int RightPadding;
-
-        public static PaddingConfig CreatePaddingConfig(string[,] grid, ICoordinate coordinate)
-        {
-            var maxIdLength = 1;
-            var cellValue = grid[coordinate.YCoordinate, coordinate.XCoordinate].PadLeft(8);
-            var extraPadding = maxIdLength - cellValue.Length;
-            var leftPadding = extraPadding / 2;
-            var rightPadding = extraPadding - leftPadding;
-
-            return new PaddingConfig
-            {
-                    CellValue = cellValue,
-                    ExtraPadding = extraPadding,
-                    LeftPadding = leftPadding,
-                    RightPadding = rightPadding
-            };
         }
     }
 }
