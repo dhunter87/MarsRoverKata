@@ -56,11 +56,11 @@ namespace MarsRover.Helpers
             switch (setting)
             {
                 case DifficultySetting.Easy:
-                    return 1;
-                case DifficultySetting.Medium:
                     return 3;
-                case DifficultySetting.Hard:
+                case DifficultySetting.Medium:
                     return 5;
+                case DifficultySetting.Hard:
+                    return 10;
             }
             return 0;
         }

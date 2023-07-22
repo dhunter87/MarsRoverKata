@@ -12,7 +12,7 @@ namespace MarsRover.Models
         private int Score;
         private readonly int TeamLimit;
         private readonly int InstructionLimit;
-        public List<IGamePoint> GamePoints;
+        public Dictionary<IGamePoint, string> GamePoints;
 
         public Player(IPlateau platau, int teamLimit, int instructionLimit, int id)
         {
@@ -22,7 +22,7 @@ namespace MarsRover.Models
             InstructionLimit = instructionLimit;
             Plateau = platau;
             Team = new List<IRover>();
-            GamePoints = new List<IGamePoint>();
+            GamePoints = new Dictionary<IGamePoint, string> ();
         }
 
         public bool AddTeamMember(IRoverPosition position, string id)
@@ -53,7 +53,7 @@ namespace MarsRover.Models
 
             foreach (var gamepoint in GamePoints)
             {
-                Score += gamepoint.TreasureValue;
+                Score += gamepoint.Key.TreasureValue;
             }
 
             Console.WriteLine($"Player: {Id}, Score: {Score}");
@@ -72,16 +72,21 @@ namespace MarsRover.Models
             {
                 instructions = instructions.Substring(0, InstructionLimit);
             }
+
             var points = rover.ExecuteInstructions(instructions);
-            GamePoints.AddRange(points);
+            foreach (var point in points)
+            {
+                GamePoints.Add(point, rover.GetId());
+            }
+
             GetScore();
         }
 
-        public IGamePoint? GetGamePointAt(int x, int y)
+        public Dictionary<IGamePoint, string> GetGamePoints()
         {
             if (GamePoints.Count() > 0)
             {
-                return GamePoints.FirstOrDefault(gp => gp.EqualsCoordinates(Coordinate.CreateCoordinate(x, y)));
+                return GamePoints;
             }
             return null;
         }

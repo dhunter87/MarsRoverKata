@@ -34,6 +34,7 @@ class Program
     {
         foreach (var rover in player.Team)
         {
+            Console.WriteLine("");
             ConsoleAppUi.PrintRoverPositions(mission);
             //PrintCurrentPosition(player, rover);
             var instructions = InputValidator.SetupRoverInstructions();
