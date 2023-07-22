@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MarsRover.Interfaces;
 using MarsRover.Models;
+using System.Linq;
 
 namespace MarsRover.CLI
 {
@@ -9,74 +10,90 @@ namespace MarsRover.CLI
     {
         public static void PrintRoverPositions(MarsMission mission)
         {
+            Dictionary<ICoordinate, List<(string roverId, string gamePointIndicator)>> roverDataOnGrid = new Dictionary<ICoordinate, List<(string, string)>>();
             Dictionary<GamePoint, string> discoveredGamepoints = GetDiscoveredGamepoints(mission);
-            var gamePointIndicators = discoveredGamepoints.Keys.ToList();
 
+            var gamePointIndicators = discoveredGamepoints.Keys.ToList();
             int gridSizeX = mission.Plateau.MaxCoordinates.XCoordinate + 1;
             int gridSizeY = mission.Plateau.MaxCoordinates.YCoordinate + 1;
-
             var grid = new string[gridSizeY, gridSizeX];
+
             InitializeGrid(grid);
 
-            Dictionary<ICoordinate, List<(string roverId, string gamePointIndicator)>> roverDataOnGrid = new Dictionary<ICoordinate, List<(string, string)>>();
+            SetAllRoversGridPositions(mission, grid);
 
-            foreach (var player in mission.GetPlayers())
-            {
-                foreach (var rover in player.Team)
-                {
-                    var coordinate = Coordinate.CreateCoordinate(rover.Position.XCoordinate, rover.Position.YCoordinate);
+            PrintPlateauGrid(discoveredGamepoints, gridSizeX, gridSizeY, grid);
+        }
 
-                    grid[coordinate.YCoordinate, coordinate.XCoordinate] = $"{rover.GetId()}-{rover.Position.Bearing}";
-                }
-            }
-
-
-            int maxIdLength = CalculateMaxIdLength(mission.GetPlayers());
-
-            // Print the grid
+        private static void PrintPlateauGrid(Dictionary<GamePoint, string> discoveredGamepoints, int gridSizeX, int gridSizeY, string[,] grid)
+        {
             Console.WriteLine(new string('-', (8 + 1) * gridSizeX));
-            for (int y = gridSizeY - 1; y >= 0; y--)
+            for (int yCoordinate = gridSizeY - 1; yCoordinate >= 0; yCoordinate--)
             {
                 for (int line = 0; line < 2; line++)
                 {
-                    for (int x = 0; x < gridSizeX; x++)
-                    {
-                        var coordinate = Coordinate.CreateCoordinate(x,y);
-                        string cellValue = grid[y, x].PadLeft(8);
-                        int extraPadding = maxIdLength - cellValue.Length;
-                        int leftPadding = extraPadding / 2;
-                        int rightPadding = extraPadding - leftPadding;
-
-                        if (line == 0)
-                        {
-                            Console.Write($"|{cellValue.PadLeft(4 + leftPadding).PadRight(4 + rightPadding)}");
-                        }
-                        else
-                        {
-                            //var roverData = roverDataOnGrid.ContainsKey(coordinate) ? roverDataOnGrid[coordinate] : new List<(string, string)>();
-                            var currentGridSquareGamepoint = discoveredGamepoints.Where(gp => gp.Key.EqualsCoordinates(coordinate)).FirstOrDefault();
-                            if (currentGridSquareGamepoint.Key != null && currentGridSquareGamepoint.Value != null)
-                            {
-                                var gamepoint = currentGridSquareGamepoint.Key;
-                                var roverid = currentGridSquareGamepoint.Value;
-
-                                var gamePointIndicator = GetGamePointIndicator(gamepoint.TreasureType, roverid.Substring(0,2));
-
-                                // Calculate padding for the gamePointIndicator
-                                int gamePointExtraPadding = 6 - gamePointIndicator.Length; // Considering the length of "P1-G" is 6
-                                string gamePointPadded = gamePointExtraPadding > 0 ? gamePointIndicator.PadRight(6 + gamePointExtraPadding) : gamePointIndicator;
-
-                                Console.Write($"|{gamePointPadded}");
-                            }
-                            else
-                            {
-                                Console.Write("|        ");
-                            }
-                        }
-                    }
-                    Console.WriteLine("|");
+                    PrtinLine(discoveredGamepoints, gridSizeX, grid, yCoordinate, line);
                 }
                 Console.WriteLine(new string('-', (8 + 1) * gridSizeX));
+            }
+        }
+
+        private static void PrtinLine(Dictionary<GamePoint, string> discoveredGamepoints, int gridSizeX, string[,] grid, int yCoordinate, int line)
+        {
+            for (int xCoordinate = 0; xCoordinate < gridSizeX; xCoordinate++)
+            {
+                var currentCoordinates = Coordinate.CreateCoordinate(xCoordinate, yCoordinate);
+                var config = PaddingConfig.CreatePaddingConfig(grid, currentCoordinates);
+                var currentGridSquareGamepoint = discoveredGamepoints.Where(gp => gp.Key.EqualsCoordinates(currentCoordinates)).FirstOrDefault();
+
+                if (line == 0)
+                {
+                    PrintRoverPosition(config);
+                }
+
+                if (line != 0)
+                {
+                    if (currentGridSquareGamepoint.Key != null && currentGridSquareGamepoint.Value != null)
+                    {
+                        PrintGamePoint(currentGridSquareGamepoint);
+                        continue;
+                    }
+
+                    Console.Write("|        ");
+                }
+            }
+            Console.WriteLine("|");
+        }
+
+        private static void PrintGamePoint(KeyValuePair<GamePoint,string> currentGridSquareGamepoint)
+        {
+            var gamePointPadded = SetupGamePointPadding(currentGridSquareGamepoint);
+            Console.Write($"|{gamePointPadded}");
+        }
+
+        private static void PrintRoverPosition(PaddingConfig config)
+        {
+            Console.Write($"|{config.CellValue.PadLeft(4 + config.LeftPadding).PadRight(4 + config.RightPadding)}");
+        }
+
+        private static string SetupGamePointPadding(KeyValuePair<GamePoint, string> currentGridSquareGamepoint)
+        {
+            var gamePointIndicator = GetGamePointIndicator(
+                currentGridSquareGamepoint.Key.TreasureType,
+                currentGridSquareGamepoint.Value.Substring(0, 2));
+
+            int gamePointExtraPadding = 6 - gamePointIndicator.Length; // Considering the length of "P1-G" is 6
+            string gamePointPadded = gamePointExtraPadding > 0 ? gamePointIndicator.PadRight(6 + gamePointExtraPadding) : gamePointIndicator;
+
+            return gamePointPadded;
+        }
+
+        private static void SetAllRoversGridPositions(MarsMission mission, string[,] grid)
+        {
+            foreach (var rover in mission.GetPlayers().SelectMany(player => player.Team))
+            {
+                var coordinate = Coordinate.CreateCoordinate(rover.Position.XCoordinate, rover.Position.YCoordinate);
+                grid[coordinate.YCoordinate, coordinate.XCoordinate] = $"{rover.GetId()}-{rover.Position.Bearing}";
             }
         }
 
@@ -108,23 +125,6 @@ namespace MarsRover.CLI
             }
         }
 
-        private static int CalculateMaxIdLength(List<Player> players)
-        {
-            int maxIdLength = 0;
-            foreach (var player in players)
-            {
-                foreach (var rover in player.Team)
-                {
-                    int idLength = rover.GetId().Length;
-                    if (idLength > maxIdLength)
-                    {
-                        maxIdLength = idLength;
-                    }
-                }
-            }
-            return maxIdLength;
-        }
-
         private static string GetGamePointIndicator(Prize prize, string playerId)
         {
             switch (prize)
@@ -138,6 +138,31 @@ namespace MarsRover.CLI
                 default:
                     return "";
             }
+        }
+    }
+
+    public class PaddingConfig
+    {
+        public string CellValue;
+        public int ExtraPadding;
+        public int LeftPadding;
+        public int RightPadding;
+
+        public static PaddingConfig CreatePaddingConfig(string[,] grid, ICoordinate coordinate)
+        {
+            var maxIdLength = 1;
+            var cellValue = grid[coordinate.YCoordinate, coordinate.XCoordinate].PadLeft(8);
+            var extraPadding = maxIdLength - cellValue.Length;
+            var leftPadding = extraPadding / 2;
+            var rightPadding = extraPadding - leftPadding;
+
+            return new PaddingConfig
+            {
+                    CellValue = cellValue,
+                    ExtraPadding = extraPadding,
+                    LeftPadding = leftPadding,
+                    RightPadding = rightPadding
+            };
         }
     }
 }

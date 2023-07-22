@@ -121,12 +121,24 @@ namespace PlayerShould
         {
             var instructionsCount = instructions.ToArray().Length;
             var valuePerMove = (instructionsCount * treasureVal);
+            var position = RoverPosition.CreateRoverPosition(0, 0, 'N');
+
+            MockRover.SetupProperty(r => r.Position);
+            MockRover.Object.Position = position;
+
 
             MockRover.Setup(r => r.ExecuteInstructions(
                     It.Is<string>(s => s == instructions)))
-                .Returns(new List<IGamePoint>
+                .Callback((string _) =>
                 {
-                    { new GamePointFake(valuePerMove, Prize.Bronze) }
+                    MockRover.Object.Position.XCoordinate += 1;
+                })
+                .Returns(() =>
+                {
+                    return new List<IGamePoint>
+                    {
+                        { new GamePointFake(valuePerMove, Prize.Bronze) }
+                    };
                 });
 
             var playerScore = Player.GetScore();

@@ -104,8 +104,6 @@ namespace MarsRover.Models
         {
             return Id;
         }
-
-
     }
 }
 
