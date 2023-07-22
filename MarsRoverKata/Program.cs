@@ -26,7 +26,7 @@ class Program
 
         Console.WriteLine("Mission Over");
         PrintPlayerScores(players);
-        ConsoleAppUi.PrintRoverPositions(mission);
+        ConsoleApp.PrintRoverPositions(mission);
         Console.ReadLine();
     }
 
@@ -35,7 +35,7 @@ class Program
         foreach (var rover in player.Team)
         {
             Console.WriteLine("");
-            ConsoleAppUi.PrintRoverPositions(mission);
+            ConsoleApp.PrintRoverPositions(mission);
             //PrintCurrentPosition(player, rover);
             var instructions = InputValidator.SetupRoverInstructions();
             player.GiveRoverInstructions(rover, instructions);

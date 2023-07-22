@@ -1,40 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using MarsRover.Interfaces;
 using MarsRover.Models;
-using System.Linq;
 
 namespace MarsRover.CLI
 {
-    public static class ConsoleAppUi
-    {
-        public static void PrintRoverPositions(MarsMission mission)
+	public static class PlateauUi
+	{
+        public static void PrintPlateauGrid(Dictionary<GamePoint, string> discoveredGamepoints, int gridSizeX, int gridSizeY, string[,] grid)
         {
-            Dictionary<ICoordinate, List<(string roverId, string gamePointIndicator)>> roverDataOnGrid = new Dictionary<ICoordinate, List<(string, string)>>();
-            Dictionary<GamePoint, string> discoveredGamepoints = GetDiscoveredGamepoints(mission);
-
-            var gamePointIndicators = discoveredGamepoints.Keys.ToList();
-            int gridSizeX = mission.Plateau.MaxCoordinates.XCoordinate + 1;
-            int gridSizeY = mission.Plateau.MaxCoordinates.YCoordinate + 1;
-            var grid = new string[gridSizeY, gridSizeX];
-
-            InitializeGrid(grid);
-
-            SetAllRoversGridPositions(mission, grid);
-
-            PrintPlateauGrid(discoveredGamepoints, gridSizeX, gridSizeY, grid);
-        }
-
-        private static void PrintPlateauGrid(Dictionary<GamePoint, string> discoveredGamepoints, int gridSizeX, int gridSizeY, string[,] grid)
-        {
-            Console.WriteLine(new string('-', (8 + 1) * gridSizeX));
+            var gridSquareSpaceing = 9;
+            Console.WriteLine(new string('-', gridSquareSpaceing * gridSizeX));
             for (int yCoordinate = gridSizeY - 1; yCoordinate >= 0; yCoordinate--)
             {
                 for (int line = 0; line < 2; line++)
                 {
                     PrtinLine(discoveredGamepoints, gridSizeX, grid, yCoordinate, line);
                 }
-                Console.WriteLine(new string('-', (8 + 1) * gridSizeX));
+                Console.WriteLine(new string('-', gridSquareSpaceing * gridSizeX));
             }
         }
 
@@ -65,7 +46,7 @@ namespace MarsRover.CLI
             Console.WriteLine("|");
         }
 
-        private static void PrintGamePoint(KeyValuePair<GamePoint,string> currentGridSquareGamepoint)
+        private static void PrintGamePoint(KeyValuePair<GamePoint, string> currentGridSquareGamepoint)
         {
             var gamePointPadded = SetupGamePointPadding(currentGridSquareGamepoint);
             Console.Write($"|{gamePointPadded}");
@@ -83,50 +64,13 @@ namespace MarsRover.CLI
                 currentGridSquareGamepoint.Value.Substring(0, 2));
 
             // Considering the length of "P1-G" is 6
-            int gamePointExtraPadding = 6 - gamePointIndicator.Length; 
+            int gamePointExtraPadding = 6 - gamePointIndicator.Length;
 
             string gamePointPadded = gamePointExtraPadding > 0 ?
                 gamePointIndicator.PadRight(6 + gamePointExtraPadding) :
                 gamePointIndicator;
 
             return gamePointPadded;
-        }
-
-        private static void SetAllRoversGridPositions(MarsMission mission, string[,] grid)
-        {
-            foreach (var rover in mission.GetPlayers().SelectMany(player => player.Team))
-            {
-                var coordinate = Coordinate.CreateCoordinate(rover.Position.XCoordinate, rover.Position.YCoordinate);
-                grid[coordinate.YCoordinate, coordinate.XCoordinate] = $"{rover.GetId()}-{rover.Position.Bearing}";
-            }
-        }
-
-        private static Dictionary<GamePoint, string> GetDiscoveredGamepoints(MarsMission mission)
-        {
-            var discoveredGamePoints = new Dictionary<GamePoint, string>();
-            foreach (var player in mission.GetPlayers())
-            {
-                var points = player.GetGamePoints();
-                if (points != null)
-                {
-                    foreach (var point in points)
-                    {
-                        discoveredGamePoints.Add(point.Key as GamePoint, point.Value);
-                    }
-                }
-            }
-            return discoveredGamePoints;
-        }
-            
-        private static void InitializeGrid(string[,] grid)
-        {
-            for (int y = 0; y < grid.GetLength(0); y++)
-            {
-                for (int x = 0; x < grid.GetLength(1); x++)
-                {
-                    grid[y, x] = " ";
-                }
-            }
         }
 
         private static string GetGamePointIndicator(Prize prize, string playerId)
@@ -145,3 +89,4 @@ namespace MarsRover.CLI
         }
     }
 }
+

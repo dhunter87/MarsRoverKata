@@ -126,7 +126,6 @@ namespace PlayerShould
             MockRover.SetupProperty(r => r.Position);
             MockRover.Object.Position = position;
 
-
             MockRover.Setup(r => r.ExecuteInstructions(
                     It.Is<string>(s => s == instructions)))
                 .Callback((string _) =>
