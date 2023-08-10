@@ -279,7 +279,7 @@ namespace PlatauShould
             Assert.That(gamepoints.Count(), Is.EqualTo(GamepointsCount));
         }
 
-        // gamepoints snould not exceed 20% available Plateau Coords i.e. MaxGamepoints = (maxX * maxY) * .20
+        // gamepoints should not exceed 20% available Plateau Coords i.e. MaxGamepoints = (maxX * maxY) * .20
         [TestCase(5, 5, 6, 5)]
         [TestCase(10, 10, 50, 20)]
         public void Platau_GamePoints_Should_Not_20_Percent_Of_Plateau(int maxXCoord, int maxYCord, int GamepointsCount, int expectedGamepointCount)
@@ -316,7 +316,7 @@ namespace PlatauShould
             }
 
             List<IRoverPosition> roverPositions = _plateau.GetRoverPositions();
-            Assert.That(roverPositions.Count(), Is.EqualTo(1));
+            Assert.That(roverPositions.Count, Is.EqualTo(1));
         }
 
         [Test]

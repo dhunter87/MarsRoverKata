@@ -10,7 +10,6 @@ namespace MarsRover.Models
         private HashSet<IGamePoint> GamePoints;
         public Dictionary<string, IRoverPosition> RoverPositions;
 
-
         public Plateau(ICoordinate maxCoordinates, int maxGamePoints)
         {
             if (!CoordinatesValidator.IsInitialPlateauCoordinateValid(maxCoordinates))
@@ -19,13 +18,13 @@ namespace MarsRover.Models
             }
             MaxCoordinates = maxCoordinates;
 
-            GamePointCount = GetGamePointCount(maxGamePoints);
+            GamePointCount = SetupGamepointLimit(maxGamePoints);
             GamePoints = new HashSet<IGamePoint>();
 
             RoverPositions = new Dictionary<string, IRoverPosition>();
         }
 
-        private int GetGamePointCount(int maxGamePoints)
+        private int SetupGamepointLimit(int maxGamePoints)
         {
             var maxGamePointLimit = (int)Math.Floor((MaxCoordinates.XCoordinate * MaxCoordinates.YCoordinate) * 0.2); // limited to 20% of available Plateau
             var minGamepointLimit = 1;
@@ -64,6 +63,7 @@ namespace MarsRover.Models
             return GamePoints.Count > 0;
         }
 
+        // only used in tests??
         public HashSet<IGamePoint> GetGamePoints()
         {
             return GamePoints;
@@ -93,6 +93,7 @@ namespace MarsRover.Models
             return (GamePoint)matchedPoint;
         }
 
+        // only used in tests?
         public List<IRoverPosition> GetRoverPositions()
         {
             return RoverPositions.Values.ToList();

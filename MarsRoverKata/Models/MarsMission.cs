@@ -23,7 +23,6 @@ namespace MarsRover.Models
 
             Players = new List<Player>();
             SetupPlayers(config.PlayerCount);
-
         }
         
         public void SetupPlayers(int playerCount)
@@ -32,7 +31,7 @@ namespace MarsRover.Models
             {
                 Players.Add(new Player(Plateau, TeamLimit, CommandLimit, i+1));   
             }
-            if (Players.Count() == 0)   
+            if (Players.Count == 0)   
             {
                 Players.Add(new Player(Plateau, TeamLimit, CommandLimit, 1));
             }
@@ -45,18 +44,6 @@ namespace MarsRover.Models
 			return new Plateau(maxCoordinates, GamePointLimit);
         }
 
-        public void CreateRover(Player player, int startingXCoordinate, int startingYCoordinate, char startingBearing, string id)
-        {
-            var position = RoverPosition.CreateRoverPosition(startingXCoordinate, startingYCoordinate, startingBearing);
-
-            player.AddTeamMember(position, id);
-        }
-
-        public int GetCommandLimit()
-        {
-            return CommandLimit;
-        }
-
         public List<Player> GetPlayers()
         {
             return Players;
@@ -65,7 +52,7 @@ namespace MarsRover.Models
         public void ActivateMission()
         {   
             Plateau.SetupGamePoints();
+            Console.WriteLine("\nWelcome To Mars Mission!");
         }
     }
 }
-

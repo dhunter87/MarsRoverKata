@@ -67,9 +67,15 @@ namespace MarsRover.Helpers
 
         private static int SetUpTeamLimits(DifficultySetting setting)
         {
-            // default number of rovers set to 1
-            // possible bug in directing multiple rovers
-            // reqs better UI to properly utilise multiple rovers
+            switch (setting)
+            {
+                case DifficultySetting.Easy:
+                    return 1;
+                case DifficultySetting.Medium:
+                    return 2;
+                case DifficultySetting.Hard:
+                    return 3;
+            }
             return 1;
         }
 

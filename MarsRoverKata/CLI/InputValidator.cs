@@ -8,15 +8,25 @@ namespace MarsRover.Helpers
         {
             foreach (var player in players)
             {
-                var counter = 1;
-                var initialRoverCoordinates = SetupRoverCoordinates(plateau.MaxCoordinates);
+                for (int i = 0; i < player.TeamLimit; i++)
+                {
+                    var initialRoverCoordinates = SetupRoverCoordinates(plateau.MaxCoordinates);
 
-                var position = RoverPosition.CreateRoverPosition(initialRoverCoordinates.Value.XCoordinate, initialRoverCoordinates.Value.YCoordinate, initialRoverCoordinates.Key);
+                    var position = RoverPosition.CreateRoverPosition(initialRoverCoordinates.Value.XCoordinate, initialRoverCoordinates.Value.YCoordinate, initialRoverCoordinates.Key);
+                    string roverId = SetRoverId(player, i);
 
-                player.AddTeamMember(position, $"{player.Id}R{counter}");
-
-                counter++;
+                    player.AddTeamMember(position, roverId);
+                }
             }
+        }
+
+        private static string SetRoverId(Player player, int i)
+        {
+            if (player.Id != null)
+            {
+                return $"{player.Id}R{i + 1}";
+            }
+            throw new ArgumentException();
         }
 
         public static KeyValuePair<char, ICoordinate> SetupRoverCoordinates(ICoordinate maxCoordinates)

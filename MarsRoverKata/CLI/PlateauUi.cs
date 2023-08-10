@@ -5,7 +5,7 @@ namespace MarsRover.CLI
 {
 	public static class PlateauUi
 	{
-        public static void PrintPlateauGrid(Dictionary<GamePoint, string> discoveredGamepoints, int gridSizeX, int gridSizeY, string[,] grid)
+        public static void PrintGrid(Dictionary<GamePoint, string> discoveredGamepoints, int gridSizeX, int gridSizeY, string[,] grid)
         {
             var gridSquareSpaceing = 9;
             Console.WriteLine(new string('-', gridSquareSpaceing * gridSizeX));

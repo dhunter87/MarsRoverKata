@@ -8,7 +8,7 @@ namespace MarsRover.CLI
 {
     public static class ConsoleApp
     {
-        public static void PrintRoverPositions(MarsMission mission)
+        public static void PrintPlateauGrid(MarsMission mission)
         {
             Dictionary<ICoordinate, List<(string roverId, string gamePointIndicator)>> roverDataOnGrid = new Dictionary<ICoordinate, List<(string, string)>>();
             Dictionary<GamePoint, string> discoveredGamepoints = GetDiscoveredGamepoints(mission);
@@ -21,10 +21,9 @@ namespace MarsRover.CLI
 
             SetAllRoversGridPositions(mission, grid);
 
-            PlateauUi.PrintPlateauGrid(discoveredGamepoints, gridSizeX, gridSizeY, grid);
+            PlateauUi.PrintGrid(discoveredGamepoints, gridSizeX, gridSizeY, grid);
         }
 
-        
         private static void SetAllRoversGridPositions(MarsMission mission, string[,] grid)
         {
             foreach (var rover in mission.GetPlayers().SelectMany(player => player.Team))
@@ -48,6 +47,7 @@ namespace MarsRover.CLI
                     }
                 }
             }
+
             return discoveredGamePoints;
         }
             

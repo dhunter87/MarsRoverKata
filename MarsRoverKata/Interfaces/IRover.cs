@@ -13,4 +13,3 @@ namespace MarsRover.Interfaces
         string GetId();
     }
 }
-

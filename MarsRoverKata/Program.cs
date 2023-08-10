@@ -8,53 +8,55 @@ class Program
     static void Main()
     {
         var missionConfig = MissionSetup.CreateMissionConfig();
-
         var mission = new MarsMission(missionConfig);
 
         var players = mission.GetPlayers();
-
         InputValidator.SetupTeamRovers(players, mission.Plateau);
+
         mission.ActivateMission();
 
         while (mission.IsActive)
         {
             foreach (var player in players)
             {
+                if (!mission.IsActive)
+                {
+                    continue;
+                }
                 TakePlayerTurn(mission, player);
             }
         }
 
         Console.WriteLine("Mission Over");
         PrintPlayerScores(players);
-        ConsoleApp.PrintRoverPositions(mission);
+        ConsoleApp.PrintPlateauGrid(mission);
         Console.ReadLine();
     }
 
     private static void TakePlayerTurn(MarsMission mission, Player player)
     {
-        foreach (var rover in player.Team)
-        {
-            Console.WriteLine("");
-            ConsoleApp.PrintRoverPositions(mission);
-            //PrintCurrentPosition(player, rover);
-            var instructions = InputValidator.SetupRoverInstructions();
-            player.GiveRoverInstructions(rover, instructions);
-        }
+        Console.WriteLine("");
+        ConsoleApp.PrintPlateauGrid(mission);
+
+        player.GiveRoverInstructions(InputValidator.SetupRoverInstructions());        
     }
 
     private static void PrintPlayerScores(List<Player> players)
     {
+        // calculate winner & output. concider a draw.
+        var winningScore = 0;
+        var winner = "";
         foreach (var player in players)
         {
-            player.GetScore();
+            var score = player.GetScore();
+            if (winningScore == 0 || winningScore < score)
+            {
+                winningScore = score;
+                winner = player.Id;
+            }
         }
+
+        Console.WriteLine($"Winner: {winner}, Score: {winningScore}");
     }
 
-    private static void PrintCurrentPosition(Player player, IRover rover)
-    {
-        player.GetScore();
-        Console.WriteLine("\n Current Rover position: \n");
-        Console.WriteLine($"RoverId: {rover.GetId()}:");
-        Console.WriteLine($"XCoordinate: {rover.Position.XCoordinate}, YCoordinate: {rover.Position.YCoordinate}, Bearing: {rover.Position.Bearing}");
-    }
 }
