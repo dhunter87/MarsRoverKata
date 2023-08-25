@@ -1,6 +1,5 @@
 ﻿using MarsRover.CLI;
 using MarsRover.Helpers;
-using MarsRover.Interfaces;
 using MarsRover.Models;
 
 class Program
@@ -23,6 +22,7 @@ class Program
                 {
                     continue;
                 }
+
                 TakePlayerTurn(mission, player);
             }
         }
@@ -58,5 +58,4 @@ class Program
 
         Console.WriteLine($"Winner: {winner}, Score: {winningScore}");
     }
-
 }

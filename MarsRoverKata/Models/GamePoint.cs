@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using MarsRover.Helpers;
+﻿using MarsRover.Helpers;
 using MarsRover.Interfaces;
 
 namespace MarsRover.Models
 {
-	public class GamePoint : IGamePoint
+    public class GamePoint : IGamePoint
     {
         public int XCoordinate { get; set; }
         public int YCoordinate { get; set; }

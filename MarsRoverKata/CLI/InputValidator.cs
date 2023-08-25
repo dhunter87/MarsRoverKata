@@ -1,4 +1,5 @@
-﻿using MarsRover.Interfaces;
+﻿using MarsRover.CLI;
+using MarsRover.Interfaces;
 using MarsRover.Models;
 namespace MarsRover.Helpers
 {
@@ -6,8 +7,38 @@ namespace MarsRover.Helpers
 	{
         public static void SetupTeamRovers(List<Player> players, IPlateau plateau)
         {
+            while (players.Any(x => x.Team.Count < x.TeamLimit))
+            {
+                foreach (var player in players)
+                {
+                    // print current player
+                    Console.WriteLine($"Current Player: {player.Id}");
+                    // set up 1 rover at a time
+                    SetupNextRover(player, plateau);
+                }
+            }
+        }
+
+        private static void SetupNextRover(Player player, IPlateau plateau)
+        {
+            var currentPlayersTeamCount = player.Team.Count;
+
+            if (currentPlayersTeamCount < player?.TeamLimit) 
+            {
+                var initialRoverCoordinates = SetupRoverCoordinates(plateau.MaxCoordinates);
+
+                var position = RoverPosition.CreateRoverPosition(initialRoverCoordinates.Value.XCoordinate, initialRoverCoordinates.Value.YCoordinate, initialRoverCoordinates.Key);
+                string roverId = SetRoverId(player, currentPlayersTeamCount);
+
+                player.AddTeamMember(position, roverId);
+            }
+        }
+
+        public static void SetupTeamRoversOld(List<Player> players, IPlateau plateau)
+        {
             foreach (var player in players)
             {
+
                 for (int i = 0; i < player.TeamLimit; i++)
                 {
                     var initialRoverCoordinates = SetupRoverCoordinates(plateau.MaxCoordinates);
@@ -67,7 +98,7 @@ namespace MarsRover.Helpers
 
         private static void PrintSetupRoverCoordinateInstructions(ICoordinate maxCoordinate)
         {
-            Console.WriteLine("Enter Rover Coordinates And Bearing to start Mars Mission!");
+            Console.WriteLine("Enter Rover Coordinates And Bearing!");
             Console.WriteLine("Rover Coordinates must be within Platau maximum Coordinates");
             Console.WriteLine("Bearing Must Be N (North), E (East), S (South), or W (West)");
             Console.WriteLine($"e.g. between '0,0,N' And '{maxCoordinate.XCoordinate},{maxCoordinate.YCoordinate},S'");
