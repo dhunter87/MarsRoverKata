@@ -30,8 +30,6 @@ namespace MarsRover.Models
         {
             var rover = GetNextRover();
 
-            PrintCurrentPosition(rover);
-
             if (string.IsNullOrEmpty(instructions))
             {
                 return;
@@ -46,18 +44,6 @@ namespace MarsRover.Models
 
             GetScoreThisMove(rover, points);
             PreviousRover = rover;
-        }
-
-
-        private void PrintCurrentPosition(IRover rover)
-        {
-            var score = GetScore();
-            Console.WriteLine($"\nCurrent Player: {Id}\n");
-            Console.WriteLine("\nCurrent Rover position: \n");
-            Console.WriteLine($"RoverId: {rover.GetId()}:");
-            Console.WriteLine($"XCoordinate: {rover.Position.XCoordinate}, YCoordinate: {rover.Position.YCoordinate}, Bearing: {rover.Position.Bearing}");
-            Console.WriteLine($"Score: {score}");
-            Console.WriteLine("");
         }
 
         public bool AddTeamMember(IRoverPosition position, string id)

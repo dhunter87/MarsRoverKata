@@ -13,7 +13,6 @@ namespace MarsRover.Helpers
             {
                 foreach (var player in players)
                 {
-                    // set up 1 rover at a time
                     SetupNextRover(player, plateau);
                 }
             }
@@ -93,6 +92,7 @@ namespace MarsRover.Helpers
 
             while (true)
             {
+                Console.Write("\nInstructions:");
                 var instructions = Console.ReadLine();
 
                 if (instructions == null)
