@@ -2,7 +2,7 @@
 using MarsRover.Helpers;
 using MarsRover.Models;
 
-class Program
+class Program : ProgramBase
 {   
     static void Main()
     {
@@ -28,34 +28,7 @@ class Program
         }
 
         Console.WriteLine("Mission Over");
-        PrintPlayerScores(players);
-        ConsoleApp.PrintPlateauGrid(mission);
+        PrintGameResult(players);
         Console.ReadLine();
-    }
-
-    private static void TakePlayerTurn(MarsMission mission, Player player)
-    {
-        Console.WriteLine("");
-        ConsoleApp.PrintPlateauGrid(mission);
-
-        player.GiveRoverInstructions(InputValidator.SetupRoverInstructions(player));        
-    }
-
-    private static void PrintPlayerScores(List<Player> players)
-    {
-        // calculate winner & output. concider a draw.
-        var winningScore = 0;
-        var winner = "";
-        foreach (var player in players)
-        {
-            var score = player.GetScore();
-            if (winningScore == 0 || winningScore < score)
-            {
-                winningScore = score;
-                winner = player.Id;
-            }
-        }
-
-        Console.WriteLine($"Winner: {winner}, Score: {winningScore}");
     }
 }

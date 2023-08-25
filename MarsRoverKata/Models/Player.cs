@@ -77,8 +77,6 @@ namespace MarsRover.Models
                 Score += gamepoint.Key.TreasureValue;
             }
 
-            Console.WriteLine($"Player: {Id}, Score: {Score}");
-
             return Score;
         }
 
@@ -90,6 +88,7 @@ namespace MarsRover.Models
             }
 
             GetScore();
+            Console.WriteLine($"Player: {Id}, Score: {Score}");
         }
 
         public IRover GetNextRover()
