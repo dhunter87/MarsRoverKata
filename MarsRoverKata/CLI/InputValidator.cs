@@ -1,6 +1,8 @@
 ﻿using MarsRover.CLI;
 using MarsRover.Interfaces;
 using MarsRover.Models;
+using System.Numerics;
+
 namespace MarsRover.Helpers
 {
     public static class InputValidator
@@ -11,8 +13,6 @@ namespace MarsRover.Helpers
             {
                 foreach (var player in players)
                 {
-                    // print current player
-                    Console.WriteLine($"Current Player: {player.Id}");
                     // set up 1 rover at a time
                     SetupNextRover(player, plateau);
                 }
@@ -25,29 +25,12 @@ namespace MarsRover.Helpers
 
             if (currentPlayersTeamCount < player?.TeamLimit) 
             {
-                var initialRoverCoordinates = SetupRoverCoordinates(plateau.MaxCoordinates);
+                var initialRoverCoordinates = SetupRoverCoordinates(player, plateau.MaxCoordinates);
 
                 var position = RoverPosition.CreateRoverPosition(initialRoverCoordinates.Value.XCoordinate, initialRoverCoordinates.Value.YCoordinate, initialRoverCoordinates.Key);
                 string roverId = SetRoverId(player, currentPlayersTeamCount);
 
                 player.AddTeamMember(position, roverId);
-            }
-        }
-
-        public static void SetupTeamRoversOld(List<Player> players, IPlateau plateau)
-        {
-            foreach (var player in players)
-            {
-
-                for (int i = 0; i < player.TeamLimit; i++)
-                {
-                    var initialRoverCoordinates = SetupRoverCoordinates(plateau.MaxCoordinates);
-
-                    var position = RoverPosition.CreateRoverPosition(initialRoverCoordinates.Value.XCoordinate, initialRoverCoordinates.Value.YCoordinate, initialRoverCoordinates.Key);
-                    string roverId = SetRoverId(player, i);
-
-                    player.AddTeamMember(position, roverId);
-                }
             }
         }
 
@@ -60,9 +43,9 @@ namespace MarsRover.Helpers
             throw new ArgumentException();
         }
 
-        public static KeyValuePair<char, ICoordinate> SetupRoverCoordinates(ICoordinate maxCoordinates)
+        public static KeyValuePair<char, ICoordinate> SetupRoverCoordinates(Player player, ICoordinate maxCoordinates)
         {
-            PrintSetupRoverCoordinateInstructions(maxCoordinates);
+            PrintSetupRoverCoordinateInstructions(player, maxCoordinates);
 
             while (true)
             {
@@ -96,18 +79,17 @@ namespace MarsRover.Helpers
             }
         }
 
-        private static void PrintSetupRoverCoordinateInstructions(ICoordinate maxCoordinate)
+        private static void PrintSetupRoverCoordinateInstructions(Player player, ICoordinate maxCoordinate)
         {
-            Console.WriteLine("Enter Rover Coordinates And Bearing!");
+            Console.WriteLine($"Current Player: {player.Id}, Enter Rover {player.Team.Count + 1} Coordinates And Bearing!");
             Console.WriteLine("Rover Coordinates must be within Platau maximum Coordinates");
             Console.WriteLine("Bearing Must Be N (North), E (East), S (South), or W (West)");
             Console.WriteLine($"e.g. between '0,0,N' And '{maxCoordinate.XCoordinate},{maxCoordinate.YCoordinate},S'");
         }
 
-
-        public static string SetupRoverInstructions()
+        public static string SetupRoverInstructions(Player player)
         {
-            PrintSetupRoverInstructions();
+            PrintSetupRoverInstructions(player);
 
             while (true)
             {
@@ -123,9 +105,9 @@ namespace MarsRover.Helpers
             }
         }
 
-        private static void PrintSetupRoverInstructions()
+        private static void PrintSetupRoverInstructions(Player player)
         {
-            Console.WriteLine("Enter Rover Instructions to Roam Mars!");
+            Console.WriteLine($"Current Player: {player.Id}, Current Rover: {player.GetNextRover().GetId()}, Enter Rover Instructions to Roam Mars!");
             Console.WriteLine("Instructions must be R (Rotate 90 degrees Right), L (Rotate 90 degrees Left) or M (Move forward 1 grid square)");
             Console.WriteLine("e.g. MMMMMRRMMMMMLLMMMMMRRMMM");
         }

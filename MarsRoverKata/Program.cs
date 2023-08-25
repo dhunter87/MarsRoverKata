@@ -38,7 +38,7 @@ class Program
         Console.WriteLine("");
         ConsoleApp.PrintPlateauGrid(mission);
 
-        player.GiveRoverInstructions(InputValidator.SetupRoverInstructions());        
+        player.GiveRoverInstructions(InputValidator.SetupRoverInstructions(player));        
     }
 
     private static void PrintPlayerScores(List<Player> players)
