@@ -1,13 +1,34 @@
-﻿using System;
+﻿using MarsRover.CLI;
+using MarsRover.Helpers;
+using MarsRover.Models;
 
-class Program
-{
+class Program : ProgramBase
+{   
     static void Main()
     {
-        // Program execution starts here
-        Console.WriteLine("Hello, World!");
+        var missionConfig = MissionSetup.CreateMissionConfig();
+        var mission = new MarsMission(missionConfig);
 
-        // Wait for user input before exiting
+        var players = mission.GetPlayers();
+        InputValidator.SetupTeamRovers(players, mission.Plateau);
+
+        mission.ActivateMission();
+
+        while (mission.IsActive)
+        {
+            foreach (var player in players)
+            {
+                if (!mission.IsActive)
+                {
+                    continue;
+                }
+
+                TakePlayerTurn(mission, player);
+            }
+        }
+
+        Console.WriteLine("Mission Over");
+        PrintGameResult(players);
         Console.ReadLine();
     }
 }

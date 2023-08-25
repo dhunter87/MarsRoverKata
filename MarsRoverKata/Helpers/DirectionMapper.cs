@@ -1,7 +1,9 @@
-﻿using System;
+﻿using MarsRover.Interfaces;
+using MarsRover.Models;
+
 namespace MarsRover.Helpers
 {
-	public static class DirectionMapper
+    public static class DirectionMapper
     {
         const char North = 'N';
         const char South = 'S';
@@ -24,12 +26,11 @@ namespace MarsRover.Helpers
             { West, 3 }
         };
 
-
-        public static (int, int) GetDirectionDelta(char currentBearing)
+        public static ICoordinate GetDirectionDelta(char currentBearing)
         {
             if (DirectionOfTravel.TryGetValue(currentBearing, out var directionDelta))
             {
-                return directionDelta;
+                return Coordinate.CreateCoordinate(directionDelta.Item1, directionDelta.Item2);
             }
             throw new ArgumentException($"Invalid bearing: {currentBearing}");
         }

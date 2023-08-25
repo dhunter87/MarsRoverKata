@@ -1,7 +1,6 @@
-﻿using System;
-namespace MarsRover.Helpers
+﻿namespace MarsRover.Helpers
 {
-	public enum RoverCommand
+    public enum RoverCommand
 	{
 		R = 1,  // TurnRight()
 		M = 2, // Move()

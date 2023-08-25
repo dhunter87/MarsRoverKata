@@ -9,5 +9,13 @@
   <ItemGroup>
     <Folder Include="Helpers\" />
     <Folder Include="Models\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Configuration\" />
+    <Folder Include="CLI\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Interfaces\" />
+    <None Remove="Configuration\" />
+    <None Remove="CLI\" />
   </ItemGroup>
 </Project>

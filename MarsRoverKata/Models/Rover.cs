@@ -1,51 +1,63 @@
-﻿using System;
-using MarsRover.Helpers;
+﻿using MarsRover.Helpers;
+using MarsRover.Interfaces;
 
 namespace MarsRover.Models
 {
-    public class Rover
+    public class Rover : IRover
     {
-        public Position Position;
-        public Platau Platau;
+        public IRoverPosition Position { get; set; }
+        public IPlateau Plateau;
+        private readonly string Id;
+        public List<IGamePoint> GamePoints;
 
-        public Rover(int xCoordinate, int yCoodinate, char bearing, Platau platau)
+        public Rover(IRoverPosition position, IPlateau plateau, string id)
         {
-            Platau = platau;
-            bearing = Char.ToUpper(bearing);
+            Id = id;
+            Plateau = plateau;
+            var bearing = Char.ToUpper(position.Bearing);
+            GamePoints = new List<IGamePoint>();
 
-            if (!CoordinatesValidator.IsValid(xCoordinate, yCoodinate, bearing))
+            if (!CoordinatesValidator.IsRoverPositionAndBearingValid(position, Plateau.MaxCoordinates))
             {
                 throw new ArgumentException();
             }
 
-            Position = new Position(xCoordinate, yCoodinate, bearing);
+            Position = RoverPosition.CreateRoverPosition(position.XCoordinate, position.YCoordinate, bearing);
         }
 
-        public void ExecuteInstructions(string instructions, List<char>? invalidCommands = null)
+        public List<IGamePoint> ExecuteInstructions(string instructions)
         {
-            if (invalidCommands == null)
-            {
-                invalidCommands = new List<char>();
-            }
+            int score = 0;
+            List<char> invalidCommands = new List<char>();
+            GamePoints = new List<IGamePoint>(); 
 
-            if (!string.IsNullOrEmpty(instructions))
+            foreach (var instruction in instructions)
             {
-                if (Enum.TryParse(Char.ToUpper(instructions[0]).ToString(), out RoverCommand currentCommand))
+                if (!Enum.TryParse(Char.ToUpper(instruction).ToString(), out RoverCommand currentCommand))
                 {
-                    ExecuteInstruction(currentCommand);
-                }
-                else
-                {
-                    invalidCommands.Add(instructions[0]);
+                    invalidCommands.Add(instruction);
                 }
 
-                ExecuteInstructions(instructions.Substring(1), invalidCommands);
+                ExecuteInstruction(currentCommand);
             }
 
+            PrintInvalidCommands(invalidCommands);
+            PrintRoverFinalPosition(score);
+
+            return GamePoints;
+        }
+
+        private void PrintInvalidCommands(List<char> invalidCommands)
+        {
             if (invalidCommands.Any())
             {
-                Console.WriteLine($"Invalid commands: {string.Join(", ", invalidCommands.Distinct<char>())}");
+                Console.WriteLine($"Invalid commands: {string.Join(", ", invalidCommands.Distinct())}");
             }
+        }
+
+        private void PrintRoverFinalPosition(int score)
+        {
+            Console.WriteLine($"Rover Final Position. XCoordinate: {Position.XCoordinate}, YCoordinate: {Position.YCoordinate}, Bearing: {Position.Bearing}");
         }
 
         public void ExecuteInstruction(RoverCommand instruction)
@@ -61,19 +73,22 @@ namespace MarsRover.Models
             }
         }
 
-        public void Move()
+        private void Move()
         {
-            (int deltaXCoordinate, int deltaYCoordinate) = DirectionMapper.GetDirectionDelta(Position.Bearing);
-            
-            var nextXCoordinate = Position.XCoordinate + deltaXCoordinate;
-            var nextYCoordinate = Position.YCoordinate + deltaYCoordinate;
+            var delta = DirectionMapper.GetDirectionDelta(Position.Bearing);
 
-            if (Platau.IsValildMove(nextXCoordinate, nextYCoordinate))
+            var newPosition = Coordinate.CreateCoordinate(Position.XCoordinate + delta.XCoordinate, Position.YCoordinate + delta.YCoordinate);
+
+            if (Plateau.IsValildMove(newPosition, Id))
             {
-                Position.XCoordinate += deltaXCoordinate;
-                Position.YCoordinate += deltaYCoordinate;
+                Position.XCoordinate += delta.XCoordinate;
+                Position.YCoordinate += delta.YCoordinate;
             }
 
+            if (Plateau.IsGamePointMove(Position))
+            {
+                GamePoints.Add(Plateau.GetGamePoint(Position));
+            }
         }
 
         private void Rotate(int bearingIncrementor)
@@ -82,6 +97,12 @@ namespace MarsRover.Models
             var newRotationValue = (currentRotationValue + bearingIncrementor) % 4;
 
             Position.Bearing = DirectionMapper.GetNewBearing(newRotationValue);
+        }
+
+        // CLI method only
+        public string GetId()
+        {
+            return Id;
         }
     }
 }
