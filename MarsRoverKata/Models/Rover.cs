@@ -21,14 +21,15 @@ namespace MarsRover.Models
             {
                 throw new ArgumentException();
             }
+            var coordinate = Coordinate.CreateCoordinate(position.XCoordinate, position.YCoordinate);
 
-            Position = RoverPosition.CreateRoverPosition(position.XCoordinate, position.YCoordinate, bearing);
+
+            Position = RoverPosition.CreateRoverPosition(coordinate, bearing);
         }
 
         public List<IGamePoint> ExecuteInstructions(string instructions)
         {
-            int score = 0;
-            List<char> invalidCommands = new List<char>();
+            var invalidCommands = new List<char>();
             GamePoints = new List<IGamePoint>(); 
 
             foreach (var instruction in instructions)
@@ -42,12 +43,12 @@ namespace MarsRover.Models
             }
 
             PrintInvalidCommands(invalidCommands);
-            PrintRoverFinalPosition(score);
+            PrintRoverFinalPosition();
 
             return GamePoints;
         }
 
-        private void PrintInvalidCommands(List<char> invalidCommands)
+        private static void PrintInvalidCommands(List<char> invalidCommands)
         {
             if (invalidCommands.Any())
             {
@@ -55,7 +56,7 @@ namespace MarsRover.Models
             }
         }
 
-        private void PrintRoverFinalPosition(int score)
+        private void PrintRoverFinalPosition()
         {
             Console.WriteLine($"Rover Final Position. XCoordinate: {Position.XCoordinate}, YCoordinate: {Position.YCoordinate}, Bearing: {Position.Bearing}");
         }

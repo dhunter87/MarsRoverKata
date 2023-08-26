@@ -1,7 +1,5 @@
-﻿using MarsRover.CLI;
-using MarsRover.Interfaces;
+﻿using MarsRover.Interfaces;
 using MarsRover.Models;
-using System.Numerics;
 
 namespace MarsRover.Helpers
 {
@@ -26,7 +24,9 @@ namespace MarsRover.Helpers
             {
                 var initialRoverCoordinates = SetupRoverCoordinates(player, plateau.MaxCoordinates);
 
-                var position = RoverPosition.CreateRoverPosition(initialRoverCoordinates.Value.XCoordinate, initialRoverCoordinates.Value.YCoordinate, initialRoverCoordinates.Key);
+                var coordinate = Coordinate.CreateCoordinate(initialRoverCoordinates.Value.XCoordinate, initialRoverCoordinates.Value.YCoordinate);
+
+                var position = RoverPosition.CreateRoverPosition(coordinate, initialRoverCoordinates.Key);
                 string roverId = SetRoverId(player, currentPlayersTeamCount);
 
                 player.AddTeamMember(position, roverId);
@@ -64,9 +64,10 @@ namespace MarsRover.Helpers
                     continue;
                 }
 
-                var initialBearing = Char.ToUpper(initialPosition[2][0]);
+                var initialBearing = Char.ToUpper(Char.Parse(initialPosition[2]));
+                var coordinate = Coordinate.CreateCoordinate(initialXCoordinate, initialYCoordinate);
 
-                var initialRoverPosition = RoverPosition.CreateRoverPosition(initialXCoordinate, initialYCoordinate, initialBearing);
+                var initialRoverPosition = RoverPosition.CreateRoverPosition(coordinate, initialBearing);
 
                 if(!CoordinatesValidator.IsRoverPositionAndBearingValid(initialRoverPosition, maxCoordinates))
                 {

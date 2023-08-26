@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using MarsRover.Interfaces;
+﻿using MarsRover.Interfaces;
 using MarsRover.Models;
-using System.Linq;
 
 namespace MarsRover.CLI
 {
@@ -10,7 +7,6 @@ namespace MarsRover.CLI
     {
         public static void PrintPlateauGrid(MarsMission mission)
         {
-            Dictionary<ICoordinate, List<(string roverId, string gamePointIndicator)>> roverDataOnGrid = new Dictionary<ICoordinate, List<(string, string)>>();
             Dictionary<GamePoint, string> discoveredGamepoints = GetDiscoveredGamepoints(mission);
 
             int gridSizeX = mission.Plateau.MaxCoordinates.XCoordinate + 1;

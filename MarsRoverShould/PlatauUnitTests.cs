@@ -1,29 +1,29 @@
-﻿using System;
-using System.Diagnostics.Metrics;
-using System.Reflection;
-using MarsRover.Interfaces;
+﻿using MarsRover.Interfaces;
 using MarsRover.Models;
 using MarsRoverUnitTests.TestHelpers;
 using NUnit.Framework;
 
 namespace PlatauShould
 {
-	[TestFixture]
+    [TestFixture]
 	public class PlatauUnitTests
 	{
         private Plateau _plateau;
-        private List<IRoverPosition> _roverPositions;
+        private List<IRoverPosition> _roverPositions; 
+        private ICoordinate _coordinate;
 
-		[SetUp]
+
+        [SetUp]
 		public void Setup()
 		{
-            var coordinate = Coordinate.CreateCoordinate(10, 10);
-            _plateau = new Plateau(coordinate, Constants.gamePointsCount);
+            _coordinate = Coordinate.CreateCoordinate(0,0);
+
+            _plateau = new Plateau(Coordinate.CreateCoordinate(10, 10), Constants.gamePointsCount);
             _roverPositions = new List<IRoverPosition>
             {
-                RoverPosition.CreateRoverPosition(0,0,'N'),
-                RoverPosition.CreateRoverPosition(1,0,'N'),
-                RoverPosition.CreateRoverPosition(0,1,'N'),
+                RoverPosition.CreateRoverPosition(_coordinate,'N'),
+                RoverPosition.CreateRoverPosition(Coordinate.CreateCoordinate(1,0),'N'),
+                RoverPosition.CreateRoverPosition(Coordinate.CreateCoordinate(0,1),'N'),
             };
         }
 
@@ -70,7 +70,9 @@ namespace PlatauShould
             _plateau = new Plateau(coordinate, Constants.gamePointsCount);
             _plateau.SetupGamePoints();
 
-            var roverPosition = RoverPosition.CreateRoverPosition(maxXCoordinate, maxYCoordinate, bearing);
+            _coordinate = Coordinate.CreateCoordinate(maxXCoordinate, maxYCoordinate);
+
+            var roverPosition = RoverPosition.CreateRoverPosition(_coordinate, bearing);
 
             _plateau.AddRover(roverPosition, Constants.RoverId);
 
@@ -89,7 +91,9 @@ namespace PlatauShould
             var counter = 1;
             foreach (var position in _roverPositions)
             {
-                var roverPosition = RoverPosition.CreateRoverPosition(position.XCoordinate, position.YCoordinate, position.Bearing);
+                _coordinate = Coordinate.CreateCoordinate(position.XCoordinate, position.YCoordinate);
+
+                var roverPosition = RoverPosition.CreateRoverPosition(_coordinate, position.Bearing);
 
                 _plateau.AddRover(roverPosition, Constants.RoverId + counter);
                 counter++;
@@ -112,7 +116,9 @@ namespace PlatauShould
             var counter = 1;
             foreach (var position in _roverPositions)
             {
-                var roverPosition = RoverPosition.CreateRoverPosition(position.XCoordinate, position.YCoordinate, position.Bearing);
+                _coordinate = Coordinate.CreateCoordinate(position.XCoordinate, position.YCoordinate);
+
+                var roverPosition = RoverPosition.CreateRoverPosition(_coordinate, position.Bearing);
 
                 _plateau.AddRover(roverPosition, Constants.RoverId + counter);
                 counter++;
@@ -120,7 +126,6 @@ namespace PlatauShould
 
             _plateau.SetupGamePoints();
 
-            var isGamePoint = _plateau.IsGamePointMove(coordinate);
             var gamePoint = _plateau.GetGamePoint(coordinate);
 
             Assert.That(gamePoint, Is.Not.Null);
@@ -138,8 +143,7 @@ namespace PlatauShould
             _plateau = new Plateau(coordinate, gamePointCount);
             _plateau.SetupGamePoints();
 
-            var isGamePoint = _plateau.IsGamePointMove(coordinate);
-            var gamePoint = _plateau.GetGamePoint(coordinate);
+            _plateau.GetGamePoint(coordinate);
 
             var result = _plateau.HasGamePoints();
 
@@ -165,13 +169,15 @@ namespace PlatauShould
             var counter = 1;
             foreach (var position in _roverPositions)
             {
-                var roverPosition = RoverPosition.CreateRoverPosition(position.XCoordinate, position.YCoordinate, position.Bearing);
+                _coordinate = Coordinate.CreateCoordinate(position.XCoordinate, position.YCoordinate);
+
+                var roverPosition = RoverPosition.CreateRoverPosition(_coordinate, position.Bearing);
 
                 _plateau.AddRover(roverPosition, Constants.RoverId + counter);
                 counter++;
             }
 
-            var newRoverPosition = RoverPosition.CreateRoverPosition(1, 1, 'N');
+            var newRoverPosition = RoverPosition.CreateRoverPosition( Coordinate.CreateCoordinate(1, 1), 'N');
             _plateau.AddRover(newRoverPosition, Constants.RoverId);
             
             Assert.Throws<InvalidOperationException>(() => _plateau.SetupGamePoints());
@@ -188,7 +194,9 @@ namespace PlatauShould
             var counter = 1;
             foreach (var position in _roverPositions)
             {
-                var roverPosition = RoverPosition.CreateRoverPosition(position.XCoordinate, position.YCoordinate, position.Bearing);
+                _coordinate = Coordinate.CreateCoordinate(position.XCoordinate, position.YCoordinate);
+
+                var roverPosition = RoverPosition.CreateRoverPosition(_coordinate, position.Bearing);
 
                 _plateau.AddRover(roverPosition, Constants.RoverId + counter);
                 counter++;
@@ -215,7 +223,9 @@ namespace PlatauShould
             var counter = 1;
             foreach (var position in _roverPositions)
             {
-                var roverPosition = RoverPosition.CreateRoverPosition(position.XCoordinate, position.YCoordinate, position.Bearing);
+                _coordinate = Coordinate.CreateCoordinate(position.XCoordinate, position.YCoordinate);
+
+                var roverPosition = RoverPosition.CreateRoverPosition(_coordinate, position.Bearing);
 
                 _plateau.AddRover(roverPosition, Constants.RoverId + counter);
                 counter++;
@@ -247,7 +257,9 @@ namespace PlatauShould
             var counter = 1;
             foreach (var position in _roverPositions)
             {
-                var roverPosition = RoverPosition.CreateRoverPosition(position.XCoordinate, position.YCoordinate, position.Bearing);
+                _coordinate = Coordinate.CreateCoordinate(position.XCoordinate, position.YCoordinate);
+
+                var roverPosition = RoverPosition.CreateRoverPosition(_coordinate, position.Bearing);
 
                 _plateau.AddRover(roverPosition, Constants.RoverId + counter);
                 counter++;
@@ -276,7 +288,7 @@ namespace PlatauShould
 
             var gamepoints = _plateau.GetGamePoints();
 
-            Assert.That(gamepoints.Count(), Is.EqualTo(GamepointsCount));
+            Assert.That(gamepoints, Has.Count.EqualTo(GamepointsCount));
         }
 
         // gamepoints should not exceed 20% available Plateau Coords i.e. MaxGamepoints = (maxX * maxY) * .20
@@ -292,7 +304,7 @@ namespace PlatauShould
 
             var gamepoints = _plateau.GetGamePoints();
 
-            Assert.That(gamepoints.Count(), Is.EqualTo(expectedGamepointCount));
+            Assert.That(gamepoints, Has.Count.EqualTo(expectedGamepointCount));
         }
 
         [Test]
@@ -308,15 +320,16 @@ namespace PlatauShould
             var counter = 1;
             foreach (var position in _roverPositions)
             {
+                _coordinate = Coordinate.CreateCoordinate(0, 0);
 
-                var roverPosition = RoverPosition.CreateRoverPosition(0, 0, position.Bearing);
+                var roverPosition = RoverPosition.CreateRoverPosition(_coordinate, position.Bearing);
 
                 _plateau.AddRover(roverPosition, Constants.RoverId + counter);
                 counter++;
             }
 
             List<IRoverPosition> roverPositions = _plateau.GetRoverPositions();
-            Assert.That(roverPositions.Count, Is.EqualTo(1));
+            Assert.That(roverPositions, Has.Count.EqualTo(1));
         }
 
         [Test]
@@ -325,8 +338,9 @@ namespace PlatauShould
             var counter = 0;
             foreach (var position in _roverPositions)
             {
+                _coordinate = Coordinate.CreateCoordinate(counter, 0);
 
-                var roverPosition = RoverPosition.CreateRoverPosition(counter, 0, position.Bearing);
+                var roverPosition = RoverPosition.CreateRoverPosition(_coordinate, position.Bearing);
 
                 _plateau.AddRover(roverPosition, Constants.RoverId + counter);
                 counter++;
@@ -347,7 +361,7 @@ namespace PlatauShould
             }
         }
 
-        private void AssertTreasureValueIsValid(int value)
+        private static void AssertTreasureValueIsValid(int value)
         {
             switch (value)
             {

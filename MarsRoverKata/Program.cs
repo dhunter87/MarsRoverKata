@@ -1,5 +1,4 @@
-﻿using MarsRover.CLI;
-using MarsRover.Helpers;
+﻿using MarsRover.Helpers;
 using MarsRover.Models;
 
 class Program : ProgramBase

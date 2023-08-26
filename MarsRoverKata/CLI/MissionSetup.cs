@@ -9,7 +9,6 @@ namespace MarsRover.Helpers
         public static MissionConfig CreateMissionConfig()
         {
             var difficultySetting = GetDifficultySetting();
-
             var maxCoordinates = SetupPlateauCoordinates(difficultySetting);
             var gamePoints = SetupGamepoints(difficultySetting);
             var maxTeamMembers = SetUpTeamLimits(difficultySetting);
@@ -53,44 +52,35 @@ namespace MarsRover.Helpers
 
         private static int SetupGamepoints(DifficultySetting setting)
         {
-            switch (setting)
+            return setting switch
             {
-                case DifficultySetting.Easy:
-                    return 3;
-                case DifficultySetting.Medium:
-                    return 5;
-                case DifficultySetting.Hard:
-                    return 10;
-            }
-            return 0;
+                DifficultySetting.Easy => 3,
+                DifficultySetting.Medium => 5,
+                DifficultySetting.Hard => 10,
+                _ => 0,
+            };
         }
 
         private static int SetUpTeamLimits(DifficultySetting setting)
         {
-            switch (setting)
+            return setting switch
             {
-                case DifficultySetting.Easy:
-                    return 1;
-                case DifficultySetting.Medium:
-                    return 2;
-                case DifficultySetting.Hard:
-                    return 3;
-            }
-            return 1;
+                DifficultySetting.Easy => 1,
+                DifficultySetting.Medium => 2,
+                DifficultySetting.Hard => 3,
+                _ => 1,
+            };
         }
 
         private static int SetupInstructionLimit(DifficultySetting setting)
         {
-            switch (setting)
+            return setting switch
             {
-                case DifficultySetting.Easy:
-                    return 5;
-                case DifficultySetting.Medium:
-                    return 10;
-                case DifficultySetting.Hard:
-                    return 5;
-            }
-            return 0;
+                DifficultySetting.Easy => 5,
+                DifficultySetting.Medium => 10,
+                DifficultySetting.Hard => 5,
+                _ => 0,
+            };
         }
 
         private static int SetupPlayerCount()

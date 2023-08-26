@@ -1,8 +1,4 @@
-﻿using System;
-using System.Diagnostics.Metrics;
-using System.Reflection;
-using MarsRover.Helpers;
-using MarsRover.Interfaces;
+﻿using MarsRover.Interfaces;
 using MarsRover.Models;
 using MarsRoverUnitTests.Dummies;
 using MarsRoverUnitTests.Fakes;
@@ -12,12 +8,13 @@ using NUnit.Framework;
 
 namespace PlayerShould
 {
-	[TestFixture]
+    [TestFixture]
 	public class PlayerUnitTests
 	{
 		Player Player;
         PlateauFake FakePlateau;
         Mock<IRover> MockRover;
+        private ICoordinate _coordinate;
 
         [SetUp]
         public void Setup()
@@ -27,7 +24,9 @@ namespace PlayerShould
 
             Player = new Player(FakePlateau, Constants.TeamLimit, Constants.InstructionLimit, Constants.PlayerOneId);
 
-            MockRover.Setup(r => r.Position).Returns(RoverPosition.CreateRoverPosition(1,1,'N'));
+            _coordinate = Coordinate.CreateCoordinate(1,1);
+
+            MockRover.Setup(r => r.Position).Returns(RoverPosition.CreateRoverPosition(_coordinate,'N'));
 
             MockRover.Setup(r => r.ExecuteInstructions(
                 It.IsAny<string>()))
@@ -57,12 +56,14 @@ namespace PlayerShould
             Player = new Player(FakePlateau, limit, Constants.InstructionLimit, Constants.PlayerOneId);
             for (int i = 0; i < actualInstanceCount; i++)
             {
-                var roverPosition = RoverPosition.CreateRoverPosition(i, 0, 'N');
+                _coordinate = Coordinate.CreateCoordinate(i, 0);
+
+                var roverPosition = RoverPosition.CreateRoverPosition(_coordinate, 'N');
 
                 Player.AddTeamMember(roverPosition, Constants.RoverId + i);
             }
 
-            Assert.That(Player.Team.Count, Is.EqualTo(expectedCount));
+            Assert.That(Player.Team, Has.Count.EqualTo(expectedCount));
         }
 
         [Test]
@@ -100,15 +101,16 @@ namespace PlayerShould
         public void Player_Score_Should_Increase_By_TreasureValue_When_Rover_Reaches_Goalpoint(int treasureVal)
         {
             var instructions = "M";
+            _coordinate = Coordinate.CreateCoordinate(0,0);
 
-            SetupMockRover(MockRover, RoverPosition.CreateRoverPosition(0, 0, 'N'), instructions, treasureVal);
+            SetupMockRover(MockRover, RoverPosition.CreateRoverPosition(_coordinate, 'N'), instructions, treasureVal);
 
             Player.Team.Add(MockRover.Object);
 
             var playerScore = Player.GetScore();
             Assert.That(playerScore, Is.EqualTo(0));
 
-            playerScore = GiveInstructionsAndCheckScore(MockRover.Object, Player, instructions);
+            playerScore = GiveInstructionsAndCheckScore(Player, instructions);
 
             Assert.That(playerScore, Is.EqualTo(treasureVal));
         }
@@ -122,7 +124,9 @@ namespace PlayerShould
         {
             var instructionsCount = instructions.ToArray().Length;
             var valuePerMove = (instructionsCount * treasureVal);
-            var startingPosition = RoverPosition.CreateRoverPosition(0, 0, 'N');
+            _coordinate = Coordinate.CreateCoordinate(0, 0);
+
+            var startingPosition = RoverPosition.CreateRoverPosition(_coordinate, 'N');
 
             SetupMockRover(MockRover, startingPosition, instructions, valuePerMove);
 
@@ -131,10 +135,10 @@ namespace PlayerShould
             var playerScore = Player.GetScore();
             Assert.That(playerScore, Is.EqualTo(0));
 
-            playerScore = GiveInstructionsAndCheckScore(MockRover.Object, Player, instructions);
+            playerScore = GiveInstructionsAndCheckScore(Player, instructions);
             Assert.That(playerScore, Is.EqualTo(valuePerMove));
 
-            playerScore = GiveInstructionsAndCheckScore(MockRover.Object, Player, instructions);
+            playerScore = GiveInstructionsAndCheckScore(Player, instructions);
             Assert.That(playerScore, Is.EqualTo(valuePerMove * 2));
         }
 
@@ -145,9 +149,11 @@ namespace PlayerShould
         {
             var instructions = "M";
             var mockRover2 = new Mock<IRover>();
+            _coordinate = Coordinate.CreateCoordinate(0, 0);
 
-            SetupMockRover(MockRover, RoverPosition.CreateRoverPosition(0, 0, 'N'), instructions);
-            SetupMockRover(mockRover2, RoverPosition.CreateRoverPosition(1, 0, 'N'), instructions);
+            SetupMockRover(MockRover, RoverPosition.CreateRoverPosition(_coordinate, 'N'), instructions);
+            _coordinate.XCoordinate++;
+            SetupMockRover(mockRover2, RoverPosition.CreateRoverPosition(_coordinate, 'N'), instructions);
 
             Player.Team.Add(MockRover.Object);
             Player.Team.Add(mockRover2.Object);
@@ -163,7 +169,7 @@ namespace PlayerShould
             });
         }
 
-        private void SetupMockRover(Mock<IRover> ThisMockRover, IRoverPosition startingPosition, string instructions, int gamepointValue = 1)
+        private static void SetupMockRover(Mock<IRover> ThisMockRover, IRoverPosition startingPosition, string instructions, int gamepointValue = 1)
         {
             ThisMockRover.SetupProperty(r => r.Position);
             ThisMockRover.Object.Position = startingPosition;
@@ -182,7 +188,7 @@ namespace PlayerShould
                 });
         }
 
-        private static int GiveInstructionsAndCheckScore(IRover rover, Player player, string instructions)
+        private static int GiveInstructionsAndCheckScore(Player player, string instructions)
         {
             int playerScore;
             player.GiveRoverInstructions(instructions);

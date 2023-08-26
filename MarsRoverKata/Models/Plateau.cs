@@ -7,7 +7,7 @@ namespace MarsRover.Models
     {   
         public ICoordinate MaxCoordinates { get; set; }
         private readonly int GamePointCount;
-        private HashSet<IGamePoint> GamePoints;
+        private readonly HashSet<IGamePoint> GamePoints;
         public Dictionary<string, IRoverPosition> RoverPositions;
 
         public Plateau(ICoordinate maxCoordinates, int maxGamePoints)
@@ -83,14 +83,14 @@ namespace MarsRover.Models
         {
             var matchedPoint = GamePoints.FirstOrDefault(p => p.EqualsCoordinates(coordinate));
 
-            if (matchedPoint == null)
+            if (matchedPoint != null)
             {
-               throw new Exception();
+                GamePoints.Remove(matchedPoint);
+
+                return (GamePoint)matchedPoint;
             }
 
-            GamePoints.Remove(matchedPoint);
-
-            return (GamePoint)matchedPoint;
+            throw new Exception();
         }
 
         // only used in tests?
