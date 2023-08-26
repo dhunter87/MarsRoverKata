@@ -12,8 +12,10 @@ internal class ProgramBase
         player.GiveRoverInstructions(InputValidator.SetupRoverInstructions(player));
     }
 
-    public static void PrintGameResult(List<Player> players)
+    public static void PrintGameResult(List<Player> players, MarsMission mission)
     {
+        ConsoleApp.PrintPlateauGrid(mission);
+
         var finalPositions = new Dictionary<Player, int>();
 
         foreach (var player in players)

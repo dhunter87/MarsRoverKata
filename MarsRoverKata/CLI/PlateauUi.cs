@@ -1,9 +1,8 @@
-﻿using System;
-using MarsRover.Models;
+﻿using MarsRover.Models;
 
 namespace MarsRover.CLI
 {
-	public static class PlateauUi
+    public static class PlateauUi
 	{
         public static void PrintGrid(Dictionary<GamePoint, string> discoveredGamepoints, int gridSizeX, int gridSizeY, string[,] grid)
         {
@@ -61,7 +60,7 @@ namespace MarsRover.CLI
         {
             var gamePointIndicator = GetGamePointIndicator(
                 currentGridSquareGamepoint.Key.TreasureType,
-                currentGridSquareGamepoint.Value.Substring(0, 2));
+                currentGridSquareGamepoint.Value[..2]);
 
             // Considering the length of "P1-G" is 6
             int gamePointExtraPadding = 6 - gamePointIndicator.Length;
@@ -75,17 +74,13 @@ namespace MarsRover.CLI
 
         private static string GetGamePointIndicator(Prize prize, string playerId)
         {
-            switch (prize)
+            return prize switch
             {
-                case Prize.Bronze:
-                    return $"{playerId}-B";
-                case Prize.Silver:
-                    return $"{playerId}-S";
-                case Prize.Gold:
-                    return $"{playerId}-G";
-                default:
-                    return "";
-            }
+                Prize.Bronze => $"{playerId}-B",
+                Prize.Silver => $"{playerId}-S",
+                Prize.Gold => $"{playerId}-G",
+                _ => "",
+            };
         }
     }
 }

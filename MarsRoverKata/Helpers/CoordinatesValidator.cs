@@ -7,19 +7,18 @@ namespace MarsRover.Helpers
         public static bool IsRoverPositionAndBearingValid(IRoverPosition position, ICoordinate platauMaxCoordinates)
         {
             if (!IsValidPosition(position, platauMaxCoordinates) ||
-                !isValidBearing(position.Bearing))
+                !IsValidBearing(position.Bearing))
             {
                 return false;
             }
-
             return true;
         }
 
         public static bool IsUnOccupiedPosition(Dictionary<string, IRoverPosition> roverPositions, ICoordinate coordinate)
         {
             return !roverPositions.Any(p => p.Value.XCoordinate == coordinate.XCoordinate && p.Value.YCoordinate == coordinate.YCoordinate);
-
         }
+
         public static bool IsUnOccupiedPosition(Dictionary<string, IRoverPosition> roverPositions, ICoordinate coordinate, string thisRoverId)
         {
             return !roverPositions.Any(p => p.Value.XCoordinate == coordinate.XCoordinate && p.Value.YCoordinate == coordinate.YCoordinate && p.Key != thisRoverId);
@@ -31,7 +30,6 @@ namespace MarsRover.Helpers
             {
                 return false;
             }
-
             return true;
         }
 
@@ -45,13 +43,12 @@ namespace MarsRover.Helpers
             return false;
         }
 
-        private static bool isValidBearing(char bearing)
+        private static bool IsValidBearing(char bearing)
         {
             if (bearing != 'N' && bearing != 'E' && bearing != 'S' && bearing != 'W')
             {
                 return false;
             }
-
             return true;
         }
 

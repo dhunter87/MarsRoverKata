@@ -10,10 +10,9 @@ namespace MarsRover.Models
         public int TreasureValue { get; set; }
         public Prize TreasureType { get; set; }
 
-        // Factory Method
         public static IGamePoint CreateGamePoint(ICoordinate maxCoordinates, Dictionary<string, IRoverPosition> roverPositions)
         {
-            Random random = new Random();
+            var random = new Random();
             int randomisedXCoord;
             int randomisedYCoord;
             Prize prize;
@@ -58,4 +57,3 @@ namespace MarsRover.Models
         }
     }
 }
-

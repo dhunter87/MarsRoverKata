@@ -1,11 +1,9 @@
-﻿using System;
-namespace MarsRover.Models
+﻿namespace MarsRover.Models
 {
-	public enum Prize
+    public enum Prize
 	{
 		Bronze = 1,
 		Silver = 2,
 		Gold = 3
 	}
 }
-

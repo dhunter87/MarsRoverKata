@@ -23,7 +23,6 @@ namespace MarsRover.Models
             }
             var coordinate = Coordinate.CreateCoordinate(position.XCoordinate, position.YCoordinate);
 
-
             Position = RoverPosition.CreateRoverPosition(coordinate, bearing);
         }
 
@@ -107,4 +106,3 @@ namespace MarsRover.Models
         }
     }
 }
-

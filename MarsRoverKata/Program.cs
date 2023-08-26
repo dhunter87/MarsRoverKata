@@ -27,7 +27,8 @@ class Program : ProgramBase
         }
 
         Console.WriteLine("Mission Over");
-        PrintGameResult(players);
+        
+        PrintGameResult(players, mission);
         Console.ReadLine();
     }
 }

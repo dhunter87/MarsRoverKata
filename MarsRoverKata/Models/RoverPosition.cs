@@ -8,7 +8,6 @@ namespace MarsRover.Models
         public int YCoordinate { get; set; }
         public char Bearing { get; set; }
 
-        // Factory Method
         public static IRoverPosition CreateRoverPosition(ICoordinate coordinate, char bearing)
         {
             return new RoverPosition { XCoordinate = coordinate.XCoordinate, YCoordinate = coordinate.YCoordinate, Bearing = Char.ToUpper(bearing) };

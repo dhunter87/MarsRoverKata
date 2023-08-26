@@ -1,5 +1,4 @@
-﻿using MarsRover.Interfaces;
-using MarsRover.Models;
+﻿using MarsRover.Models;
 
 namespace MarsRover.CLI
 {
@@ -49,11 +48,14 @@ namespace MarsRover.CLI
             
         private static void InitializeGrid(string[,] grid)
         {
-            for (int y = 0; y < grid.GetLength(0); y++)
+            var maxYCoord = grid.GetLength(0);
+            var maxXCoord = grid.GetLength(1);
+
+            for (int yAxis = 0; yAxis < maxYCoord; yAxis++)
             {
-                for (int x = 0; x < grid.GetLength(1); x++)
+                for (int xAxis = 0; xAxis < maxXCoord; xAxis++)
                 {
-                    grid[y, x] = " ";
+                    grid[yAxis, xAxis] = " ";
                 }
             }
         }

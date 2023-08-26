@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MarsRover.Interfaces
+﻿namespace MarsRover.Interfaces
 {
     public interface ICoordinate
     {
@@ -8,4 +6,3 @@ namespace MarsRover.Interfaces
         int YCoordinate { get; set; }
     }
 }
-

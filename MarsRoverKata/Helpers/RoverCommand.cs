@@ -2,9 +2,8 @@
 {
     public enum RoverCommand
 	{
-		R = 1,  // TurnRight()
+		R = 1, // TurnRight()
 		M = 2, // Move()
-		L = 3 // TurnLeft()
+		L = 3  // TurnLeft()
 	}
 }
-

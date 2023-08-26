@@ -4,26 +4,23 @@ using MarsRover.Models;
 namespace MarsRover.Helpers
 {
     public static class DirectionMapper
-    {
-        const char North = 'N';
-        const char South = 'S';
-        const char West = 'W';
-        const char East = 'E';
-        
-        public static Dictionary<char, (int, int)> DirectionOfTravel = new Dictionary<char, (int, int)>
+    {       
+        public static Dictionary<char, (int, int)> DirectionOfTravel => DirectionDictionary;
+        private static readonly Dictionary<char, (int, int)> DirectionDictionary = new()
         {
-            {North, (0, 1) },
-            {East, (1, 0) },
-            {South, (0, -1) },
-            {West, (-1, 0) }
+            { (char)Directions.North, (0, 1) },
+            { (char)Directions.East, (1, 0) },
+            { (char)Directions.South, (0, -1) },
+            { (char)Directions.West, (-1, 0) }
         };
 
-        public static Dictionary<char, int> BearingRotation = new Dictionary<char, int>
+        public static Dictionary<char, int> BearingRotation => BearingDictionary;
+        private static readonly Dictionary<char, int> BearingDictionary = new()
         {
-            { North, 0 },
-            { East, 1 },
-            { South, 2 },
-            { West, 3 }
+            { (char)Directions.North, 0 },
+            { (char)Directions.East, 1 },
+            { (char)Directions.South, 2 },
+            { (char)Directions.West, 3 }
         };
 
         public static ICoordinate GetDirectionDelta(char currentBearing)
@@ -46,4 +43,3 @@ namespace MarsRover.Helpers
         }
     }
 }
-

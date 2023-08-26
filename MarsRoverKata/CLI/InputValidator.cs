@@ -110,8 +110,9 @@ namespace MarsRover.Helpers
         {
             Console.WriteLine($"Current Player: {player.Id}, Current Rover: {player.GetNextRover().GetId()}, Enter Rover Instructions to Roam Mars!");
             Console.WriteLine("Instructions must be R (Rotate 90 degrees Right), L (Rotate 90 degrees Left) or M (Move forward 1 grid square)");
-            Console.WriteLine("e.g. MMMMMRRMMMMMLLMMMMMRRMMM");
+
+            var instructionsExample = "MMMMRMRMMMMMLLMMMMMRRMMM";
+            Console.WriteLine($"Instruction Limit: {player.InstructionLimit} E.G. {instructionsExample[..player.InstructionLimit]}");
         }
     }
 }
-

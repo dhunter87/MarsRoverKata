@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using MarsRover.Helpers;
+﻿using MarsRover.Helpers;
 using MarsRover.Interfaces;
 
 namespace MarsRover.Models
 {
-	public class MarsMission
+    public class MarsMission
 	{
 		public IPlateau Plateau;
         private readonly int TeamLimit;
         private readonly int GamePointLimit;
         private readonly int CommandLimit;
-        private List<Player> Players;
+        private readonly List<Player> Players;
 
         public MarsMission(MissionConfig config)
 		{

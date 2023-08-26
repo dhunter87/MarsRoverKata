@@ -1,12 +1,10 @@
-﻿using System;
-using MarsRover.Interfaces;
+﻿using MarsRover.Interfaces;
 
 namespace MarsRover.CLI
 {
-
     public class PaddingConfig
     {
-        public string CellValue;
+        public string? CellValue;
         public int ExtraPadding;
         public int LeftPadding;
         public int RightPadding;

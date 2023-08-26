@@ -13,7 +13,7 @@ namespace MarsRover.Models
         public string Id;
         private int Score;
         public readonly int TeamLimit;
-        private readonly int InstructionLimit;
+        public readonly int InstructionLimit;
 
         public Player(IPlateau platau, int teamLimit, int instructionLimit, int id)
         {
@@ -37,7 +37,7 @@ namespace MarsRover.Models
 
             if (instructions.Length > InstructionLimit)
             {
-                instructions = instructions.Substring(0, InstructionLimit);
+                instructions = instructions[..InstructionLimit];
             }
 
             var points = rover.ExecuteInstructions(instructions);
@@ -110,4 +110,3 @@ namespace MarsRover.Models
         }
     }
 }
-
