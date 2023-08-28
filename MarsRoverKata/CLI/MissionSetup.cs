@@ -87,7 +87,7 @@ namespace MarsRover.Helpers
         {
             while (true)
             {
-                Console.WriteLine("Enter Number Players Joining 'Mars Mission!'");
+                Console.WriteLine("Enter Number Players Joining 'Mars Mission!' (Max 4 Players)");
                 var playerCount = Console.ReadLine();
 
                 if (!int.TryParse(playerCount, out int players))
@@ -96,7 +96,7 @@ namespace MarsRover.Helpers
                     continue;
 
                 }
-                if (players <= 0)
+                if (players <= 0 || players > 4)
                 {
                     Console.WriteLine("Invalid input - out of range.");
                     continue;

@@ -48,12 +48,52 @@ namespace MarsRover.CLI
         private static void PrintGamePoint(KeyValuePair<GamePoint, string> currentGridSquareGamepoint)
         {
             var gamePointPadded = SetupGamePointPadding(currentGridSquareGamepoint);
+
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.Write($"|{gamePointPadded}");
+            Console.ResetColor();
         }
 
         private static void PrintRoverPosition(PaddingConfig config)
         {
-            Console.Write($"|{config.CellValue.PadLeft(4 + config.LeftPadding).PadRight(4 + config.RightPadding)}");
+            var player = "";
+            var trimmedString = "";
+
+            if (config.CellValue != null)
+            {
+                trimmedString = config.CellValue.Trim();
+            }
+           
+            if (trimmedString != string.Empty)
+            {
+                player = trimmedString[..2];
+            }
+
+            Console.Write($"|");
+            SetConsoleOutputColour(player);
+            Console.Write($"{config.CellValue.PadLeft(4 + config.LeftPadding).PadRight(4 + config.RightPadding)}");
+            Console.ResetColor();
+        }
+
+        private static void SetConsoleOutputColour(string player)
+        {
+            switch (player)
+            {
+                case "P1":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+                case "P2":
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    break;
+                case "P3":
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    break;
+                case "P4":
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    break;
+                default:
+                    break;
+            }
         }
 
         private static string SetupGamePointPadding(KeyValuePair<GamePoint, string> currentGridSquareGamepoint)
